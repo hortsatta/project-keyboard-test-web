@@ -9,8 +9,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     /* variables */
-    --color-dark-text: 226, 237, 226;
-    --color-dark-backdrop: 6, 18, 6;
     --font-body: Body;
   }
 

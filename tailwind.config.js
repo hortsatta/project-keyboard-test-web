@@ -1,22 +1,31 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 import tailwindcssThemer from 'tailwindcss-themer';
 
+const COLOR_DEFAULT_PRIMARY = '55, 177, 59';
+const COLOR_DEFAULT_TEXT = '226, 237, 226';
+const COLOR_DEFAULT_BACKDROP = '8, 25, 8';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        body: ['var(--font-body)', ...defaultTheme.fontFamily.sans],
+      },
+      animation: {
+        blink: 'pulse 1s step-start 0s infinite',
+      },
+    },
   },
   plugins: [
     tailwindcssThemer({
       defaultTheme: {
         extend: {
           colors: {
-            text: 'rgba(var(--color-dark-text), 1)',
-            backdrop: 'rgba(var(--color-dark-backdrop), 1)',
-          },
-          fontFamily: {
-            body: ['var(--font-body)', ...defaultTheme.fontFamily.sans],
+            primary: `rgba(${COLOR_DEFAULT_PRIMARY}, 1)`,
+            text: `rgba(${COLOR_DEFAULT_TEXT}, 1)`,
+            backdrop: `rgba(${COLOR_DEFAULT_BACKDROP}, 1)`,
           },
         },
       },
