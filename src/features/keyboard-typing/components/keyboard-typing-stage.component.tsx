@@ -7,7 +7,7 @@ import { KeyboardTypingWordPassage } from './keyboard-typing-word-passage.compon
 import type { ChangeEvent, ComponentProps } from 'react';
 
 const TEMP_VALUE =
-  'the time has finally come for three middle aged men to talk about a children franchise';
+  'love is not like pizza everyone pretends to like wheat until you mention barley you have every right to be angry but that does give you the right to be mean the water flowing down the river did look that powerful from the car the efficiency we have at removing trash has made creating trash more acceptable flesh yoga pants were far worse than even he feared';
 
 export const KeyboardTypingStage = memo(function ({
   className,
@@ -60,7 +60,7 @@ export const KeyboardTypingStage = memo(function ({
         onBack={handleInputBack}
       />
       <KeyboardTypingWordPassage
-        className='mx-auto max-w-3xl flex-wrap text-xl'
+        className='mx-auto h-[160px] max-w-5xl flex-wrap overflow-hidden text-xl leading-8'
         value={TEMP_VALUE}
         activeIndex={activeIndex}
         inputValue={inputValue}

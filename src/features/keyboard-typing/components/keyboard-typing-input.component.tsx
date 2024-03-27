@@ -16,9 +16,9 @@ export const KeyboardTypingInput = memo(
     const handleChange = useCallback(
       (event: ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
-        const lastValue = value[value.length - 1];
+        const lastChar = value[value.length - 1];
 
-        if (lastValue === ' ') {
+        if (lastChar === ' ') {
           event.target.value = '';
           value.length > 1 && onNext && onNext();
         }
@@ -35,7 +35,9 @@ export const KeyboardTypingInput = memo(
           event.key === 'ArrowUp' ||
           event.key === 'ArrowRight' ||
           event.key === 'ArrowDown' ||
-          event.key === 'ArrowLeft'
+          event.key === 'ArrowLeft' ||
+          ((event.ctrlKey || event.metaKey) && event.key === 'z') ||
+          ((event.ctrlKey || event.metaKey) && event.key === 'r')
         ) {
           event.preventDefault();
         }
@@ -44,7 +46,10 @@ export const KeyboardTypingInput = memo(
           return;
         }
 
-        (value as string)?.length <= 0 && onBack && onBack();
+        if ((value as string)?.length <= 0) {
+          onBack && onBack();
+          event.preventDefault();
+        }
       },
       [value, onBack],
     );
@@ -54,7 +59,7 @@ export const KeyboardTypingInput = memo(
         ref={ref}
         type='text'
         value={value}
-        className={cx('absolute left-0 top-0 -z-[1] w-0', className)}
+        className={cx('absolute left-0 top-0 -z-10 w-0', className)}
         tabIndex={0}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
