@@ -1,7 +1,7 @@
-import { forwardRef, memo, useEffect, useMemo, useState } from 'react';
-import levenshtein from 'damerau-levenshtein';
+import { forwardRef, memo } from 'react';
 import cx from 'classix';
 
+import { useKeyboardTypingWordSingle } from '../hooks/use-keyboard-typing-word-single.hook';
 import { KeyboardTypingWordMark } from './keyboard-typing-word-mark.component';
 
 import type { ComponentProps } from 'react';
@@ -17,57 +17,8 @@ export const KeyboardTypingWordSingle = memo(
     { className, value, inputValue, active, ...moreProps },
     ref,
   ) {
-    const [isDirty, setIsDirty] = useState(false);
-    const [isPerfect, setIsPerfect] = useState(true);
-
-    const inputValueList = useMemo(
-      () => inputValue?.split('') || [],
-      [inputValue],
-    );
-
-    const wasteInputValue = useMemo(
-      () => inputValue?.slice(value.length),
-      [value, inputValue],
-    );
-
-    const isExact = useMemo(() => {
-      const { similarity } = levenshtein(value, inputValue || '');
-
-      return similarity === 1;
-    }, [value, inputValue]);
-
-    // Set dirty status
-    useEffect(() => {
-      if (!active) {
-        return;
-      }
-
-      setIsDirty((prev) => {
-        if (prev) {
-          return true;
-        }
-
-        return inputValue?.trim().length ? true : false;
-      });
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [inputValue]);
-
-    // Check if input has mistake, set as perfect if none
-    useEffect(() => {
-      if (!isDirty) {
-        return;
-      }
-
-      const hasMistake = inputValue
-        ?.split('')
-        .some((char, index) => char !== value[index]);
-
-      if (!hasMistake) {
-        return;
-      }
-
-      setIsPerfect(false);
-    }, [isDirty, value, inputValue]);
+    const { inputValueList, wasteInputValue, isDirty, isExact, isPerfect } =
+      useKeyboardTypingWordSingle(value, inputValue, active);
 
     return (
       <span ref={ref} className={cx('relative my-1', className)} {...moreProps}>
@@ -83,7 +34,7 @@ export const KeyboardTypingWordSingle = memo(
             key={`char-${index}`}
             className={cx(
               'relative z-10 inline-block not-italic transition-all duration-75',
-              inputValueList[index] == null ? 'opacity-30' : 'opacity-80',
+              inputValueList[index] == null ? 'opacity-40' : 'opacity-80',
               inputValueList[index] != null &&
                 inputValueList[index] !== char &&
                 'text-rose-300',
