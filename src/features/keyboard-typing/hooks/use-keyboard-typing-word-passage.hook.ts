@@ -105,7 +105,7 @@ export function useKeyboardTypeingPassage(
   const wrapperStyle = useMemo(
     () => ({
       paddingTop: wordHeight,
-      paddingBottom: wordHeight * 2,
+      paddingBottom: wordHeight * 3,
     }),
     [wordHeight],
   );
