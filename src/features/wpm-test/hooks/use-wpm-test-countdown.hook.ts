@@ -12,10 +12,7 @@ type Result = {
   stop: () => void;
 };
 
-export function useKeyboardTypingTimer(
-  endTimeSec: number,
-  options?: Options,
-): Result {
+export function useWPMTestTimer(endTimeSec: number, options?: Options): Result {
   const timeMs = useRef<number>(endTimeSec * 1000);
   const prevMs = useRef<number>(timeMs.current);
   const [timer, setTimer] = useState(endTimeSec);

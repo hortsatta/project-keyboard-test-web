@@ -1,17 +1,17 @@
 import { create } from 'zustand';
 import { devtools, persist, subscribeWithSelector } from 'zustand/middleware';
 
-import { createKeyboardTypingSlice } from '#/keyboard-typing/keyboard-typing.store';
+import { createWPMTestSlice } from '#/wpm-test/wpm-test.store';
 
-import type { KeyboardTypingSlice } from '#/keyboard-typing/models/keyboard-typing.model';
+import type { WPMTestSlice } from '#/wpm-test/models/wpm-test.model';
 
-export const useBoundStore = create<// CoreSlice & KeyboardTypingSlice
-KeyboardTypingSlice>()(
+export const useBoundStore = create<// CoreSlice & WPMTestSlice
+WPMTestSlice>()(
   devtools(
     persist(
       subscribeWithSelector((...a) => ({
         // ...createCoreSlice(...a),
-        ...createKeyboardTypingSlice(...a),
+        ...createWPMTestSlice(...a),
       })),
       {
         name: 'main-storage',

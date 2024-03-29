@@ -59,7 +59,7 @@ const getPosY = (node: HTMLElement, offsetTop = 0) => {
   return offsetTop - parseInt(marginTop, 10);
 };
 
-export function useKeyboardTypeingPassage(
+export function useWPMTestWordPassage(
   value?: string,
   inputValue?: string,
   fullInputValue?: string,

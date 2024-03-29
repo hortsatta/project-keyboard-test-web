@@ -8,7 +8,7 @@ type Props = ComponentProps<'input'> & {
   onBack?: () => void;
 };
 
-export const KeyboardTypingInput = memo(
+export const WPMTestInput = memo(
   forwardRef<HTMLInputElement, Props>(function (
     { className, value, onChange, onNext, onBack, ...moreProps },
     ref,

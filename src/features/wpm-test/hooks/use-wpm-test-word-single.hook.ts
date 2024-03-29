@@ -9,7 +9,7 @@ type Result = {
   isPerfect: boolean;
 };
 
-export function useKeyboardTypingWordSingle(
+export function useWPMTestWordSingle(
   value: string,
   inputValue?: string,
   active?: boolean,

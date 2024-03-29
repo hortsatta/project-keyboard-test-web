@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react';
 
-export type KeyboardTypingSlice = {
+export type WPMTestSlice = {
   isPlaying: boolean;
   activeIndex: number;
   inputValue: string;

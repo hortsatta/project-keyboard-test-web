@@ -13,7 +13,7 @@ type Props = ComponentProps<'div'> & {
 
 const IMG_CLASSNAME = 'h-1.5 w-1.5';
 
-export const KeyboardTypingWordMark = memo(function ({
+export const WPMTestWordMark = memo(function ({
   className,
   isCorrect,
   isPerfect,

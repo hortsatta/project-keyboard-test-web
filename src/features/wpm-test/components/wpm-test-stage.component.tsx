@@ -2,16 +2,16 @@ import { memo, useCallback, useRef } from 'react';
 import cx from 'classix';
 
 import { useBoundStore } from '#/core/hooks/use-store.hook';
-import { KeyboardTypingInput } from './keyboard-typing-input.component';
-import { KeyboardTypingProgress } from './keyboard-typing-progress.component';
-import { KeyboardTypingWordPassage } from './keyboard-typing-word-passage.component';
+import { WPMTestInput } from './wpm-test-input.component';
+import { WPMTestProgress } from './wpm-test-progress.component';
+import { WPMTestWordPassage } from './wpm-test-word-passage.component';
 
 import type { ComponentProps } from 'react';
 
 const TEMP_VALUE =
   'love is not like pizza everyone pretends to like wheat until you mention barley you have every right to be angry but that does give you the right to be mean the water flowing down the river did look that powerful from the car the efficiency we have at removing trash has made creating trash more acceptable flesh yoga pants were far worse than even he feared';
 
-export const KeyboardTypingStage = memo(function ({
+export const WPMTestStage = memo(function ({
   className,
   ...moreProps
 }: ComponentProps<'div'>) {
@@ -33,20 +33,20 @@ export const KeyboardTypingStage = memo(function ({
       onClick={handleWrapperClick}
       {...moreProps}
     >
-      <KeyboardTypingInput
+      <WPMTestInput
         ref={inputRef}
         value={inputValue}
         onChange={setInputChange}
         onNext={setInputNext}
         onBack={setInputBack}
       />
-      <KeyboardTypingProgress
+      <WPMTestProgress
         className='max-w-4xl px-1.5'
         mode='time'
-        endTimeSec={5}
+        endTimeSec={60}
       />
       <div className='relative h-[240px] overflow-hidden'>
-        <KeyboardTypingWordPassage
+        <WPMTestWordPassage
           className='h-full max-w-4xl'
           value={TEMP_VALUE}
           activeIndex={activeIndex}

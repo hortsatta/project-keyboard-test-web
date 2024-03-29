@@ -1,12 +1,12 @@
 import type { ChangeEvent } from 'react';
 import type { StateCreator } from 'zustand';
-import type { KeyboardTypingSlice } from './models/keyboard-typing.model';
+import type { WPMTestSlice } from './models/wpm-test.model';
 
-export const createKeyboardTypingSlice: StateCreator<
-  KeyboardTypingSlice,
+export const createWPMTestSlice: StateCreator<
+  WPMTestSlice,
   [],
   [],
-  KeyboardTypingSlice
+  WPMTestSlice
 > = (set, get) => ({
   isPlaying: false,
   activeIndex: 0,

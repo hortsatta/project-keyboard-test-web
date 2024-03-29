@@ -1,8 +1,8 @@
 import { forwardRef, memo, useCallback, useEffect, useRef } from 'react';
 import cx from 'classix';
 
-import { useKeyboardTypingWordSingle } from '../hooks/use-keyboard-typing-word-single.hook';
-import { KeyboardTypingWordMark } from './keyboard-typing-word-mark.component';
+import { useWPMTestWordSingle } from '../hooks/use-wpm-test-word-single.hook';
+import { WPMTestWordMark } from './wpm-test-word-mark.component';
 
 import type { ComponentProps } from 'react';
 
@@ -13,7 +13,7 @@ type Props = ComponentProps<'div'> & {
   onPerfect?: (rect?: DOMRect) => void;
 };
 
-export const KeyboardTypingWordSingle = memo(
+export const WPMTestWordSingle = memo(
   forwardRef<HTMLElement, Props>(function (
     { className, value, inputValue, active, onPerfect, ...moreProps },
     ref,
@@ -21,7 +21,7 @@ export const KeyboardTypingWordSingle = memo(
     const localRef = useRef<HTMLElement | null>(null);
 
     const { inputValueList, wasteInputValue, isDirty, isExact, isPerfect } =
-      useKeyboardTypingWordSingle(value, inputValue, active);
+      useWPMTestWordSingle(value, inputValue, active);
 
     const handleMergeRefs = useCallback(
       (instance: HTMLElement) => {
@@ -60,7 +60,7 @@ export const KeyboardTypingWordSingle = memo(
         {...moreProps}
       >
         {isDirty && !active && (
-          <KeyboardTypingWordMark
+          <WPMTestWordMark
             className='-bottom-1 left-1/2 -translate-x-1/2'
             isCorrect={isExact}
             isPerfect={isPerfect}

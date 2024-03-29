@@ -2,7 +2,7 @@ import { memo, useEffect, useMemo } from 'react';
 import cx from 'classix';
 
 import { useBoundStore } from '#/core/hooks/use-store.hook';
-import { useKeyboardTypingTimer } from '../hooks/use-keyboard-typing-countdown.hook';
+import { useWPMTestTimer } from '../hooks/use-wpm-test-countdown.hook';
 
 import type { ComponentProps } from 'react';
 
@@ -11,7 +11,7 @@ type Props = ComponentProps<'div'> & {
   endTimeSec?: number;
 };
 
-export const KeyboardTypingProgress = memo(function ({
+export const WPMTestProgress = memo(function ({
   className,
   endTimeSec,
   mode,
@@ -19,7 +19,7 @@ export const KeyboardTypingProgress = memo(function ({
 }: Props) {
   const isPlaying = useBoundStore((state) => state.isPlaying);
   const stopPlaying = useBoundStore((state) => state.stopPlaying);
-  const { timer, start } = useKeyboardTypingTimer(endTimeSec || 0, {
+  const { timer, start } = useWPMTestTimer(endTimeSec || 0, {
     onComplete: stopPlaying,
   });
 

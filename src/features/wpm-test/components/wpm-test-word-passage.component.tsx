@@ -2,8 +2,8 @@ import { Fragment, memo } from 'react';
 import Lottie from 'react-lottie-player';
 import cx from 'classix';
 
-import { useKeyboardTypeingPassage } from '../hooks/use-keyboard-typing-word-passage.hook';
-import { KeyboardTypingWordSingle } from './keyboard-typing-word-single.component';
+import { useWPMTestWordPassage } from '../hooks/use-wpm-test-word-passage.hook';
+import { WPMTestWordSingle } from './wpm-test-word-single.component';
 
 import type { ComponentProps } from 'react';
 
@@ -16,7 +16,7 @@ type Props = ComponentProps<'div'> & {
   fullInputValue?: string;
 };
 
-export const KeyboardTypingWordPassage = memo(function ({
+export const WPMTestWordPassage = memo(function ({
   className,
   value,
   inputValue,
@@ -36,7 +36,7 @@ export const KeyboardTypingWordPassage = memo(function ({
     fullInputValueList,
     handleActiveWordRef,
     playBlastEffect,
-  } = useKeyboardTypeingPassage(value, inputValue, fullInputValue);
+  } = useWPMTestWordPassage(value, inputValue, fullInputValue);
 
   return (
     <div
@@ -71,7 +71,7 @@ export const KeyboardTypingWordPassage = memo(function ({
       {valueList?.map((str, index) => (
         <Fragment key={`word-${index}`}>
           {activeIndex === index ? (
-            <KeyboardTypingWordSingle
+            <WPMTestWordSingle
               ref={handleActiveWordRef}
               style={wordStyle}
               value={str}
@@ -79,7 +79,7 @@ export const KeyboardTypingWordPassage = memo(function ({
               active
             />
           ) : (
-            <KeyboardTypingWordSingle
+            <WPMTestWordSingle
               style={wordStyle}
               className='relative z-10'
               value={str}

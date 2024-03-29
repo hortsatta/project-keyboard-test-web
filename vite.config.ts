@@ -24,9 +24,9 @@ export default defineConfig({
         ),
       },
       {
-        find: '#/keyboard-typing',
+        find: '#/wpm-test',
         replacement: fileURLToPath(
-          new URL('./src/features/keyboard-typing', import.meta.url),
+          new URL('./src/features/wpm-test', import.meta.url),
         ),
       },
     ],

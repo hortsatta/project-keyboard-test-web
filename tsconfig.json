@@ -22,7 +22,7 @@
       "#/assets/*": ["./src/assets/*"],
       "#/base/*": ["./src/features/base/*"],
       "#/core/*": ["./src/features/core/*"],
-      "#/keyboard-typing/*": ["./src/features/keyboard-typing/*"]
+      "#/wpm-test/*": ["./src/features/wpm-test/*"]
     }
   },
   "include": ["src"],
