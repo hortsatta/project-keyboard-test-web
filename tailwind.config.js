@@ -13,8 +13,18 @@ export default {
       fontFamily: {
         body: ['var(--font-body)', ...defaultTheme.fontFamily.sans],
       },
+      keyframes: {
+        shaking: {
+          '0%': { transform: 'translateX(0)' },
+          '25%': { transform: 'translateX(3px)' },
+          '50%': { transform: 'translateX(-3px)' },
+          '75%': { transform: 'translateX(3px)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+      },
       animation: {
         blink: 'pulse 1s step-start 0s infinite',
+        error: 'shaking 0.3s forwards',
       },
     },
   },

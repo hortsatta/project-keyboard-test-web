@@ -1,16 +1,20 @@
 import { useRef, useState, useMemo, useCallback, useEffect } from 'react';
 
 import type { CSSProperties, RefObject } from 'react';
+import type { AnimationItem } from 'lottie-web';
 
 type Result = {
   wrapperRef: RefObject<HTMLDivElement>;
   charSampleRef: RefObject<HTMLInputElement>;
+  blastEffectRef: RefObject<AnimationItem | undefined>;
   wrapperStyle: CSSProperties | undefined;
   textCursorStyle: CSSProperties | undefined;
   wordStyle: CSSProperties | undefined;
+  blastEffectStyle: CSSProperties | undefined;
   valueList: string[] | undefined;
   fullInputValueList: string[];
   handleActiveWordRef: (node: HTMLElement) => void;
+  playBlastEffect: (rect?: DOMRect) => void;
 };
 
 const DEFAULT_CHAR_SAMPLE_SIZE = { width: 0, height: 0 };
@@ -30,6 +34,8 @@ const DEFAULT_SCROLLBY_OPTIONS = {
   left: 0,
   behavior: 'smooth' as ScrollBehavior,
 };
+
+const BLAST_EFFECT_SIZE = 60;
 
 const getElementHeight = (node: HTMLElement) => {
   const style = window && window.getComputedStyle(node);
@@ -60,6 +66,7 @@ export function useKeyboardTypeingPassage(
 ): Result {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const charSampleRef = useRef<HTMLInputElement>(null);
+  const blastEffectRef = useRef<AnimationItem | undefined>(null);
 
   const [charSampleSize, setCharSampleSize] = useState(
     DEFAULT_CHAR_SAMPLE_SIZE,
@@ -69,10 +76,12 @@ export function useKeyboardTypeingPassage(
     DEFAULT_TEXT_CURSOR_STYLE,
   );
 
-  const [wordHeight, setWordHeight] = useState(0);
   const [textCursorPosY, setTextCursorPosY] = useState(
     DEFAULT_TEXT_CURSOR_POSY,
   );
+
+  const [wordHeight, setWordHeight] = useState(0);
+  const [blastEffectStyle, setBlastEffectStyle] = useState({});
 
   const valueList = useMemo(
     () => value?.split(/(\s+)/).filter((str) => str.trim().length > 0),
@@ -95,6 +104,7 @@ export function useKeyboardTypeingPassage(
 
   const wrapperStyle = useMemo(
     () => ({
+      paddingTop: wordHeight,
       paddingBottom: wordHeight * 2,
     }),
     [wordHeight],
@@ -106,34 +116,59 @@ export function useKeyboardTypeingPassage(
         return;
       }
 
+      const wordHeight = getElementHeight(node);
       const offsetX = (inputValue?.length || 0) * charSampleSize.width;
       const { offsetLeft, offsetTop } = node;
 
       const posX =
         (offsetLeft <= 0 ? charSampleSize.width / 2 : offsetLeft) + offsetX;
 
+      const posY = offsetTop - wordHeight;
+
       setTextCursorStyle({
         width: charSampleSize.width,
         height: charSampleSize.height + 3,
-        transform: `translate(${posX}px, ${offsetTop}px)`,
+        transform: `translate(${posX}px, ${posY}px)`,
       });
 
-      setWordHeight(getElementHeight(node));
+      setWordHeight(wordHeight);
 
       // Get get and set current cursor position
 
-      const posY = getPosY(node, offsetTop);
+      const currentPosY = getPosY(node, posY);
 
-      if (posY === textCursorPosY.value) {
+      if (currentPosY === textCursorPosY.value) {
         return;
       }
 
       setTextCursorPosY({
-        value: posY,
-        isForward: textCursorPosY.value <= posY,
+        value: currentPosY,
+        isForward: textCursorPosY.value <= currentPosY,
       });
     },
     [charSampleSize, textCursorPosY.value, inputValue],
+  );
+
+  const playBlastEffect = useCallback(
+    (rect?: DOMRect) => {
+      if (!blastEffectRef?.current || !rect) {
+        return;
+      }
+
+      const posX = rect.left + rect.width / 2 - BLAST_EFFECT_SIZE / 2;
+      const posY = rect.top + 2 - wordHeight;
+
+      setBlastEffectStyle({
+        height: BLAST_EFFECT_SIZE,
+        transform: `translate(${posX}px, ${posY}px)`,
+      });
+
+      blastEffectRef.current.playSegments(
+        [0, blastEffectRef.current.totalFrames],
+        true,
+      );
+    },
+    [wordHeight],
   );
 
   useEffect(() => {
@@ -166,11 +201,14 @@ export function useKeyboardTypeingPassage(
   return {
     wrapperRef,
     charSampleRef,
+    blastEffectRef,
     wrapperStyle,
     textCursorStyle,
     wordStyle,
+    blastEffectStyle,
     valueList,
     fullInputValueList,
     handleActiveWordRef,
+    playBlastEffect,
   };
 }

@@ -20,6 +20,7 @@
     // Others
     "paths": {
       "#/assets/*": ["./src/assets/*"],
+      "#/base/*": ["./src/features/base/*"],
       "#/core/*": ["./src/features/core/*"],
       "#/keyboard-typing/*": ["./src/features/keyboard-typing/*"]
     }

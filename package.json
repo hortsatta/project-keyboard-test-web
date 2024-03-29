@@ -14,9 +14,11 @@
     "classix": "^2.1.36",
     "damerau-levenshtein": "^1.0.8",
     "localforage": "^1.10.0",
+    "lottie-react": "^2.4.0",
     "match-sorter": "^6.3.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-lottie-player": "^2.0.0",
     "react-router-dom": "^6.22.3",
     "sort-by": "^1.2.0"
   },

@@ -1,10 +1,13 @@
 import { Fragment, memo } from 'react';
+import Lottie from 'react-lottie-player';
 import cx from 'classix';
 
 import { useKeyboardTypeingPassage } from '../hooks/use-keyboard-typing-word-passage.hook';
 import { KeyboardTypingWordSingle } from './keyboard-typing-word-single.component';
 
 import type { ComponentProps } from 'react';
+
+import blastEffectJson from '#/assets/json/blast-effect.json';
 
 type Props = ComponentProps<'div'> & {
   activeIndex: number;
@@ -24,12 +27,15 @@ export const KeyboardTypingWordPassage = memo(function ({
   const {
     wrapperRef,
     charSampleRef,
+    blastEffectRef,
     wrapperStyle,
     textCursorStyle,
     wordStyle,
+    blastEffectStyle,
     valueList,
     fullInputValueList,
     handleActiveWordRef,
+    playBlastEffect,
   } = useKeyboardTypeingPassage(value, inputValue, fullInputValue);
 
   return (
@@ -37,7 +43,7 @@ export const KeyboardTypingWordPassage = memo(function ({
       ref={wrapperRef}
       style={wrapperStyle}
       className={cx(
-        'relative flex h-[160px] max-w-4xl flex-wrap items-baseline overflow-hidden text-xl font-light leading-8',
+        'relative flex max-w-4xl flex-wrap items-baseline overflow-hidden text-xl font-light leading-8',
         className,
       )}
       {...moreProps}
@@ -54,6 +60,14 @@ export const KeyboardTypingWordPassage = memo(function ({
         style={textCursorStyle}
         className='absolute -ml-px -mt-px animate-blink border-l-2 border-primary bg-gradient-to-r from-primary/30 transition-transform duration-75'
       />
+      <Lottie
+        ref={blastEffectRef}
+        style={blastEffectStyle}
+        className='absolute opacity-80'
+        animationData={blastEffectJson}
+        speed={2}
+        loop={false}
+      />
       {valueList?.map((str, index) => (
         <Fragment key={`word-${index}`}>
           {activeIndex === index ? (
@@ -67,8 +81,10 @@ export const KeyboardTypingWordPassage = memo(function ({
           ) : (
             <KeyboardTypingWordSingle
               style={wordStyle}
+              className='relative z-10'
               value={str}
               inputValue={fullInputValueList[index]}
+              onPerfect={playBlastEffect}
             />
           )}
         </Fragment>

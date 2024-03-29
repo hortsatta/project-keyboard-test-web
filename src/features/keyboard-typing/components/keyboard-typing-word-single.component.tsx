@@ -1,4 +1,4 @@
-import { forwardRef, memo } from 'react';
+import { forwardRef, memo, useCallback, useEffect, useRef } from 'react';
 import cx from 'classix';
 
 import { useKeyboardTypingWordSingle } from '../hooks/use-keyboard-typing-word-single.hook';
@@ -10,18 +10,55 @@ type Props = ComponentProps<'div'> & {
   value: string;
   inputValue?: string;
   active?: boolean;
+  onPerfect?: (rect?: DOMRect) => void;
 };
 
 export const KeyboardTypingWordSingle = memo(
   forwardRef<HTMLElement, Props>(function (
-    { className, value, inputValue, active, ...moreProps },
+    { className, value, inputValue, active, onPerfect, ...moreProps },
     ref,
   ) {
+    const localRef = useRef<HTMLElement | null>(null);
+
     const { inputValueList, wasteInputValue, isDirty, isExact, isPerfect } =
       useKeyboardTypingWordSingle(value, inputValue, active);
 
+    const handleMergeRefs = useCallback(
+      (instance: HTMLElement) => {
+        // Set localRef
+        localRef.current = instance;
+        // Set forwardRef
+        if (!ref) {
+          return;
+        }
+
+        typeof ref === 'function' ? ref(instance) : (ref.current = instance);
+      },
+      [ref],
+    );
+
+    useEffect(() => {
+      if (isDirty && !active && isExact && isPerfect) {
+        const { width, height } =
+          localRef.current?.getBoundingClientRect() || {};
+        const left = localRef.current?.offsetLeft || 0;
+        const top = localRef.current?.offsetTop || 0;
+
+        onPerfect && onPerfect({ width, height, left, top } as DOMRect);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [active, isDirty, isExact, isPerfect]);
+
     return (
-      <span ref={ref} className={cx('relative my-1', className)} {...moreProps}>
+      <span
+        ref={handleMergeRefs}
+        className={cx(
+          'relative my-1',
+          isDirty && !isExact && !active && 'animate-error',
+          className,
+        )}
+        {...moreProps}
+      >
         {isDirty && !active && (
           <KeyboardTypingWordMark
             className='-bottom-1 left-1/2 -translate-x-1/2'
