@@ -43,7 +43,7 @@ export const KeyboardTypingWordPassage = memo(function ({
       ref={wrapperRef}
       style={wrapperStyle}
       className={cx(
-        'relative flex max-w-4xl flex-wrap items-baseline overflow-hidden text-xl font-light leading-8',
+        'relative flex flex-wrap items-baseline overflow-hidden text-xl font-light leading-8',
         className,
       )}
       {...moreProps}
