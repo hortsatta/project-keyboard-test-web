@@ -1,5 +1,4 @@
 import { memo, useEffect, useMemo } from 'react';
-import cx from 'classix';
 
 import { useBoundStore } from '#/core/hooks/use-store.hook';
 import { useWPMTestTimer } from '../hooks/use-wpm-test-countdown.hook';
@@ -12,7 +11,6 @@ type Props = ComponentProps<'div'> & {
 };
 
 export const WPMTestProgress = memo(function ({
-  className,
   endTimeSec,
   mode,
   ...moreProps
@@ -35,16 +33,8 @@ export const WPMTestProgress = memo(function ({
   }, [isPlaying]);
 
   return (
-    <div className={cx('w-full', className)} {...moreProps}>
-      <div className='flex w-full items-center'>
-        <div className='h-5 flex-1'>
-          <div className='h-full w-full bg-primary' />
-        </div>
-        <div>{currentPoints}</div>
-        <div className='h-5 flex-1'>
-          <div className='h-full w-full bg-primary' />
-        </div>
-      </div>
+    <div {...moreProps}>
+      <div className='text-3xl text-primary'>{currentPoints}</div>
       {/* TODO Combo */}
     </div>
   );

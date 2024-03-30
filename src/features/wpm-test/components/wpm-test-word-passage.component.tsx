@@ -63,8 +63,9 @@ export const WPMTestWordPassage = memo(function ({
       <Lottie
         ref={blastEffectRef}
         style={blastEffectStyle}
-        className='absolute opacity-80'
+        className='absolute opacity-60'
         animationData={blastEffectJson}
+        renderer='canvas'
         speed={2}
         loop={false}
       />

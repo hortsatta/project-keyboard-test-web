@@ -17,15 +17,12 @@ export const createWPMTestSlice: StateCreator<
     const { isPlaying, fullInputValue } = get();
     const { value } = event.target;
 
-    if (!isPlaying) {
-      if (fullInputValue == null) {
-        value.length && set({ isPlaying: true });
-      } else {
-        return;
-      }
-    }
-
     set({ inputValue: value });
+
+    !isPlaying &&
+      fullInputValue == null &&
+      value.length &&
+      set({ isPlaying: true });
   },
 
   setInputNext: () =>
@@ -49,9 +46,9 @@ export const createWPMTestSlice: StateCreator<
   },
 
   stopPlaying: () => {
-    const { setInputNext } = get();
+    const { inputValue, setInputNext } = get();
 
-    setInputNext();
+    inputValue.trim().length && setInputNext();
     set({ isPlaying: false, inputValue: '' });
   },
 });

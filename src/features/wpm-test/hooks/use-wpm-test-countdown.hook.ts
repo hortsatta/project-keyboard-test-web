@@ -48,6 +48,7 @@ export function useWPMTestTimer(endTimeSec: number, options?: Options): Result {
       } else {
         const seconds = Math.floor(timeMs.current / 1000);
         const isUpdate = seconds !== Math.floor(prevMs.current / 1000);
+
         prevMs.current = timeMs.current;
 
         if (isUpdate) {

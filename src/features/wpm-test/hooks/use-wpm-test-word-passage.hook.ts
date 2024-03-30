@@ -155,8 +155,8 @@ export function useWPMTestWordPassage(
         return;
       }
 
-      const posX = rect.left + rect.width / 2 - BLAST_EFFECT_SIZE / 2;
-      const posY = rect.top + 2 - wordHeight;
+      const posX = rect.left + rect.width / 2 - BLAST_EFFECT_SIZE - 1;
+      const posY = rect.top + 3 - wordHeight;
 
       setBlastEffectStyle({
         height: BLAST_EFFECT_SIZE,
