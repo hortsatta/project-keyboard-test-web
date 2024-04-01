@@ -1,4 +1,5 @@
-import { memo, useCallback, useRef } from 'react';
+import { memo, useCallback, useMemo, useRef } from 'react';
+import levenshtein from 'damerau-levenshtein';
 import cx from 'classix';
 
 import { useBoundStore } from '#/core/hooks/use-store.hook';
@@ -27,9 +28,24 @@ export const WPMTestStage = memo(function ({
   const resetComboCounter = useBoundStore((state) => state.resetComboCounter);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const valueList = useMemo(
+    () => TEMP_VALUE?.split(/(\s+)/).filter((str) => str.trim().length > 0),
+    [],
+  );
+
   const handleWrapperClick = useCallback(() => {
     inputRef.current?.focus();
   }, []);
+
+  const handleInputNext = useCallback(() => {
+    const { similarity } = levenshtein(
+      valueList[activeIndex],
+      inputValue || '',
+    );
+
+    similarity !== 1 && resetComboCounter();
+    setInputNext();
+  }, [activeIndex, inputValue, valueList, setInputNext, resetComboCounter]);
 
   return (
     <div
@@ -41,14 +57,14 @@ export const WPMTestStage = memo(function ({
         ref={inputRef}
         value={inputValue}
         onChange={setInputChange}
-        onNext={setInputNext}
+        onNext={handleInputNext}
         onBack={setInputBack}
         onBackspace={resetComboCounter}
         disabled={!isPlaying && fullInputValue != null}
       />
       <div className='relative h-[200px] max-w-4xl'>
         <WPMTestComboCounter
-          className='absolute right-full top-1/2 mr-6 -translate-y-1/2'
+          className='!absolute right-full top-1/2 mr-6 -translate-y-1/2'
           count={comboCounterCount}
         />
         <div className='relative mb-2.5 h-[200px] overflow-hidden'>
