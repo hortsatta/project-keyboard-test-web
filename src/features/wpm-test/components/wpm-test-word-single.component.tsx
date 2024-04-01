@@ -72,7 +72,7 @@ export const WPMTestWordSingle = memo(
             key={`char-${index}`}
             className={cx(
               'relative z-10 inline-block not-italic transition-all duration-75',
-              inputValueList[index] == null ? 'opacity-40' : 'opacity-80',
+              inputValueList[index] == null ? 'opacity-30' : 'opacity-80',
               inputValueList[index] != null &&
                 inputValueList[index] !== char &&
                 'text-rose-300',
