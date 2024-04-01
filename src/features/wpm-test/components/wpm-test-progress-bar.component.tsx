@@ -4,24 +4,17 @@ import cx from 'classix';
 import type { ComponentProps } from 'react';
 
 type Props = ComponentProps<'div'> & {
-  value: number;
-  maxValue: number;
+  currentProgressPercent: number;
   wrapperClassname?: string;
   reverse?: boolean;
 };
 
 export const WPMTestProgressBar = memo(function ({
   wrapperClassname,
-  value,
-  maxValue,
+  currentProgressPercent,
   reverse,
   ...moreProps
 }: Props) {
-  const currentProgressPercent = useMemo(
-    () => 100 - Math.ceil((value / maxValue) * 100),
-    [value, maxValue],
-  );
-
   const progressStyle = useMemo(
     () => ({
       transform: `translateX(${reverse ? -currentProgressPercent : currentProgressPercent}%)`,
@@ -30,10 +23,12 @@ export const WPMTestProgressBar = memo(function ({
   );
 
   return (
-    <div className={cx('overflow-hidden', wrapperClassname)}>
+    <div
+      className={cx('flex h-8 items-center overflow-hidden', wrapperClassname)}
+    >
       <div
         style={progressStyle}
-        className='h-full w-full rounded-[1px] bg-primary/50 transition-transform duration-1000 ease-linear'
+        className='relative h-0.5 w-full rounded-[1px] bg-text transition-transform duration-1000 ease-linear'
         {...moreProps}
       />
     </div>

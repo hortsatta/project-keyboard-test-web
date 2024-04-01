@@ -1,4 +1,4 @@
-import { forwardRef, memo, useCallback, useEffect, useRef } from 'react';
+import { forwardRef, memo, useCallback } from 'react';
 import cx from 'classix';
 
 import { useWPMTestWordSingle } from '../hooks/use-wpm-test-word-single.hook';
@@ -10,18 +10,31 @@ type Props = ComponentProps<'div'> & {
   value: string;
   inputValue?: string;
   active?: boolean;
+  onMistake?: () => void;
   onPerfect?: (rect?: DOMRect) => void;
 };
 
 export const WPMTestWordSingle = memo(
   forwardRef<HTMLElement, Props>(function (
-    { className, value, inputValue, active, onPerfect, ...moreProps },
+    {
+      className,
+      value,
+      inputValue,
+      active,
+      onMistake,
+      onPerfect,
+      ...moreProps
+    },
     ref,
   ) {
-    const localRef = useRef<HTMLElement | null>(null);
-
-    const { inputValueList, wasteInputValue, isDirty, isExact, isPerfect } =
-      useWPMTestWordSingle(value, inputValue, active);
+    const {
+      localRef,
+      inputValueList,
+      wasteInputValue,
+      isDirty,
+      isExact,
+      isPerfect,
+    } = useWPMTestWordSingle(value, inputValue, active, onMistake, onPerfect);
 
     const handleMergeRefs = useCallback(
       (instance: HTMLElement) => {
@@ -34,20 +47,8 @@ export const WPMTestWordSingle = memo(
 
         typeof ref === 'function' ? ref(instance) : (ref.current = instance);
       },
-      [ref],
+      [ref, localRef],
     );
-
-    useEffect(() => {
-      if (isDirty && !active && isExact && isPerfect) {
-        const { width, height } =
-          localRef.current?.getBoundingClientRect() || {};
-        const left = localRef.current?.offsetLeft || 0;
-        const top = localRef.current?.offsetTop || 0;
-
-        onPerfect && onPerfect({ width, height, left, top } as DOMRect);
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [active, isDirty, isExact, isPerfect]);
 
     return (
       <span
@@ -71,7 +72,7 @@ export const WPMTestWordSingle = memo(
             key={`char-${index}`}
             className={cx(
               'relative z-10 inline-block not-italic transition-all duration-75',
-              inputValueList[index] == null ? 'opacity-30' : 'opacity-80',
+              inputValueList[index] == null ? 'opacity-40' : 'opacity-80',
               inputValueList[index] != null &&
                 inputValueList[index] !== char &&
                 'text-rose-300',

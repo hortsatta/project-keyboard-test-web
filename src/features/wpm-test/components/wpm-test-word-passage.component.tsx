@@ -35,7 +35,8 @@ export const WPMTestWordPassage = memo(function ({
     valueList,
     fullInputValueList,
     handleActiveWordRef,
-    playBlastEffect,
+    handleMistake,
+    handlePerfectWord,
   } = useWPMTestWordPassage(value, inputValue, fullInputValue);
 
   return (
@@ -63,7 +64,7 @@ export const WPMTestWordPassage = memo(function ({
       <Lottie
         ref={blastEffectRef}
         style={blastEffectStyle}
-        className='absolute opacity-60'
+        className='absolute -translate-x-full -translate-y-full opacity-70'
         animationData={blastEffectJson}
         renderer='canvas'
         speed={2}
@@ -77,6 +78,7 @@ export const WPMTestWordPassage = memo(function ({
               style={wordStyle}
               value={str}
               inputValue={inputValue}
+              onMistake={handleMistake}
               active
             />
           ) : (
@@ -85,7 +87,7 @@ export const WPMTestWordPassage = memo(function ({
               className='relative z-10'
               value={str}
               inputValue={fullInputValueList[index]}
-              onPerfect={playBlastEffect}
+              onPerfect={handlePerfectWord}
             />
           )}
         </Fragment>

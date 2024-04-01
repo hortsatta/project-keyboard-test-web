@@ -2,6 +2,11 @@ import type { ChangeEvent } from 'react';
 import type { StateCreator } from 'zustand';
 import type { WPMTestSlice } from './models/wpm-test.model';
 
+const DEFAULT_COMBO_COUNTER = {
+  count: 0,
+  highestCount: 0,
+};
+
 export const createWPMTestSlice: StateCreator<
   WPMTestSlice,
   [],
@@ -12,38 +17,37 @@ export const createWPMTestSlice: StateCreator<
   activeIndex: 0,
   inputValue: '',
   fullInputValue: undefined,
+  comboCounter: DEFAULT_COMBO_COUNTER,
 
-  setInputChange: (event: ChangeEvent<HTMLInputElement>) => {
-    const { isPlaying, fullInputValue } = get();
-    const { value } = event.target;
+  setInputChange: (event: ChangeEvent<HTMLInputElement>) =>
+    set(({ isPlaying, fullInputValue }) => {
+      const { value } = event.target;
 
-    set({ inputValue: value });
-
-    !isPlaying &&
-      fullInputValue == null &&
-      value.length &&
-      set({ isPlaying: true });
-  },
+      return !isPlaying && fullInputValue == null && value.length
+        ? { inputValue: value, isPlaying: true }
+        : { inputValue: value };
+    }),
 
   setInputNext: () =>
-    set((state) => ({
-      activeIndex: state.activeIndex + 1,
-      fullInputValue: (state.fullInputValue || '') + ' ' + state.inputValue,
+    set(({ activeIndex, inputValue, fullInputValue }) => ({
+      activeIndex: activeIndex + 1,
+      fullInputValue: (fullInputValue || '') + ' ' + inputValue,
     })),
 
-  setInputBack: () => {
-    const { activeIndex, fullInputValue } = get();
-    const targetIndex = activeIndex > 0 ? activeIndex - 1 : 0;
-    const fullInputValueList =
-      fullInputValue?.split(/(\s+)/).filter((str) => str.trim().length > 0) ||
-      [];
+  setInputBack: () =>
+    set(({ activeIndex, fullInputValue, comboCounter }) => {
+      const targetIndex = activeIndex > 0 ? activeIndex - 1 : 0;
+      const fullInputValueList =
+        fullInputValue?.split(/(\s+)/).filter((str) => str.trim().length > 0) ||
+        [];
 
-    set(() => ({
-      activeIndex: targetIndex,
-      inputValue: fullInputValueList[targetIndex] || '',
-      fullInputValue: fullInputValueList.slice(0, -1).join(' '),
-    }));
-  },
+      return {
+        activeIndex: targetIndex,
+        inputValue: fullInputValueList[targetIndex] || '',
+        fullInputValue: fullInputValueList.slice(0, -1).join(' '),
+        comboCounter: { ...comboCounter, count: 0 },
+      };
+    }),
 
   stopPlaying: () => {
     const { inputValue, setInputNext } = get();
@@ -51,4 +55,26 @@ export const createWPMTestSlice: StateCreator<
     inputValue.trim().length && setInputNext();
     set({ isPlaying: false, inputValue: '' });
   },
+
+  appendComboCounter: () =>
+    set(({ comboCounter, activeIndex }) => {
+      const count = comboCounter.count + 1;
+
+      return {
+        comboCounter: { ...comboCounter, lastIndex: activeIndex, count },
+      };
+    }),
+
+  resetComboCounter: (hardReset?: boolean) =>
+    set(({ comboCounter: prevComboCounter }) => {
+      const comboCounter = hardReset
+        ? DEFAULT_COMBO_COUNTER
+        : {
+            ...prevComboCounter,
+            highestCount: prevComboCounter.count,
+            count: 0,
+          };
+
+      return { comboCounter };
+    }),
 });

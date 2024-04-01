@@ -5,6 +5,7 @@ import { useBoundStore } from '#/core/hooks/use-store.hook';
 import { WPMTestInput } from './wpm-test-input.component';
 import { WPMTestProgress } from './wpm-test-progress.component';
 import { WPMTestWordPassage } from './wpm-test-word-passage.component';
+import { WPMTestComboCounter } from './wpm-test-combo-counter.component';
 
 import type { ComponentProps } from 'react';
 
@@ -19,9 +20,11 @@ export const WPMTestStage = memo(function ({
   const activeIndex = useBoundStore((state) => state.activeIndex);
   const inputValue = useBoundStore((state) => state.inputValue);
   const fullInputValue = useBoundStore((state) => state.fullInputValue);
+  const comboCounterCount = useBoundStore((state) => state.comboCounter.count);
   const setInputChange = useBoundStore((state) => state.setInputChange);
   const setInputNext = useBoundStore((state) => state.setInputNext);
   const setInputBack = useBoundStore((state) => state.setInputBack);
+  const resetComboCounter = useBoundStore((state) => state.resetComboCounter);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleWrapperClick = useCallback(() => {
@@ -40,15 +43,15 @@ export const WPMTestStage = memo(function ({
         onChange={setInputChange}
         onNext={setInputNext}
         onBack={setInputBack}
+        onBackspace={resetComboCounter}
         disabled={!isPlaying && fullInputValue != null}
       />
       <div className='relative h-[200px] max-w-4xl'>
-        <WPMTestProgress
-          className='absolute right-full top-1/2  z-30 mr-2.5 max-w-4xl -translate-y-1/2'
-          mode='time'
-          endTimeSec={60}
+        <WPMTestComboCounter
+          className='absolute right-full top-1/2 mr-6 -translate-y-1/2'
+          count={comboCounterCount}
         />
-        <div className='relative h-[200px] overflow-hidden'>
+        <div className='relative mb-2.5 h-[200px] overflow-hidden'>
           <WPMTestWordPassage
             className='h-full'
             value={TEMP_VALUE}
@@ -66,6 +69,7 @@ export const WPMTestStage = memo(function ({
             <div className='h-2 w-full bg-backdrop' />
           </div>
         </div>
+        <WPMTestProgress className='pl-1 pr-5' mode='time' endTimeSec={60} />
       </div>
     </div>
   );

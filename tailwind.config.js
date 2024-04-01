@@ -14,17 +14,31 @@ export default {
         body: ['var(--font-body)', ...defaultTheme.fontFamily.sans],
       },
       keyframes: {
-        shaking: {
+        'shaking-x': {
           '0%': { transform: 'translateX(0)' },
           '25%': { transform: 'translateX(3px)' },
           '50%': { transform: 'translateX(-3px)' },
           '75%': { transform: 'translateX(3px)' },
           '100%': { transform: 'translateX(0)' },
         },
+        shaking: {
+          '0%': { transform: 'rotate(0deg)' },
+          '25%': { transform: 'rotate(3deg)' },
+          '50%': { transform: 'rotate(0eg)' },
+          '75%': { transform: 'rotate(-3deg)' },
+          '100%': { transform: 'rotate(0deg)' },
+        },
+        rainbow: {
+          '0%': { filter: 'hue-rotate(0deg)' },
+          '100%': { filter: 'hue-rotate(359deg)' },
+        },
       },
       animation: {
         blink: 'pulse 1s step-start 0s infinite',
-        error: 'shaking 0.3s forwards',
+        'pulse-fast': 'pulse 0.6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        error: 'shaking-x 0.3s forwards',
+        'add-combo': 'ping 0.4s 1',
+        'max-combo': 'rainbow 0.8s linear infinite',
       },
     },
   },

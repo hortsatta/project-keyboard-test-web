@@ -6,11 +6,12 @@ import type { ChangeEvent, ComponentProps, KeyboardEvent } from 'react';
 type Props = ComponentProps<'input'> & {
   onNext?: () => void;
   onBack?: () => void;
+  onBackspace?: () => void;
 };
 
 export const WPMTestInput = memo(
   forwardRef<HTMLInputElement, Props>(function (
-    { className, value, onChange, onNext, onBack, ...moreProps },
+    { className, value, onChange, onNext, onBack, onBackspace, ...moreProps },
     ref,
   ) {
     const handleChange = useCallback(
@@ -46,12 +47,14 @@ export const WPMTestInput = memo(
           return;
         }
 
+        onBackspace && onBackspace();
+
         if ((value as string)?.length <= 0) {
           onBack && onBack();
           event.preventDefault();
         }
       },
-      [value, onBack],
+      [value, onBack, onBackspace],
     );
 
     return (

@@ -1,4 +1,5 @@
 import { useRef, useState, useMemo, useCallback, useEffect } from 'react';
+import { useBoundStore } from '#/core/hooks/use-store.hook';
 
 import type { CSSProperties, RefObject } from 'react';
 import type { AnimationItem } from 'lottie-web';
@@ -14,7 +15,8 @@ type Result = {
   valueList: string[] | undefined;
   fullInputValueList: string[];
   handleActiveWordRef: (node: HTMLElement) => void;
-  playBlastEffect: (rect?: DOMRect) => void;
+  handleMistake: () => void;
+  handlePerfectWord: (rect?: DOMRect) => void;
 };
 
 const DEFAULT_CHAR_SAMPLE_SIZE = { width: 0, height: 0 };
@@ -64,6 +66,8 @@ export function useWPMTestWordPassage(
   inputValue?: string,
   fullInputValue?: string,
 ): Result {
+  const appendComboCounter = useBoundStore((state) => state.appendComboCounter);
+  const resetComboCounter = useBoundStore((state) => state.resetComboCounter);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const charSampleRef = useRef<HTMLInputElement>(null);
   const blastEffectRef = useRef<AnimationItem | undefined>(null);
@@ -171,6 +175,16 @@ export function useWPMTestWordPassage(
     [wordHeight],
   );
 
+  const handlePerfectWord = useCallback(
+    (rect?: DOMRect) => {
+      // Play perfect animation effect and
+      // +1 to combo counter
+      playBlastEffect(rect);
+      appendComboCounter();
+    },
+    [playBlastEffect, appendComboCounter],
+  );
+
   useEffect(() => {
     const rect = charSampleRef.current?.getBoundingClientRect();
     const width = Math.ceil(rect?.width || 0);
@@ -209,6 +223,7 @@ export function useWPMTestWordPassage(
     valueList,
     fullInputValueList,
     handleActiveWordRef,
-    playBlastEffect,
+    handleMistake: resetComboCounter,
+    handlePerfectWord,
   };
 }

@@ -16,3 +16,9 @@
     @apply bg-backdrop font-body text-text;
   }
 }
+
+.max-combo {
+  background: -webkit-radial-gradient(#ef4444, #facc15, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

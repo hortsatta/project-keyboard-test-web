@@ -1,7 +1,10 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import levenshtein from 'damerau-levenshtein';
 
+import type { MutableRefObject } from 'react';
+
 type Result = {
+  localRef: MutableRefObject<HTMLElement | null>;
   inputValueList: string[];
   wasteInputValue: string | undefined;
   isDirty: boolean;
@@ -13,7 +16,10 @@ export function useWPMTestWordSingle(
   value: string,
   inputValue?: string,
   active?: boolean,
+  onMistake?: () => void,
+  onPerfect?: (rect: DOMRect) => void,
 ): Result {
+  const localRef = useRef<HTMLElement | null>(null);
   const [isDirty, setIsDirty] = useState(false);
   const [isPerfect, setIsPerfect] = useState(true);
 
@@ -64,9 +70,23 @@ export function useWPMTestWordSingle(
     }
 
     setIsPerfect(false);
+    onMistake && onMistake();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDirty, value, inputValue]);
 
+  useEffect(() => {
+    if (isDirty && !active && isExact && isPerfect) {
+      const { width, height } = localRef.current?.getBoundingClientRect() || {};
+      const left = localRef.current?.offsetLeft || 0;
+      const top = localRef.current?.offsetTop || 0;
+
+      onPerfect && onPerfect({ width, height, left, top } as DOMRect);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active, isDirty, isExact, isPerfect]);
+
   return {
+    localRef,
     inputValueList,
     wasteInputValue,
     isDirty,
