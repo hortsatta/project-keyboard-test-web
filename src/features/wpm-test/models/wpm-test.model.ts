@@ -1,5 +1,10 @@
 import type { ChangeEvent } from 'react';
 
+export enum TestMode {
+  Time = 'time',
+  Word = 'word',
+}
+
 export type ComboCounter = {
   count: number;
   highestCount: number;

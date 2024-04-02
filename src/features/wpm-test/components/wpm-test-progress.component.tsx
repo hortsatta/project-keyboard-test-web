@@ -2,13 +2,14 @@ import { memo, useEffect, useMemo } from 'react';
 import cx from 'classix';
 
 import { useBoundStore } from '#/core/hooks/use-store.hook';
-import { useWPMTestTimer } from '../hooks/use-wpm-test-countdown.hook';
+import { TestMode } from '../models/wpm-test.model';
+import { useWPMTestTimer } from '../hooks/use-wpm-test-timer.hook';
 import { WPMTestProgressBar } from './wpm-test-progress-bar.component';
 
 import type { ComponentProps } from 'react';
 
 type Props = ComponentProps<'div'> & {
-  mode: 'time' | 'word';
+  mode: TestMode;
   endTimeSec?: number;
 };
 
@@ -27,13 +28,13 @@ export const WPMTestProgress = memo(function ({
   });
 
   const currentPoints = useMemo(() => {
-    if (mode === 'time') {
+    if (mode === TestMode.Time) {
       return timer.toString().padStart(3, '0');
     }
   }, [mode, timer]);
 
   const currentProgressValue = useMemo(() => {
-    if (mode === 'time') {
+    if (mode === TestMode.Time) {
       return timer;
     } else {
       return 0;
@@ -41,7 +42,7 @@ export const WPMTestProgress = memo(function ({
   }, [mode, timer]);
 
   const maxProgressValue = useMemo(() => {
-    if (mode === 'time') {
+    if (mode === TestMode.Time) {
       return endTimeSec;
     } else {
       return 0;
@@ -70,7 +71,7 @@ export const WPMTestProgress = memo(function ({
           <div
             className={cx(
               'px-2.5 text-[26px] transition-colors',
-              isPlaying ? 'text-text/80' : 'text-text/40',
+              isPlaying ? 'text-primary/80' : 'text-text/40',
               isPlaying &&
                 currentProgressPercent >= 90 &&
                 'animate-pulse-fast !text-red-500',
@@ -85,7 +86,6 @@ export const WPMTestProgress = memo(function ({
           />
         </div>
       )}
-      {/* TODO Combo */}
     </div>
   );
 });

@@ -9,7 +9,10 @@ export const WPMTestToolbarMenu = memo(function ({
 }: ComponentProps<'div'>) {
   return (
     <div
-      className={cx('h-8 w-full rounded-sm bg-primary/10', className)}
+      className={cx(
+        'h-full w-full rounded border border-primary/30 bg-primary/10',
+        className,
+      )}
       {...moreProps}
     >
       {/* time */}

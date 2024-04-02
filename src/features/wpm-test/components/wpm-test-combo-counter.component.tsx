@@ -108,7 +108,7 @@ export const WPMTestComboCounter = memo(function ({
           <span
             className={cx(
               'inline-block overflow-hidden rounded-[1px] bg-gradient-to-b from-[#ffd679] from-30% to-[#b57b06]',
-              'px-1.5 py-px text-xs font-bold uppercase leading-[1.2] tracking-tight text-backdrop opacity-80',
+              'px-1.5 py-px text-xs font-bold uppercase leading-[1.2] tracking-tight text-backdrop opacity-90',
             )}
           >
             Perfect

@@ -10,6 +10,9 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      maxWidth: {
+        main: '876px',
+      },
       fontFamily: {
         body: ['var(--font-body)', ...defaultTheme.fontFamily.sans],
       },

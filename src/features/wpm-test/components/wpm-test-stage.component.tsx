@@ -9,6 +9,7 @@ import { WPMTestWordPassage } from './wpm-test-word-passage.component';
 import { WPMTestComboCounter } from './wpm-test-combo-counter.component';
 
 import type { ComponentProps } from 'react';
+import { TestMode } from '../models/wpm-test.model';
 
 const TEMP_VALUE =
   'love is not like pizza everyone pretends to like wheat until you mention barley you have every right to be angry but that does give you the right to be mean the water flowing down the river did look that powerful from the car the efficiency we have at removing trash has made creating trash more acceptable flesh yoga pants were far worse than even he feared love is not like pizza everyone pretends to like wheat until you mention barley you have every right to be angry but that does give you the right';
@@ -62,7 +63,7 @@ export const WPMTestStage = memo(function ({
         onBackspace={resetComboCounter}
         disabled={!isPlaying && fullInputValue != null}
       />
-      <div className='relative h-[200px] max-w-4xl'>
+      <div className='max-w-main relative h-[200px]'>
         <WPMTestComboCounter
           className='!absolute right-full top-1/2 mr-6 -translate-y-1/2'
           count={comboCounterCount}
@@ -85,7 +86,11 @@ export const WPMTestStage = memo(function ({
             <div className='h-2 w-full bg-backdrop' />
           </div>
         </div>
-        <WPMTestProgress className='pl-1 pr-5' mode='time' endTimeSec={60} />
+        <WPMTestProgress
+          className='px-1'
+          mode={TestMode.Time}
+          endTimeSec={60}
+        />
       </div>
     </div>
   );
