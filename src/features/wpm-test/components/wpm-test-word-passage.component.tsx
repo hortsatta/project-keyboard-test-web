@@ -10,18 +10,12 @@ import type { ComponentProps } from 'react';
 import blastEffectJson from '#/assets/json/blast-effect.json';
 
 type Props = ComponentProps<'div'> & {
-  activeIndex: number;
-  value?: string;
-  inputValue?: string;
-  fullInputValue?: string;
+  passageList?: string[];
 };
 
 export const WPMTestWordPassage = memo(function ({
   className,
-  value,
-  inputValue,
-  fullInputValue,
-  activeIndex,
+  passageList,
   ...moreProps
 }: Props) {
   const {
@@ -32,12 +26,12 @@ export const WPMTestWordPassage = memo(function ({
     textCursorStyle,
     wordStyle,
     blastEffectStyle,
-    valueList,
-    fullInputValueList,
+    activeIndex,
+    inputValue,
+    transcripts,
     handleActiveWordRef,
-    handleMistake,
     handlePerfectWord,
-  } = useWPMTestWordPassage(value, inputValue, fullInputValue);
+  } = useWPMTestWordPassage();
 
   return (
     <div
@@ -70,7 +64,7 @@ export const WPMTestWordPassage = memo(function ({
         speed={2}
         loop={false}
       />
-      {valueList?.map((str, index) => (
+      {passageList?.map((str, index) => (
         <Fragment key={`word-${index}`}>
           {activeIndex === index ? (
             <WPMTestWordSingle
@@ -78,7 +72,7 @@ export const WPMTestWordPassage = memo(function ({
               style={wordStyle}
               value={str}
               inputValue={inputValue}
-              onMistake={handleMistake}
+              transcript={transcripts[index]}
               active
             />
           ) : (
@@ -86,7 +80,8 @@ export const WPMTestWordPassage = memo(function ({
               style={wordStyle}
               className='relative z-10'
               value={str}
-              inputValue={fullInputValueList[index]}
+              inputValue={transcripts[index]?.inputValue}
+              transcript={transcripts[index]}
               onPerfect={handlePerfectWord}
             />
           )}

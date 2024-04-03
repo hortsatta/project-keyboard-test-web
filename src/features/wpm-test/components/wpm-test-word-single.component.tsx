@@ -1,16 +1,17 @@
-import { forwardRef, memo, useCallback } from 'react';
+import { forwardRef, memo } from 'react';
 import cx from 'classix';
 
 import { useWPMTestWordSingle } from '../hooks/use-wpm-test-word-single.hook';
 import { WPMTestWordMark } from './wpm-test-word-mark.component';
 
 import type { ComponentProps } from 'react';
+import type { Transcript } from '../models/wpm-test.model';
 
 type Props = ComponentProps<'div'> & {
   value: string;
   inputValue?: string;
   active?: boolean;
-  onMistake?: () => void;
+  transcript?: Transcript;
   onPerfect?: (rect?: DOMRect) => void;
 };
 
@@ -21,33 +22,26 @@ export const WPMTestWordSingle = memo(
       value,
       inputValue,
       active,
-      onMistake,
+      transcript,
       onPerfect,
       ...moreProps
     },
     ref,
   ) {
     const {
-      localRef,
       inputValueList,
       wasteInputValue,
       isDirty,
       isExact,
       isPerfect,
-    } = useWPMTestWordSingle(value, inputValue, active, onMistake, onPerfect);
-
-    const handleMergeRefs = useCallback(
-      (instance: HTMLElement) => {
-        // Set localRef
-        localRef.current = instance;
-        // Set forwardRef
-        if (!ref) {
-          return;
-        }
-
-        typeof ref === 'function' ? ref(instance) : (ref.current = instance);
-      },
-      [ref, localRef],
+      handleMergeRefs,
+    } = useWPMTestWordSingle(
+      value,
+      inputValue,
+      active,
+      transcript,
+      ref,
+      onPerfect,
     );
 
     return (

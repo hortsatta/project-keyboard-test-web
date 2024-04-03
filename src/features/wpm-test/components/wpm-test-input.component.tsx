@@ -1,32 +1,52 @@
-import { forwardRef, memo, useCallback } from 'react';
+import { forwardRef, memo, useCallback, useMemo } from 'react';
 import cx from 'classix';
+
+import { useBoundStore } from '#/core/hooks/use-store.hook';
 
 import type { ChangeEvent, ComponentProps, KeyboardEvent } from 'react';
 
 type Props = ComponentProps<'input'> & {
-  onNext?: () => void;
-  onBack?: () => void;
-  onBackspace?: () => void;
+  passageList: string[];
 };
 
 export const WPMTestInput = memo(
   forwardRef<HTMLInputElement, Props>(function (
-    { className, value, onChange, onNext, onBack, onBackspace, ...moreProps },
+    { className, passageList, ...moreProps },
     ref,
   ) {
-    const handleChange = useCallback(
-      (event: ChangeEvent<HTMLInputElement>) => {
-        const { value } = event.target;
-        const lastChar = value[value.length - 1];
+    const isPlaying = useBoundStore((state) => state.isPlaying);
+    const activeIndex = useBoundStore((state) => state.activeIndex);
+    const inputValue = useBoundStore((state) => state.inputValue);
+    const transcripts = useBoundStore((state) => state.transcripts);
+    const setInputChange = useBoundStore((state) => state.setInputChange);
+    const setInputNext = useBoundStore((state) => state.setInputNext);
+    const setInputBack = useBoundStore((state) => state.setInputBack);
 
-        if (lastChar === ' ') {
-          event.target.value = '';
-          value.length > 1 && onNext && onNext();
+    const activePassage = useMemo(
+      () => passageList[activeIndex + 1],
+      [passageList, activeIndex],
+    );
+
+    const handleBack = useCallback(
+      (event: KeyboardEvent<HTMLInputElement>) => {
+        if ((inputValue as string)?.length > 0) {
+          return;
         }
-
-        onChange && onChange(event);
+        event.preventDefault();
+        setInputBack();
       },
-      [onChange, onNext],
+      [inputValue, setInputBack],
+    );
+
+    const handleNext = useCallback(
+      (event: KeyboardEvent<HTMLInputElement>) => {
+        event.preventDefault();
+        setInputNext(activePassage);
+        setInputChange({
+          target: { value: '' },
+        } as ChangeEvent<HTMLInputElement>);
+      },
+      [activePassage, setInputNext, setInputChange],
     );
 
     const handleKeyDown = useCallback(
@@ -43,29 +63,25 @@ export const WPMTestInput = memo(
           event.preventDefault();
         }
 
-        if (event.key !== 'Backspace') {
-          return;
-        }
-
-        onBackspace && onBackspace();
-
-        if ((value as string)?.length <= 0) {
-          onBack && onBack();
-          event.preventDefault();
+        if (event.key === 'Backspace') {
+          handleBack(event);
+        } else if (event.key === ' ') {
+          handleNext(event);
         }
       },
-      [value, onBack, onBackspace],
+      [handleBack, handleNext],
     );
 
     return (
       <input
         ref={ref}
         type='text'
-        value={value}
+        value={inputValue}
         className={cx('absolute left-0 top-0 -z-10 w-0', className)}
         tabIndex={0}
-        onChange={handleChange}
+        onChange={setInputChange}
         onKeyDown={handleKeyDown}
+        disabled={!isPlaying && !!transcripts.length}
         autoFocus
         {...moreProps}
       />

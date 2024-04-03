@@ -1,27 +1,32 @@
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useMemo, useEffect, useRef, useCallback } from 'react';
 import levenshtein from 'damerau-levenshtein';
 
-import type { MutableRefObject } from 'react';
+import type { ForwardedRef } from 'react';
+import type { Transcript } from '../models/wpm-test.model';
 
 type Result = {
-  localRef: MutableRefObject<HTMLElement | null>;
   inputValueList: string[];
   wasteInputValue: string | undefined;
   isDirty: boolean;
   isExact: boolean;
   isPerfect: boolean;
+  handleMergeRefs: (instance: HTMLElement) => void;
 };
 
 export function useWPMTestWordSingle(
   value: string,
   inputValue?: string,
   active?: boolean,
-  onMistake?: () => void,
+  transcript?: Transcript,
+  ref?: ForwardedRef<HTMLElement>,
   onPerfect?: (rect: DOMRect) => void,
 ): Result {
+  const { isDirty, hasBackspace } = transcript || {
+    isDirty: false,
+    hasBackspace: false,
+  };
+
   const localRef = useRef<HTMLElement | null>(null);
-  const [isDirty, setIsDirty] = useState(false);
-  const [isPerfect, setIsPerfect] = useState(true);
 
   const inputValueList = useMemo(
     () => inputValue?.split('') || [],
@@ -39,40 +44,24 @@ export function useWPMTestWordSingle(
     return similarity === 1;
   }, [value, inputValue]);
 
-  // Set dirty status
-  useEffect(() => {
-    if (!active) {
-      return;
-    }
+  const isPerfect = useMemo(
+    () => (!isDirty ? false : isExact && !hasBackspace),
+    [isExact, isDirty, hasBackspace],
+  );
 
-    setIsDirty((prev) => {
-      if (prev) {
-        return true;
+  const handleMergeRefs = useCallback(
+    (instance: HTMLElement) => {
+      // Set localRef
+      localRef.current = instance;
+      // Set forwardRef
+      if (!ref) {
+        return;
       }
 
-      return inputValue?.trim().length ? true : false;
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputValue]);
-
-  // Check if input has mistake, set as perfect if none
-  useEffect(() => {
-    if (!isDirty) {
-      return;
-    }
-
-    const hasMistake = inputValue
-      ?.split('')
-      .some((char, index) => char !== value[index]);
-
-    if (!hasMistake) {
-      return;
-    }
-
-    setIsPerfect(false);
-    onMistake && onMistake();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDirty, value, inputValue]);
+      typeof ref === 'function' ? ref(instance) : (ref.current = instance);
+    },
+    [ref, localRef],
+  );
 
   useEffect(() => {
     if (isDirty && !active && isExact && isPerfect) {
@@ -86,11 +75,11 @@ export function useWPMTestWordSingle(
   }, [active, isDirty, isExact, isPerfect]);
 
   return {
-    localRef,
     inputValueList,
     wasteInputValue,
     isDirty,
     isExact,
     isPerfect,
+    handleMergeRefs,
   };
 }

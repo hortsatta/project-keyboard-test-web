@@ -5,6 +5,13 @@ export enum TestMode {
   Word = 'word',
 }
 
+export type Transcript = {
+  inputValue: string;
+  targetText: string;
+  hasBackspace: boolean;
+  isDirty: boolean;
+};
+
 export type ComboCounter = {
   count: number;
   highestCount: number;
@@ -17,10 +24,13 @@ export type WPMTestSlice = {
   inputValue: string;
   fullInputValue: string | undefined;
   comboCounter: ComboCounter;
+  transcripts: Transcript[];
   setInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  setInputNext: () => void;
+  setInputNext: (targetText?: string) => void;
   setInputBack: () => void;
   stopPlaying: () => void;
   appendComboCounter: () => void;
-  resetComboCounter: () => void;
+  resetComboCounter: (hardReset?: boolean) => void;
+  initializeTranscripts: (targetText: string) => void;
+  resetTranscripts: () => void;
 };

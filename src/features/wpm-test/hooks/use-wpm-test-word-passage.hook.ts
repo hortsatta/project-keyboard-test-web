@@ -3,6 +3,7 @@ import { useBoundStore } from '#/core/hooks/use-store.hook';
 
 import type { CSSProperties, RefObject } from 'react';
 import type { AnimationItem } from 'lottie-web';
+import type { Transcript } from '../models/wpm-test.model';
 
 type Result = {
   wrapperRef: RefObject<HTMLDivElement>;
@@ -12,10 +13,10 @@ type Result = {
   textCursorStyle: CSSProperties | undefined;
   wordStyle: CSSProperties | undefined;
   blastEffectStyle: CSSProperties | undefined;
-  valueList: string[] | undefined;
-  fullInputValueList: string[];
+  activeIndex: number;
+  inputValue: string;
+  transcripts: Transcript[];
   handleActiveWordRef: (node: HTMLElement) => void;
-  handleMistake: () => void;
   handlePerfectWord: (rect?: DOMRect) => void;
 };
 
@@ -61,13 +62,10 @@ const getPosY = (node: HTMLElement, offsetTop = 0) => {
   return offsetTop - parseInt(marginTop, 10);
 };
 
-export function useWPMTestWordPassage(
-  value?: string,
-  inputValue?: string,
-  fullInputValue?: string,
-): Result {
-  const appendComboCounter = useBoundStore((state) => state.appendComboCounter);
-  const resetComboCounter = useBoundStore((state) => state.resetComboCounter);
+export function useWPMTestWordPassage(): Result {
+  const activeIndex = useBoundStore((state) => state.activeIndex);
+  const inputValue = useBoundStore((state) => state.inputValue);
+  const transcripts = useBoundStore((state) => state.transcripts);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const charSampleRef = useRef<HTMLInputElement>(null);
   const blastEffectRef = useRef<AnimationItem | undefined>(null);
@@ -86,18 +84,6 @@ export function useWPMTestWordPassage(
 
   const [wordHeight, setWordHeight] = useState(0);
   const [blastEffectStyle, setBlastEffectStyle] = useState({});
-
-  const valueList = useMemo(
-    () => value?.split(/(\s+)/).filter((str) => str.trim().length > 0),
-    [value],
-  );
-
-  const fullInputValueList = useMemo(
-    () =>
-      fullInputValue?.split(/(\s+)/).filter((str) => str.trim().length > 0) ||
-      [],
-    [fullInputValue],
-  );
 
   const wordStyle = useMemo(
     () => ({
@@ -177,12 +163,10 @@ export function useWPMTestWordPassage(
 
   const handlePerfectWord = useCallback(
     (rect?: DOMRect) => {
-      // Play perfect animation effect and
-      // +1 to combo counter
+      // Play perfect animation effect on +1 to combo counter
       playBlastEffect(rect);
-      appendComboCounter();
     },
-    [playBlastEffect, appendComboCounter],
+    [playBlastEffect],
   );
 
   useEffect(() => {
@@ -220,10 +204,10 @@ export function useWPMTestWordPassage(
     textCursorStyle,
     wordStyle,
     blastEffectStyle,
-    valueList,
-    fullInputValueList,
+    activeIndex,
+    inputValue,
+    transcripts,
     handleActiveWordRef,
-    handleMistake: resetComboCounter,
     handlePerfectWord,
   };
 }

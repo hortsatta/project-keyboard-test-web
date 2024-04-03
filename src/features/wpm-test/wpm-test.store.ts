@@ -1,3 +1,10 @@
+import {
+  appendTranscripts,
+  checkMistake,
+  checkSimilarity,
+  updateTranscripts,
+} from './helpers/transcript.helper';
+
 import type { ChangeEvent } from 'react';
 import type { StateCreator } from 'zustand';
 import type { WPMTestSlice } from './models/wpm-test.model';
@@ -17,25 +24,85 @@ export const createWPMTestSlice: StateCreator<
   activeIndex: 0,
   inputValue: '',
   fullInputValue: undefined,
+  transcripts: [],
   comboCounter: DEFAULT_COMBO_COUNTER,
 
-  setInputChange: (event: ChangeEvent<HTMLInputElement>) =>
-    set(({ isPlaying, fullInputValue }) => {
-      const { value } = event.target;
+  setInputChange: (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    const newState: Record<string, unknown> = { inputValue: value };
 
-      return !isPlaying && fullInputValue == null && value.length
-        ? { inputValue: value, isPlaying: true }
-        : { inputValue: value };
-    }),
+    const {
+      activeIndex,
+      isPlaying,
+      fullInputValue,
+      transcripts,
+      resetComboCounter,
+    } = get();
 
-  setInputNext: () =>
-    set(({ activeIndex, inputValue, fullInputValue }) => ({
-      activeIndex: activeIndex + 1,
-      fullInputValue: (fullInputValue || '') + ' ' + inputValue,
-    })),
+    const updatedTranscript = updateTranscripts(
+      transcripts,
+      activeIndex,
+      value,
+    );
+    const targetTranscript = (updatedTranscript || [])[activeIndex];
 
-  setInputBack: () =>
-    set(({ activeIndex, fullInputValue, comboCounter }) => {
+    targetTranscript &&
+      checkMistake(
+        value,
+        targetTranscript.targetText,
+        targetTranscript.hasBackspace,
+        resetComboCounter,
+      );
+
+    if (!isPlaying && fullInputValue == null && value.length) {
+      newState.isPlaying = true;
+    }
+
+    if (updatedTranscript) {
+      newState.transcripts = updatedTranscript;
+    }
+
+    set(newState);
+  },
+
+  setInputNext: (targetText?: string) => {
+    const {
+      activeIndex,
+      inputValue,
+      fullInputValue,
+      transcripts,
+      appendComboCounter,
+      resetComboCounter,
+    } = get();
+
+    const nextActiveIndex = activeIndex + 1;
+    const updatedFullInputValue = (fullInputValue || '') + ' ' + inputValue;
+    const targetTranscript = transcripts[activeIndex];
+
+    const newState: Record<string, unknown> = {
+      activeIndex: nextActiveIndex,
+      fullInputValue: updatedFullInputValue,
+    };
+
+    targetTranscript &&
+      checkSimilarity(
+        inputValue,
+        targetTranscript.targetText,
+        targetTranscript.hasBackspace,
+        appendComboCounter,
+        resetComboCounter,
+      );
+
+    // Add current value data to the transcript if targetText is not null
+    if (nextActiveIndex >= transcripts.length && targetText?.length) {
+      newState.transcripts = appendTranscripts(transcripts, targetText);
+    }
+
+    set(newState);
+  },
+
+  setInputBack: () => {
+    set(({ activeIndex, fullInputValue }) => {
       const targetIndex = activeIndex > 0 ? activeIndex - 1 : 0;
       const fullInputValueList =
         fullInputValue?.split(/(\s+)/).filter((str) => str.trim().length > 0) ||
@@ -45,9 +112,11 @@ export const createWPMTestSlice: StateCreator<
         activeIndex: targetIndex,
         inputValue: fullInputValueList[targetIndex] || '',
         fullInputValue: fullInputValueList.slice(0, -1).join(' '),
-        comboCounter: { ...comboCounter, count: 0 },
       };
-    }),
+    });
+    // Reset combo counter
+    get().resetComboCounter();
+  },
 
   stopPlaying: () => {
     const { inputValue, setInputNext } = get();
@@ -77,4 +146,13 @@ export const createWPMTestSlice: StateCreator<
 
       return { comboCounter };
     }),
+
+  initializeTranscripts: (targetText: string) =>
+    set({
+      transcripts: [
+        { inputValue: '', targetText, hasBackspace: false, isDirty: false },
+      ],
+    }),
+
+  resetTranscripts: () => set({ transcripts: [] }),
 });
