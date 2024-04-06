@@ -4,15 +4,14 @@ import {
   checkSimilarity,
   updateTranscripts,
 } from './helpers/transcript.helper';
+import {
+  DEFAULT_COMBO_COUNTER,
+  DEFAULT_TEST_OPTIONS,
+} from './config/wpm-test.config';
 
 import type { ChangeEvent } from 'react';
 import type { StateCreator } from 'zustand';
-import type { WPMTestSlice } from './models/wpm-test.model';
-
-const DEFAULT_COMBO_COUNTER = {
-  count: 0,
-  highestCount: 0,
-};
+import type { TestOptions, WPMTestSlice } from './models/wpm-test.model';
 
 export const createWPMTestSlice: StateCreator<
   WPMTestSlice,
@@ -20,12 +19,19 @@ export const createWPMTestSlice: StateCreator<
   [],
   WPMTestSlice
 > = (set, get) => ({
+  testOptions: DEFAULT_TEST_OPTIONS.time,
   isPlaying: false,
+  isComplete: false,
   activeIndex: 0,
   inputValue: '',
   fullInputValue: undefined,
   transcripts: [],
   comboCounter: DEFAULT_COMBO_COUNTER,
+
+  setTestOptions: (testOptions: TestOptions) => {
+    get().resetTest();
+    set({ testOptions });
+  },
 
   setInputChange: (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -118,11 +124,11 @@ export const createWPMTestSlice: StateCreator<
     get().resetComboCounter();
   },
 
-  stopPlaying: () => {
+  setComplete: () => {
     const { inputValue, setInputNext } = get();
 
     inputValue.trim().length && setInputNext();
-    set({ isPlaying: false, inputValue: '' });
+    set({ isPlaying: false, isComplete: true, inputValue: '' });
   },
 
   appendComboCounter: () =>
@@ -148,11 +154,26 @@ export const createWPMTestSlice: StateCreator<
     }),
 
   initializeTranscripts: (targetText: string) =>
-    set({
+    set(({ inputValue }) => ({
       transcripts: [
-        { inputValue: '', targetText, hasBackspace: false, isDirty: false },
+        { inputValue, targetText, hasBackspace: false, isDirty: false },
       ],
-    }),
+    })),
 
   resetTranscripts: () => set({ transcripts: [] }),
+
+  resetTest: () => {
+    const { resetComboCounter, resetTranscripts } = get();
+
+    resetComboCounter(true);
+    resetTranscripts();
+
+    set(() => ({
+      isPlaying: false,
+      isComplete: false,
+      activeIndex: 0,
+      inputValue: '',
+      fullInputValue: undefined,
+    }));
+  },
 });

@@ -53,6 +53,7 @@ export default {
             primary: `rgba(${COLOR_DEFAULT_PRIMARY}, 1)`,
             text: `rgba(${COLOR_DEFAULT_TEXT}, 1)`,
             backdrop: `rgba(${COLOR_DEFAULT_BACKDROP}, 1)`,
+            border: `rgba(${COLOR_DEFAULT_PRIMARY}, 0.3)`,
           },
         },
       },

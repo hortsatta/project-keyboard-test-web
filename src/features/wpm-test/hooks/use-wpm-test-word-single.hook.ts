@@ -54,9 +54,7 @@ export function useWPMTestWordSingle(
       // Set localRef
       localRef.current = instance;
       // Set forwardRef
-      if (!ref) {
-        return;
-      }
+      if (!ref) return;
 
       typeof ref === 'function' ? ref(instance) : (ref.current = instance);
     },

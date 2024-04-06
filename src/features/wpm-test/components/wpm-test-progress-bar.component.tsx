@@ -2,9 +2,11 @@ import { memo, useMemo } from 'react';
 import cx from 'classix';
 
 import type { ComponentProps } from 'react';
+import { TestMode } from '../models/wpm-test.model';
 
 type Props = ComponentProps<'div'> & {
   currentProgressPercent: number;
+  mode: TestMode;
   wrapperClassname?: string;
   reverse?: boolean;
 };
@@ -12,6 +14,7 @@ type Props = ComponentProps<'div'> & {
 export const WPMTestProgressBar = memo(function ({
   wrapperClassname,
   currentProgressPercent,
+  mode,
   reverse,
   ...moreProps
 }: Props) {
@@ -28,7 +31,10 @@ export const WPMTestProgressBar = memo(function ({
     >
       <div
         style={progressStyle}
-        className='relative h-0.5 w-full rounded-[1px] bg-text transition-transform duration-1000 ease-linear'
+        className={cx(
+          'relative h-0.5 w-full rounded-[1px] bg-text transition-transform ease-linear',
+          mode === TestMode.Time ? 'duration-1000' : 'duration-150',
+        )}
         {...moreProps}
       />
     </div>

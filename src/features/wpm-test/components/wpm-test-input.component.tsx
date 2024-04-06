@@ -14,10 +14,9 @@ export const WPMTestInput = memo(
     { className, passageList, ...moreProps },
     ref,
   ) {
-    const isPlaying = useBoundStore((state) => state.isPlaying);
+    const isComplete = useBoundStore((state) => state.isComplete);
     const activeIndex = useBoundStore((state) => state.activeIndex);
     const inputValue = useBoundStore((state) => state.inputValue);
-    const transcripts = useBoundStore((state) => state.transcripts);
     const setInputChange = useBoundStore((state) => state.setInputChange);
     const setInputNext = useBoundStore((state) => state.setInputNext);
     const setInputBack = useBoundStore((state) => state.setInputBack);
@@ -29,9 +28,8 @@ export const WPMTestInput = memo(
 
     const handleBack = useCallback(
       (event: KeyboardEvent<HTMLInputElement>) => {
-        if ((inputValue as string)?.length > 0) {
-          return;
-        }
+        if ((inputValue as string)?.length > 0) return;
+
         event.preventDefault();
         setInputBack();
       },
@@ -41,12 +39,15 @@ export const WPMTestInput = memo(
     const handleNext = useCallback(
       (event: KeyboardEvent<HTMLInputElement>) => {
         event.preventDefault();
+
+        if (inputValue.length < 1) return;
+
         setInputNext(activePassage);
         setInputChange({
           target: { value: '' },
         } as ChangeEvent<HTMLInputElement>);
       },
-      [activePassage, setInputNext, setInputChange],
+      [activePassage, inputValue, setInputNext, setInputChange],
     );
 
     const handleKeyDown = useCallback(
@@ -77,11 +78,11 @@ export const WPMTestInput = memo(
         ref={ref}
         type='text'
         value={inputValue}
-        className={cx('absolute left-0 top-0 -z-10 w-0', className)}
+        className={cx('absolute left-0 top-0 -z-10 w-0 opacity-0', className)}
         tabIndex={0}
         onChange={setInputChange}
         onKeyDown={handleKeyDown}
-        disabled={!isPlaying && !!transcripts.length}
+        disabled={isComplete}
         autoFocus
         {...moreProps}
       />

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import cx from 'classix';
 
 import { WPMTestToolbarMenu } from '#/wpm-test/components/wpm-test-toolbar-menu.component';
+import { useBoundStore } from '../hooks/use-store.hook';
 
 import type { ComponentProps } from 'react';
 
@@ -14,10 +15,13 @@ export const CoreHeader = memo(function ({
   className,
   ...moreProps
 }: ComponentProps<'header'>) {
+  const isMinimalUI = useBoundStore((state) => state.isMinimalUI);
+
   return (
     <header
       className={cx(
-        'relative z-50 flex h-[61px] w-full items-center gap-4',
+        'relative z-50 flex h-[61px] w-full items-center gap-4 transition-opacity duration-500 hover:!pointer-events-auto hover:!opacity-100',
+        isMinimalUI && 'pointer-events-none opacity-0',
         className,
       )}
       {...moreProps}
@@ -29,7 +33,7 @@ export const CoreHeader = memo(function ({
         <h1 className='absolute left-full top-full'>{APP_TITLE}</h1>
         <img src={logoPng} alt='logo' />
       </Link>
-      <WPMTestToolbarMenu className='max-w-main pl-2 pr-4' />
+      <WPMTestToolbarMenu className='h-full max-w-main flex-1' />
     </header>
   );
 });

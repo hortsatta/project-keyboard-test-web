@@ -63,6 +63,8 @@ const getPosY = (node: HTMLElement, offsetTop = 0) => {
 };
 
 export function useWPMTestWordPassage(): Result {
+  const isPlaying = useBoundStore((state) => state.isPlaying);
+  const isComplete = useBoundStore((state) => state.isComplete);
   const activeIndex = useBoundStore((state) => state.activeIndex);
   const inputValue = useBoundStore((state) => state.inputValue);
   const transcripts = useBoundStore((state) => state.transcripts);
@@ -102,9 +104,7 @@ export function useWPMTestWordPassage(): Result {
 
   const handleActiveWordRef = useCallback(
     (node: HTMLElement) => {
-      if (!node) {
-        return;
-      }
+      if (!node) return;
 
       const wordHeight = getElementHeight(node);
       const offsetX = (inputValue?.length || 0) * charSampleSize.width;
@@ -127,9 +127,7 @@ export function useWPMTestWordPassage(): Result {
 
       const currentPosY = getPosY(node, posY);
 
-      if (currentPosY === textCursorPosY.value) {
-        return;
-      }
+      if (currentPosY === textCursorPosY.value) return;
 
       setTextCursorPosY({
         value: currentPosY,
@@ -141,9 +139,7 @@ export function useWPMTestWordPassage(): Result {
 
   const playBlastEffect = useCallback(
     (rect?: DOMRect) => {
-      if (!blastEffectRef?.current || !rect) {
-        return;
-      }
+      if (!blastEffectRef?.current || !rect) return;
 
       const posX = rect.left + rect.width / 2 - BLAST_EFFECT_SIZE - 1;
       const posY = rect.top + 3 - wordHeight;
@@ -177,9 +173,7 @@ export function useWPMTestWordPassage(): Result {
   }, [charSampleRef.current?.clientWidth]);
 
   useEffect(() => {
-    if (wordHeight <= 0 || textCursorPosY.value <= 0) {
-      return;
-    }
+    if (wordHeight <= 0 || textCursorPosY.value <= 0) return;
 
     if (textCursorPosY.isForward) {
       textCursorPosY.value >= wordHeight * 2 &&
@@ -195,6 +189,15 @@ export function useWPMTestWordPassage(): Result {
         });
     }
   }, [wordHeight, textCursorPosY]);
+
+  useEffect(() => {
+    !isPlaying &&
+      !isComplete &&
+      wrapperRef.current?.scrollTo({
+        top: 0,
+        ...DEFAULT_SCROLLBY_OPTIONS,
+      });
+  }, [isPlaying, isComplete]);
 
   return {
     wrapperRef,

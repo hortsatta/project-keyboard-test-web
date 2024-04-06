@@ -1,87 +1,60 @@
-import { memo, useEffect, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import cx from 'classix';
 
 import { useBoundStore } from '#/core/hooks/use-store.hook';
-import { TestMode } from '../models/wpm-test.model';
-import { useWPMTestTimer } from '../hooks/use-wpm-test-timer.hook';
 import { WPMTestProgressBar } from './wpm-test-progress-bar.component';
 
 import type { ComponentProps } from 'react';
-
-type Props = ComponentProps<'div'> & {
-  mode: TestMode;
-  endTimeSec?: number;
-};
+import { TestMode } from '../models/wpm-test.model';
 
 const PROGRESS_BAR_CLASSNAME = 'flex-1 opacity-30';
 
+type Props = ComponentProps<'div'> & {
+  value: number;
+};
+
 export const WPMTestProgress = memo(function ({
   className,
-  endTimeSec,
-  mode,
+  value,
   ...moreProps
 }: Props) {
+  const { timeWordAmount } = useBoundStore((state) => state.testOptions);
+  const { mode } = useBoundStore((state) => state.testOptions);
   const isPlaying = useBoundStore((state) => state.isPlaying);
-  const stopPlaying = useBoundStore((state) => state.stopPlaying);
-  const { timer, start } = useWPMTestTimer(endTimeSec || 0, {
-    onComplete: stopPlaying,
-  });
 
-  const currentPoints = useMemo(() => {
-    if (mode === TestMode.Time) {
-      return timer.toString().padStart(3, '0');
-    }
-  }, [mode, timer]);
-
-  const currentProgressValue = useMemo(() => {
-    if (mode === TestMode.Time) {
-      return timer;
-    } else {
-      return 0;
-    }
-  }, [mode, timer]);
-
-  const maxProgressValue = useMemo(() => {
-    if (mode === TestMode.Time) {
-      return endTimeSec;
-    } else {
-      return 0;
-    }
-  }, [mode, endTimeSec]);
+  const points = useMemo(() => value.toString().padStart(3, '0'), [value]);
 
   const currentProgressPercent = useMemo(
-    () =>
-      100 - Math.ceil((currentProgressValue / (maxProgressValue || 0)) * 100),
-    [currentProgressValue, maxProgressValue],
+    () => 100 - Math.ceil((value / timeWordAmount) * 100),
+    [value, timeWordAmount],
   );
-
-  useEffect(() => {
-    isPlaying && start();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPlaying]);
 
   return (
     <div className={cx('w-full', className)} {...moreProps}>
-      {maxProgressValue != null && (
+      {timeWordAmount != null && (
         <div className='flex w-full items-center'>
           <WPMTestProgressBar
             wrapperClassname={PROGRESS_BAR_CLASSNAME}
             currentProgressPercent={currentProgressPercent}
+            mode={mode}
           />
           <div
             className={cx(
               'px-2.5 text-[26px] transition-colors',
               isPlaying ? 'text-primary/80' : 'text-text/40',
+              isPlaying && currentProgressPercent >= 90 && 'animate-pulse-fast',
               isPlaying &&
                 currentProgressPercent >= 90 &&
-                'animate-pulse-fast !text-red-500',
+                mode === TestMode.Time &&
+                '!text-red-500',
             )}
           >
-            {currentPoints}
+            {points}
           </div>
           <WPMTestProgressBar
             wrapperClassname={PROGRESS_BAR_CLASSNAME}
             currentProgressPercent={currentProgressPercent}
+            mode={mode}
             reverse
           />
         </div>

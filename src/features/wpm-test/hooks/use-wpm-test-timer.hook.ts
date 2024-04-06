@@ -1,30 +1,28 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 type Options = {
-  isPlaying?: boolean;
   onComplete?: () => void;
 };
 
 type Result = {
   timer: number;
-  isPlaying: boolean;
-  start: () => void;
-  stop: () => void;
+  reset: () => void;
 };
 
-export function useWPMTestTimer(endTimeSec: number, options?: Options): Result {
+export function useWPMTestTimer(
+  endTimeSec: number,
+  isPlaying: boolean,
+  options?: Options,
+): Result {
   const timeMs = useRef<number>(endTimeSec * 1000);
   const prevMs = useRef<number>(timeMs.current);
   const [timer, setTimer] = useState(endTimeSec);
-  const [isPlaying, setIsPlaying] = useState(options?.isPlaying || false);
 
-  const start = useCallback(() => {
-    setIsPlaying(true);
-  }, []);
-
-  const stop = useCallback(() => {
-    setIsPlaying(false);
-  }, []);
+  const reset = useCallback(() => {
+    timeMs.current = endTimeSec * 1000;
+    prevMs.current = timeMs.current;
+    setTimer(endTimeSec);
+  }, [endTimeSec]);
 
   useEffect(() => {
     if (!isPlaying || timeMs.current <= 0) return;
@@ -68,10 +66,10 @@ export function useWPMTestTimer(endTimeSec: number, options?: Options): Result {
     };
   }, [isPlaying, options]);
 
-  return {
-    timer,
-    isPlaying,
-    start,
-    stop,
-  };
+  useEffect(() => {
+    reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [endTimeSec]);
+
+  return { timer, reset };
 }
