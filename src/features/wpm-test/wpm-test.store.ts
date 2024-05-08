@@ -6,12 +6,17 @@ import {
 } from './helpers/transcript.helper';
 import {
   DEFAULT_COMBO_COUNTER,
-  DEFAULT_TEST_OPTIONS,
+  DEFAULT_TEST_MODE_OPTIONS,
+  DEFAULT_TEST_SYSTEM_OPTIONS,
 } from './config/wpm-test.config';
 
 import type { ChangeEvent } from 'react';
 import type { StateCreator } from 'zustand';
-import type { TestOptions, WPMTestSlice } from './models/wpm-test.model';
+import type {
+  TestModeOptions,
+  TestSystemOptions,
+  WPMTestSlice,
+} from './models/wpm-test.model';
 
 export const createWPMTestSlice: StateCreator<
   WPMTestSlice,
@@ -19,18 +24,46 @@ export const createWPMTestSlice: StateCreator<
   [],
   WPMTestSlice
 > = (set, get) => ({
-  testOptions: DEFAULT_TEST_OPTIONS.time,
+  testModeOptions: DEFAULT_TEST_MODE_OPTIONS.time,
+  testSystemOptions: DEFAULT_TEST_SYSTEM_OPTIONS,
   isPlaying: false,
   isComplete: false,
   activeIndex: 0,
+  passage: undefined,
   inputValue: '',
   fullInputValue: undefined,
   transcripts: [],
   comboCounter: DEFAULT_COMBO_COUNTER,
+  elapsedTimeMs: 0,
 
-  setTestOptions: (testOptions: TestOptions) => {
-    get().resetTest();
-    set({ testOptions });
+  setTestSystemOptions: (testSystemOptions: TestSystemOptions) =>
+    set({ testSystemOptions }),
+
+  setTestModeOptions: (testModeOptions: TestModeOptions) => {
+    const {
+      isPlaying,
+      isComplete,
+      testModeOptions: currentTestModeOptions,
+      resetTest,
+    } = get();
+
+    if (
+      isPlaying ||
+      isComplete ||
+      currentTestModeOptions.mode !== testModeOptions.mode
+    ) {
+      resetTest();
+    }
+
+    set({ testModeOptions });
+  },
+
+  setPassage: (value: string, append?: boolean) => {
+    if (!value.trim()) return;
+
+    set(({ passage }) => ({
+      passage: append ? `${passage} ${value}` : value,
+    }));
   },
 
   setInputChange: (event: ChangeEvent<HTMLInputElement>) => {
@@ -124,11 +157,16 @@ export const createWPMTestSlice: StateCreator<
     get().resetComboCounter();
   },
 
-  setComplete: () => {
+  setComplete: (elapsedTimeMs = 0) => {
     const { inputValue, setInputNext } = get();
 
     inputValue.trim().length && setInputNext();
-    set({ isPlaying: false, isComplete: true, inputValue: '' });
+    set({
+      isPlaying: false,
+      isComplete: true,
+      inputValue: '',
+      elapsedTimeMs: Math.floor(elapsedTimeMs / 1000) * 1000,
+    });
   },
 
   appendComboCounter: () =>
@@ -146,7 +184,10 @@ export const createWPMTestSlice: StateCreator<
         ? DEFAULT_COMBO_COUNTER
         : {
             ...prevComboCounter,
-            highestCount: prevComboCounter.count,
+            highestCount:
+              prevComboCounter.highestCount < prevComboCounter.count
+                ? prevComboCounter.count
+                : prevComboCounter.highestCount,
             count: 0,
           };
 
@@ -172,8 +213,10 @@ export const createWPMTestSlice: StateCreator<
       isPlaying: false,
       isComplete: false,
       activeIndex: 0,
+      passage: undefined,
       inputValue: '',
       fullInputValue: undefined,
+      elapsedTimeMs: 0,
     }));
   },
 });

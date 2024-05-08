@@ -16,6 +16,7 @@ type Result = {
   activeIndex: number;
   inputValue: string;
   transcripts: Transcript[];
+  isComplete: boolean;
   handleActiveWordRef: (node: HTMLElement) => void;
   handlePerfectWord: (rect?: DOMRect) => void;
 };
@@ -210,6 +211,7 @@ export function useWPMTestWordPassage(): Result {
     activeIndex,
     inputValue,
     transcripts,
+    isComplete,
     handleActiveWordRef,
     handlePerfectWord,
   };

@@ -29,6 +29,7 @@ export const WPMTestWordPassage = memo(function ({
     activeIndex,
     inputValue,
     transcripts,
+    isComplete,
     handleActiveWordRef,
     handlePerfectWord,
   } = useWPMTestWordPassage();
@@ -39,6 +40,8 @@ export const WPMTestWordPassage = memo(function ({
       style={wrapperStyle}
       className={cx(
         'relative flex flex-wrap items-baseline overflow-hidden text-xl font-light leading-8',
+        isComplete &&
+          'overflow-y-scroll scrollbar-thin scrollbar-track-surface scrollbar-thumb-border',
         className,
       )}
       {...moreProps}
@@ -51,10 +54,12 @@ export const WPMTestWordPassage = memo(function ({
         q
       </i>
       {/* Create text cursor */}
-      <div
-        style={textCursorStyle}
-        className='absolute -ml-px -mt-px animate-blink border-l-2 border-primary bg-gradient-to-r from-primary/30 transition-transform duration-75'
-      />
+      {!isComplete && (
+        <div
+          style={textCursorStyle}
+          className='absolute -ml-px -mt-px animate-blink border-l-2 border-primary bg-gradient-to-r from-primary/30 transition-transform duration-75'
+        />
+      )}
       <Lottie
         ref={blastEffectRef}
         style={blastEffectStyle}

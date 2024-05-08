@@ -18,8 +18,10 @@ export const WPMTestProgress = memo(function ({
   value,
   ...moreProps
 }: Props) {
-  const { timeWordAmount } = useBoundStore((state) => state.testOptions);
-  const { mode } = useBoundStore((state) => state.testOptions);
+  const { mode, timeWordAmount } = useBoundStore(
+    (state) => state.testModeOptions,
+  );
+  const comboCounterCount = useBoundStore((state) => state.comboCounter.count);
   const isPlaying = useBoundStore((state) => state.isPlaying);
 
   const points = useMemo(() => value.toString().padStart(3, '0'), [value]);
@@ -34,7 +36,15 @@ export const WPMTestProgress = memo(function ({
       {timeWordAmount != null && (
         <div className='flex w-full items-center'>
           <WPMTestProgressBar
-            wrapperClassname={PROGRESS_BAR_CLASSNAME}
+            className={cx(
+              isPlaying &&
+                comboCounterCount >= 100 &&
+                'max-combo animate-max-combo',
+            )}
+            wrapperClassname={cx(
+              PROGRESS_BAR_CLASSNAME,
+              isPlaying && comboCounterCount >= 100 && '!opacity-80',
+            )}
             currentProgressPercent={currentProgressPercent}
             mode={mode}
           />
@@ -47,12 +57,23 @@ export const WPMTestProgress = memo(function ({
                 currentProgressPercent >= 90 &&
                 mode === TestMode.Time &&
                 '!text-red-500',
+              isPlaying &&
+                comboCounterCount >= 100 &&
+                'max-combo max-combo-mask animate-max-combo',
             )}
           >
             {points}
           </div>
           <WPMTestProgressBar
-            wrapperClassname={PROGRESS_BAR_CLASSNAME}
+            className={cx(
+              isPlaying &&
+                comboCounterCount >= 100 &&
+                'max-combo animate-max-combo',
+            )}
+            wrapperClassname={cx(
+              PROGRESS_BAR_CLASSNAME,
+              isPlaying && comboCounterCount >= 100 && '!opacity-80',
+            )}
             currentProgressPercent={currentProgressPercent}
             mode={mode}
             reverse

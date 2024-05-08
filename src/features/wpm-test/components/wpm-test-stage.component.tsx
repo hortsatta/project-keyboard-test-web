@@ -5,23 +5,26 @@ import cx from 'classix';
 import { useBoundStore } from '#/core/hooks/use-store.hook';
 import { TestMode } from '../models/wpm-test.model';
 import { useWPMTestTimer } from '../hooks/use-wpm-test-timer.hook';
+import { useWPMTestComboCounterColorBackdrop } from '../hooks/use-wpm-test-combo-counter-color-backdrop.hook';
+import { useWPMTestSentenceGenerator } from '../hooks/use-wpm-test-sentence-generator.hook';
 import { useWPMTestWordCounter } from '../hooks/use-wpm-test-word-counter.hook';
 import { WPMTestInput } from './wpm-test-input.component';
 import { WPMTestProgress } from './wpm-test-progress.component';
+import { WPMTestResults } from './wpm-test-results.component';
 import { WPMTestWordPassage } from './wpm-test-word-passage.component';
 import { WPMTestComboCounter } from './wpm-test-combo-counter.component';
+import { WPMTestComboColorBackdrop } from './wpm-test-combo-color-backdrop.component';
+import { WPMTestStageGradientFadeOut } from './wpm-test-stage-gradient-fade-out.component';
 
 import type { ComponentProps } from 'react';
-
-const TEMP_VALUE =
-  'love is not like pizza everyone pretends to like wheat until you mention barley you have every right to be angry but that does give you the right to be mean the water flowing down the river did look that powerful from the car the efficiency we have at removing trash has made creating trash more acceptable flesh yoga pants were far worse than even he feared love is not like pizza everyone pretends to like wheat until you mention barley you have every right to be angry but that does give you the right';
 
 export const WPMTestStage = memo(function ({
   className,
   ...moreProps
 }: ComponentProps<'div'>) {
-  const { mode, timeWordAmount } = useBoundStore((state) => state.testOptions);
-  const { mode: testMode } = useBoundStore((state) => state.testOptions);
+  const { mode: testMode, timeWordAmount } = useBoundStore(
+    (state) => state.testModeOptions,
+  );
   const isPlaying = useBoundStore((state) => state.isPlaying);
   const isComplete = useBoundStore((state) => state.isComplete);
   const setComplete = useBoundStore((state) => state.setComplete);
@@ -29,7 +32,9 @@ export const WPMTestStage = memo(function ({
     (state) => state.initializeTranscripts,
   );
 
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const comboColor = useWPMTestComboCounterColorBackdrop();
+  const { passageList } = useWPMTestSentenceGenerator();
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   const options = useMemo(
@@ -37,11 +42,6 @@ export const WPMTestStage = memo(function ({
       onComplete: setComplete,
     }),
     [setComplete],
-  );
-
-  const passageList = useMemo(
-    () => TEMP_VALUE?.split(/(\s+)/).filter((str) => str.trim().length > 0),
-    [],
   );
 
   const { timer, reset: resetTimer } = useWPMTestTimer(
@@ -57,7 +57,7 @@ export const WPMTestStage = memo(function ({
   );
 
   const progressValue = useMemo(() => {
-    switch (mode) {
+    switch (testMode) {
       case TestMode.Time:
         return timer;
       case TestMode.Word:
@@ -65,13 +65,12 @@ export const WPMTestStage = memo(function ({
       default:
         return 0;
     }
-  }, [mode, timer, currentWordCount]);
+  }, [testMode, timer, currentWordCount]);
 
   const handleWrapperClick = useCallback(() => {
-    inputRef.current?.focus();
-    if (document.activeElement === inputRef.current) {
-      console.log('active');
-    }
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
   }, []);
 
   useEffect(() => {
@@ -85,32 +84,35 @@ export const WPMTestStage = memo(function ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPlaying, isComplete]);
 
-  useOnClickOutside(wrapperRef, handleWrapperClick);
+  useOnClickOutside(inputRef, handleWrapperClick);
 
   return (
-    <div
-      ref={wrapperRef}
-      className={cx('relative flex flex-col items-center', className)}
-      onClick={handleWrapperClick}
-      {...moreProps}
-    >
-      <WPMTestInput ref={inputRef} passageList={passageList} />
-      <div className='relative h-[200px] max-w-main'>
-        <WPMTestComboCounter className='!absolute right-full top-1/2 mr-6 -translate-y-1/2' />
-        <div className='relative mb-2.5 h-[200px] overflow-hidden'>
-          <WPMTestWordPassage className='h-full' passageList={passageList} />
-          {/* Top and bottom fade (gradient) */}
-          <div className='absolute top-0 z-20 flex h-12 w-full flex-col'>
-            <div className='h-3.5 w-full bg-backdrop' />
-            <div className='w-full flex-1 bg-gradient-to-b from-backdrop to-transparent' />
+    <>
+      <div
+        className={cx('relative z-10 flex flex-col items-center', className)}
+        onClick={handleWrapperClick}
+        {...moreProps}
+      >
+        <WPMTestInput ref={inputRef} passageList={passageList} />
+        <div className='relative h-[200px] max-w-main'>
+          {!isComplete && (
+            <WPMTestComboCounter className='!absolute right-full top-1/2 mr-6 -translate-y-1/2' />
+          )}
+          <div className='relative mb-2.5 h-[200px] overflow-hidden'>
+            <WPMTestWordPassage className='h-full' passageList={passageList} />
+            {/* Top and bottom fade (gradient) */}
+            <WPMTestStageGradientFadeOut className='top-0' color={comboColor} />
+            <WPMTestStageGradientFadeOut
+              className='bottom-0'
+              color={comboColor}
+              isBottom
+            />
           </div>
-          <div className='absolute bottom-0 z-20 flex h-12 w-full flex-col'>
-            <div className='w-full flex-1 bg-gradient-to-t from-backdrop to-transparent' />
-            <div className='h-2 w-full bg-backdrop' />
-          </div>
+          <WPMTestProgress className='px-1' value={progressValue} />
+          {isComplete && <WPMTestResults className='mx-auto mt-16' />}
         </div>
-        <WPMTestProgress className='px-1' value={progressValue} />
       </div>
-    </div>
+      <WPMTestComboColorBackdrop />
+    </>
   );
 });

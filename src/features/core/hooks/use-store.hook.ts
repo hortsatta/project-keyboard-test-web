@@ -17,7 +17,7 @@ export const useBoundStore = create<CoreSlice & WPMTestSlice>()(
       {
         name: 'main-storage',
         partialize: (state) => ({
-          options: state.testOptions,
+          options: state.testModeOptions,
         }),
       },
     ),

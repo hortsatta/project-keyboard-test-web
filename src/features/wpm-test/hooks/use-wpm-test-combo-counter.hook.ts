@@ -20,17 +20,18 @@ const COUNTER_WRAPPER_TEXT_CLASSNAMES = [
   'animate-[shaking_0.2s_linear_infinite]',
 ];
 
-const COUNTER_TEXT_CLASSNAMES = [
+const COUNTER_COLOR_CLASSNAMES = [
   'text-text',
   'text-primary',
   'text-teal-400',
-  'text-blue-500',
+  'text-cyan-400',
+  'text-sky-400',
   'text-yellow-400',
   'text-orange-400',
   'text-red-500',
-  'text-fuchsia-400',
+  'text-pink-500',
   'text-violet-500',
-  'animate-max-combo max-combo',
+  'animate-max-combo max-combo max-combo-mask',
 ];
 
 export function useWPMTestComboCounter(): Result {
@@ -60,10 +61,10 @@ export function useWPMTestComboCounter(): Result {
     if (localCount >= 10 && localCount < 100) {
       index = +localCount.toString()[0];
     } else if (localCount >= 100) {
-      index = COUNTER_TEXT_CLASSNAMES.length - 1;
+      index = COUNTER_COLOR_CLASSNAMES.length - 1;
     }
 
-    return COUNTER_TEXT_CLASSNAMES[index];
+    return COUNTER_COLOR_CLASSNAMES[index];
   }, [localCount]);
 
   const removeAppendCounterClassName = useCallback(

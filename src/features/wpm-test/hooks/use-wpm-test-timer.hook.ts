@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 type Options = {
-  onComplete?: () => void;
+  onComplete?: (elapsedTimeMs?: number) => void;
 };
 
 type Result = {
@@ -42,7 +42,7 @@ export function useWPMTestTimer(
       if (timeMs.current <= 0) {
         setTimer(0);
         cancelAnimationFrame(handle);
-        options?.onComplete && options.onComplete();
+        options?.onComplete && options.onComplete(elapsed);
       } else {
         const seconds = Math.floor(timeMs.current / 1000);
         const isUpdate = seconds !== Math.floor(prevMs.current / 1000);

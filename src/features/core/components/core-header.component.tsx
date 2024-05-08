@@ -30,7 +30,7 @@ export const CoreHeader = memo(function ({
         to='/'
         className='relative inline-block w-56 shrink-0 overflow-hidden'
       >
-        <h1 className='absolute left-full top-full'>{APP_TITLE}</h1>
+        <h1 className='sr-only'>{APP_TITLE}</h1>
         <img src={logoPng} alt='logo' />
       </Link>
       <WPMTestToolbarMenu className='h-full max-w-main flex-1' />

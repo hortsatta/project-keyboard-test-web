@@ -6,7 +6,11 @@ export enum TestMode {
   Zen = 'zen',
 }
 
-export type TestOptions = {
+export type TestSystemOptions = {
+  comboBackdropColorSync: boolean;
+};
+
+export type TestModeOptions = {
   mode: TestMode;
   timeWordAmount: number;
 };
@@ -25,15 +29,20 @@ export type ComboCounter = {
 };
 
 export type WPMTestSlice = {
-  testOptions: TestOptions;
+  testSystemOptions: TestSystemOptions;
+  testModeOptions: TestModeOptions;
   isPlaying: boolean;
   isComplete: boolean;
   activeIndex: number;
   inputValue: string;
+  passage: string | undefined;
   fullInputValue: string | undefined;
   comboCounter: ComboCounter;
   transcripts: Transcript[];
-  setTestOptions: (testOptions: TestOptions) => void;
+  elapsedTimeMs: number;
+  setTestSystemOptions: (testSystemOptions: TestSystemOptions) => void;
+  setTestModeOptions: (testModeOptions: TestModeOptions) => void;
+  setPassage: (value: string, append?: boolean) => void;
   setInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
   setInputNext: (targetText?: string) => void;
   setInputBack: () => void;

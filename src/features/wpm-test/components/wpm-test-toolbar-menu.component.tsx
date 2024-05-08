@@ -1,15 +1,17 @@
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import cx from 'classix';
 
-import { useBoundStore } from '#/core/hooks/use-store.hook';
-import { BaseButton } from '#/base/components/base-button.component';
-import { BaseIcon } from '#/base/components/base-icon.component';
 import {
-  DEFAULT_TEST_OPTIONS,
+  DEFAULT_TEST_MODE_OPTIONS,
   timeSecondAmountList,
   wordAmountList,
 } from '../config/wpm-test.config';
 import { TestMode } from '../models/wpm-test.model';
+import { useBoundStore } from '#/core/hooks/use-store.hook';
+import { BaseButton } from '#/base/components/base-button.component';
+import { BaseIcon } from '#/base/components/base-icon.component';
+import { WPMTestSystemOptionsModal } from './wpm-test-system-options-modal.component';
+import { WPMTestAmountCustomSetterModal } from './wpm-test-amount-custom-setter-modal.component';
 
 import type { ComponentProps } from 'react';
 import type { IconName } from '#/base/models/base.model';
@@ -46,9 +48,14 @@ export const WPMTestToolbarMenu = memo(function ({
   className,
   ...moreProps
 }: ComponentProps<'div'>) {
-  const { mode, timeWordAmount } = useBoundStore((state) => state.testOptions);
-  const setTestOptions = useBoundStore((state) => state.setTestOptions);
+  const { mode, timeWordAmount } = useBoundStore(
+    (state) => state.testModeOptions,
+  );
+  const setTestModeOptions = useBoundStore((state) => state.setTestModeOptions);
   const resetTest = useBoundStore((state) => state.resetTest);
+  const [openSystemOptions, setOpenSystemOptions] = useState(false);
+  const [openCustomTimeWordAmount, setOpenCustomTimeWordAmount] =
+    useState(false);
 
   const amountList = useMemo(() => {
     if (mode === TestMode.Time) {
@@ -67,81 +74,113 @@ export const WPMTestToolbarMenu = memo(function ({
     (targetMode: TestMode) => () => {
       if (targetMode === mode) return;
 
-      setTestOptions({
+      setTestModeOptions({
         mode: targetMode,
-        timeWordAmount: DEFAULT_TEST_OPTIONS[targetMode].timeWordAmount,
+        timeWordAmount: DEFAULT_TEST_MODE_OPTIONS[targetMode].timeWordAmount,
       });
     },
-    [mode, setTestOptions],
+    [mode, setTestModeOptions],
   );
 
   const handleAmountChange = useCallback(
     (amount: number) => () => {
       if (amount === timeWordAmount) return;
 
-      setTestOptions({
+      setTestModeOptions({
         mode,
         timeWordAmount: amount,
       });
     },
-    [mode, timeWordAmount, setTestOptions],
+    [mode, timeWordAmount, setTestModeOptions],
   );
 
+  const handleCustomAmountChange = useCallback(
+    (amount: number) => {
+      handleAmountChange(amount)();
+    },
+    [handleAmountChange],
+  );
+
+  const handleCloseModal = useCallback(() => {
+    setOpenSystemOptions(false);
+    setOpenCustomTimeWordAmount(false);
+  }, []);
+
+  const handleOpenSystemOptions = useCallback(() => {
+    setOpenSystemOptions(true);
+  }, []);
+
+  const handleOpenAmountCustomSetter = useCallback(() => {
+    setOpenCustomTimeWordAmount(true);
+  }, []);
+
   return (
-    <div
-      className={cx(
-        'flex h-full w-full items-center gap-2 rounded border border-border bg-primary/10 p-2',
-        className,
-      )}
-      {...moreProps}
-    >
-      <div className={WRAPPER_OPTIONS_CLASSNAME}>
-        {testModes.map(({ value, iconName }) => (
-          <BaseButton
-            key={`tm-${value}`}
-            className={BUTTON_CLASSNAME}
-            iconName={iconName as IconName}
-            onClick={handleModeChange(value)}
-            active={value === mode}
-          />
-        ))}
-      </div>
-      <Border />
-      <div className={cx(WRAPPER_OPTIONS_CLASSNAME, 'flex-1')}>
-        {amountList?.map((amount) => (
-          <BaseButton
-            key={`ta-${amount}`}
-            className={BUTTON_CLASSNAME}
-            onClick={handleAmountChange(amount)}
-            active={amount === timeWordAmount}
-          >
-            {amount}
-          </BaseButton>
-        ))}
-        {mode === TestMode.Zen ? (
-          <BaseIcon name='minus' className='opacity-50' />
-        ) : (
-          <BaseButton
-            className={BUTTON_CLASSNAME}
-            iconName='magic-wand'
-            active={isTImeWordAmountCustom}
-            //  onClick={handleAmountChange(amount)} TODO
-          />
+    <>
+      <div
+        className={cx(
+          'flex h-full w-full items-center gap-2 rounded border border-border bg-primary/10 p-2',
+          className,
         )}
+        {...moreProps}
+      >
+        <div className={WRAPPER_OPTIONS_CLASSNAME}>
+          {testModes.map(({ value, iconName }) => (
+            <BaseButton
+              key={`tm-${value}`}
+              className={BUTTON_CLASSNAME}
+              iconName={iconName as IconName}
+              onClick={handleModeChange(value)}
+              active={value === mode}
+            />
+          ))}
+        </div>
+        <Border />
+        <div className={cx(WRAPPER_OPTIONS_CLASSNAME, 'flex-1')}>
+          {amountList?.map((amount) => (
+            <BaseButton
+              key={`ta-${amount}`}
+              className={BUTTON_CLASSNAME}
+              onClick={handleAmountChange(amount)}
+              active={amount === timeWordAmount}
+            >
+              {amount}
+            </BaseButton>
+          ))}
+          {mode === TestMode.Zen ? (
+            <BaseIcon name='minus' className='opacity-50' />
+          ) : (
+            <BaseButton
+              className={BUTTON_CLASSNAME}
+              iconName='magic-wand'
+              active={isTImeWordAmountCustom}
+              onClick={handleOpenAmountCustomSetter}
+            />
+          )}
+        </div>
+        <Border />
+        <div className={WRAPPER_OPTIONS_CLASSNAME}>
+          <BaseButton
+            className={BUTTON_CLASSNAME}
+            iconName='faders'
+            onClick={handleOpenSystemOptions}
+          />
+          <BaseButton
+            className={BUTTON_CLASSNAME}
+            iconName='rewind'
+            onClick={resetTest}
+          />
+        </div>
       </div>
-      <Border />
-      <div className={WRAPPER_OPTIONS_CLASSNAME}>
-        <BaseButton
-          className={BUTTON_CLASSNAME}
-          iconName='faders'
-          //  onClick={handleAmountChange(amount)} TODO
-        />
-        <BaseButton
-          className={BUTTON_CLASSNAME}
-          iconName='rewind'
-          onClick={resetTest}
-        />
-      </div>
-    </div>
+      <WPMTestSystemOptionsModal
+        open={openSystemOptions}
+        onClose={handleCloseModal}
+      />
+      <WPMTestAmountCustomSetterModal
+        isTime={mode === TestMode.Time}
+        open={openCustomTimeWordAmount}
+        onClose={handleCloseModal}
+        onSubmit={handleCustomAmountChange}
+      />
+    </>
   );
 });

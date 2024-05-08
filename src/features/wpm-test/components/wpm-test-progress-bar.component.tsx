@@ -12,6 +12,7 @@ type Props = ComponentProps<'div'> & {
 };
 
 export const WPMTestProgressBar = memo(function ({
+  className,
   wrapperClassname,
   currentProgressPercent,
   mode,
@@ -34,6 +35,7 @@ export const WPMTestProgressBar = memo(function ({
         className={cx(
           'relative h-0.5 w-full rounded-[1px] bg-text transition-transform ease-linear',
           mode === TestMode.Time ? 'duration-1000' : 'duration-150',
+          className,
         )}
         {...moreProps}
       />

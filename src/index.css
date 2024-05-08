@@ -15,10 +15,20 @@
   body {
     @apply bg-backdrop font-body text-text;
   }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    @apply m-0 appearance-none;
+  }
 }
 
 .max-combo {
   background: -webkit-radial-gradient(#ef4444, #facc15, #3b82f6);
+}
+
+.max-combo-mask {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

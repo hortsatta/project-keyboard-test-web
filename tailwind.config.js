@@ -4,6 +4,7 @@ import tailwindcssThemer from 'tailwindcss-themer';
 const COLOR_DEFAULT_PRIMARY = '55, 177, 59';
 const COLOR_DEFAULT_TEXT = '226, 237, 226';
 const COLOR_DEFAULT_BACKDROP = '8, 25, 8';
+const COLOR_DEFAULT_SURFACE = '13, 40, 13';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -53,6 +54,7 @@ export default {
             primary: `rgba(${COLOR_DEFAULT_PRIMARY}, 1)`,
             text: `rgba(${COLOR_DEFAULT_TEXT}, 1)`,
             backdrop: `rgba(${COLOR_DEFAULT_BACKDROP}, 1)`,
+            surface: `rgba(${COLOR_DEFAULT_SURFACE}, 1)`,
             border: `rgba(${COLOR_DEFAULT_PRIMARY}, 0.3)`,
           },
         },
@@ -72,5 +74,7 @@ export default {
       //   },
       // ],
     }),
+    // eslint-disable-next-line @typescript-eslint/no-var-requires, no-undef
+    require('tailwind-scrollbar')({ nocompatible: true }),
   ],
 };
