@@ -1,9 +1,8 @@
-import { memo, useMemo } from 'react';
-import levenshtein from 'damerau-levenshtein';
+import { memo } from 'react';
 import cx from 'classix';
 
-import { useBoundStore } from '#/core/hooks/use-store.hook';
 import { BaseButton } from '#/base/components/base-button.component';
+import { useWPMTestResults } from '../hooks/use-wpm-test-results.hook';
 
 import type { ComponentProps } from 'react';
 
@@ -14,8 +13,6 @@ type SingleResultProps = ComponentProps<'div'> & {
 const BUTTON_CLASSNAME = 'flex h-full w-12 gap-2 !px-1';
 
 const DIVIDER_CLASSNAME = 'h-20 w-px bg-border';
-
-const multiplier = Math.pow(10, 1);
 
 const SingleResult = memo(function ({
   className,
@@ -43,71 +40,8 @@ export const WPMTestResults = memo(function ({
   className,
   ...moreProps
 }: ComponentProps<'div'>) {
-  const elapsedTimeMs = useBoundStore((state) => state.elapsedTimeMs);
-  const transcripts = useBoundStore((state) => state.transcripts);
-  const resetTest = useBoundStore((state) => state.resetTest);
-
-  const highestComboCount = useBoundStore(
-    (state) => state.comboCounter.highestCount,
-  );
-
-  const timeSeconds = useMemo(() => elapsedTimeMs / 1000, [elapsedTimeMs]);
-
-  const totalWordsTyped = useMemo(
-    () => transcripts.filter(({ isDirty }) => isDirty),
-    [transcripts],
-  );
-
-  const totalWordMistakes = useMemo(
-    () =>
-      totalWordsTyped.filter(({ inputValue, targetText }) => {
-        const { similarity } = levenshtein(inputValue, targetText);
-        return similarity !== 1;
-      }),
-    [totalWordsTyped],
-  );
-
-  const totalTimeMins = useMemo(() => elapsedTimeMs / 60000, [elapsedTimeMs]);
-
-  // const grossWPM = useMemo(() => {
-  //   const value = totalWordsTyped.length / totalTimeMins;
-  //   return Math.round(value * multiplier) / multiplier;
-  // }, [totalWordsTyped, totalTimeMins]);
-
-  const netWPM = useMemo(() => {
-    const netWordsTypedCount =
-      totalWordsTyped.length - totalWordMistakes.length;
-    const value = netWordsTypedCount / totalTimeMins;
-    return Math.round(value * multiplier) / multiplier;
-  }, [totalWordsTyped, totalWordMistakes, totalTimeMins]);
-
-  const totalCharactersTypedCount = useMemo(() => {
-    const spaces = totalWordsTyped.length - 1;
-    const count = totalWordsTyped.reduce(
-      (total, current) => total + current.inputValue.length,
-      0,
-    );
-
-    return count + spaces;
-  }, [totalWordsTyped]);
-
-  const totalCorrectCharacterCount = useMemo(() => {
-    const spaces = totalWordsTyped.length - 1;
-    let count = 0;
-
-    totalWordsTyped.forEach(({ inputValue, targetText }) => {
-      inputValue.split('').forEach((value, index) => {
-        value === targetText[index] && ++count;
-      });
-    });
-
-    return count + spaces;
-  }, [totalWordsTyped]);
-
-  const accuracyPercent = useMemo(
-    () => (totalCorrectCharacterCount / totalCharactersTypedCount) * 100,
-    [totalCharactersTypedCount, totalCorrectCharacterCount],
-  );
+  const { timeSeconds, resetTest, accuracyPercent, netWPM, highestComboCount } =
+    useWPMTestResults();
 
   return (
     <div
