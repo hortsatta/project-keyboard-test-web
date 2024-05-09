@@ -7,7 +7,9 @@ export enum TestMode {
 }
 
 export type TestSystemOptions = {
-  comboBackdropColorSync: boolean;
+  comboBackdropColorSync?: boolean;
+  perfectWordSfx?: boolean;
+  notCorrectWordSfx?: boolean;
 };
 
 export type TestModeOptions = {

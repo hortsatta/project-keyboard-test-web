@@ -36,7 +36,9 @@ const COUNTER_COLOR_CLASSNAMES = [
 
 export function useWPMTestComboCounter(): Result {
   const count = useBoundStore((state) => state.comboCounter.count);
+
   const [localCount, setLocalCount] = useState(0);
+
   const [appendCounterClassName, setAppendCounterClassName] = useState<
     string | undefined
   >(undefined);

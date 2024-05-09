@@ -37,7 +37,9 @@ export const createWPMTestSlice: StateCreator<
   elapsedTimeMs: 0,
 
   setTestSystemOptions: (testSystemOptions: TestSystemOptions) =>
-    set({ testSystemOptions }),
+    set(({ testSystemOptions: oldTestSystemOptions }) => ({
+      testSystemOptions: { ...oldTestSystemOptions, ...testSystemOptions },
+    })),
 
   setTestModeOptions: (testModeOptions: TestModeOptions) => {
     const {

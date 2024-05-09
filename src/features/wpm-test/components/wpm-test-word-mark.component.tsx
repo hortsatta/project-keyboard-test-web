@@ -22,7 +22,11 @@ export const WPMTestWordMark = memo(function ({
   return (
     <div className={cx('absolute', className)} {...moreProps}>
       {!isCorrect ? (
-        <img src={iconNotCorrectPng} alt='correct' className={IMG_CLASSNAME} />
+        <img
+          src={iconNotCorrectPng}
+          alt='not correct'
+          className={IMG_CLASSNAME}
+        />
       ) : (
         isPerfect && (
           <img src={iconPerfectPng} alt='perfect' className={IMG_CLASSNAME} />
