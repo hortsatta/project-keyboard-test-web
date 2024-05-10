@@ -43,13 +43,13 @@ export const WPMTestSystemOptionsModal = memo(function (
           enabled={!!perfectWordSfx}
           onChange={settingsToggle({ perfectWordSfx: !perfectWordSfx })}
         >
-          Perfect word sfx
+          Sfx on perfect word
         </BaseSwitchToggle>
         <BaseSwitchToggle
           enabled={!!notCorrectWordSfx}
           onChange={settingsToggle({ notCorrectWordSfx: !notCorrectWordSfx })}
         >
-          Mistake word sfx
+          Sfx on mistake word
         </BaseSwitchToggle>
       </div>
     </BaseModal>
