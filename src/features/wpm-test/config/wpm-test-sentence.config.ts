@@ -860,20 +860,43 @@ const adverbs = [
 ];
 
 function makeRandomSentence() {
+  let currentWord: { type: string | undefined; value: string | undefined } = {
+    type: undefined,
+    value: undefined,
+  };
+
   const template = random.choice(sentenceTemplates) || '';
 
   const templateList = template.split(' ').map((word) => {
+    let value: string | undefined = word;
+
     if (word === '{noun}') {
-      return random.choice(nouns);
+      value =
+        currentWord.type === word
+          ? random.choice(nouns.filter((noun) => noun !== currentWord.value))
+          : random.choice(nouns);
     } else if (word === '{adjective}') {
-      return random.choice(adjectives);
+      value =
+        currentWord.type === word
+          ? random.choice(
+              adjectives.filter((noun) => noun !== currentWord.value),
+            )
+          : random.choice(adjectives);
     } else if (word === '{verb}') {
-      return random.choice(verbs);
+      value =
+        currentWord.type === word
+          ? random.choice(verbs.filter((noun) => noun !== currentWord.value))
+          : random.choice(verbs);
     } else if (word === '{adverb}') {
-      return random.choice(adverbs);
+      value =
+        currentWord.type === word
+          ? random.choice(adverbs.filter((noun) => noun !== currentWord.value))
+          : random.choice(adverbs);
     }
 
-    return word;
+    currentWord = { type: word, value };
+
+    return value;
   });
 
   return templateList.join(' ');
