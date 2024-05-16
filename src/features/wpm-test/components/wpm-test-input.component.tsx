@@ -20,6 +20,7 @@ export const WPMTestInput = memo(
     const setInputChange = useBoundStore((state) => state.setInputChange);
     const setInputNext = useBoundStore((state) => state.setInputNext);
     const setInputBack = useBoundStore((state) => state.setInputBack);
+    const setOpenMainMenu = useBoundStore((state) => state.setOpenMainMenu);
 
     const activePassage = useMemo(
       () => passageList[activeIndex + 1],
@@ -50,8 +51,25 @@ export const WPMTestInput = memo(
       [activePassage, inputValue, setInputNext, setInputChange],
     );
 
+    const handleChange = useCallback(
+      (event: ChangeEvent<HTMLInputElement>) => {
+        if (isComplete) {
+          event.preventDefault();
+          return;
+        }
+
+        setInputChange(event);
+      },
+      [isComplete, setInputChange],
+    );
+
     const handleKeyDown = useCallback(
       (event: KeyboardEvent<HTMLInputElement>) => {
+        if (isComplete) {
+          event.preventDefault();
+          return;
+        }
+
         // Prevent arrow keys for text cursor movement
         if (
           event.key === 'ArrowUp' ||
@@ -70,7 +88,15 @@ export const WPMTestInput = memo(
           handleNext(event);
         }
       },
-      [handleBack, handleNext],
+      [isComplete, handleBack, handleNext],
+    );
+
+    const handleKeyUp = useCallback(
+      (event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.key !== 'Escape') return;
+        setOpenMainMenu();
+      },
+      [setOpenMainMenu],
     );
 
     return (
@@ -80,9 +106,9 @@ export const WPMTestInput = memo(
         value={inputValue}
         className={cx('absolute left-0 top-0 -z-10 w-0 opacity-0', className)}
         tabIndex={0}
-        onChange={setInputChange}
+        onChange={handleChange}
         onKeyDown={handleKeyDown}
-        disabled={isComplete}
+        onKeyUp={handleKeyUp}
         autoFocus
         {...moreProps}
       />

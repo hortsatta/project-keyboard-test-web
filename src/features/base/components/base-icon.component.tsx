@@ -2,10 +2,12 @@ import { memo, forwardRef, useMemo } from 'react';
 import {
   ClockCountdown,
   Faders,
+  List,
   MagicWand,
   Minus,
   Rewind,
   TextAa,
+  X as XMark,
   YinYang,
 } from '@phosphor-icons/react';
 
@@ -27,6 +29,8 @@ export const BaseIcon = memo(
           return ClockCountdown;
         case 'faders':
           return Faders;
+        case 'list':
+          return List;
         case 'magic-wand':
           return MagicWand;
         case 'minus':
@@ -35,6 +39,8 @@ export const BaseIcon = memo(
           return Rewind;
         case 'text-aa':
           return TextAa;
+        case 'x-mark':
+          return XMark;
         case 'yin-yang':
           return YinYang;
       }

@@ -20,7 +20,7 @@ export const CoreHeader = memo(function ({
   return (
     <header
       className={cx(
-        'relative z-50 flex h-[61px] w-full items-center gap-4 transition-opacity duration-500 hover:!pointer-events-auto hover:!opacity-100',
+        'relative z-50 flex h-[61px] w-full items-center justify-between gap-4 px-2.5 transition-opacity duration-500 hover:!pointer-events-auto hover:!opacity-100 lg:justify-normal lg:px-0',
         isMinimalUI && 'pointer-events-none opacity-0',
         className,
       )}
@@ -33,7 +33,7 @@ export const CoreHeader = memo(function ({
         <h1 className='sr-only'>{APP_TITLE}</h1>
         <img src={logoPng} alt='logo' />
       </Link>
-      <WPMTestToolbarMenu className='h-full max-w-main flex-1' />
+      <WPMTestToolbarMenu className='h-full max-w-main' />
     </header>
   );
 });

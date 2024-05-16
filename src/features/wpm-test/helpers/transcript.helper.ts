@@ -6,10 +6,13 @@ export function appendTranscripts(
   targetText: string,
   inputValue?: string,
 ) {
+  const tagetInputValue = inputValue || '';
+
   return [
     ...transcripts,
     {
-      inputValue: inputValue || '',
+      inputValue: tagetInputValue,
+      totalInputValue: tagetInputValue,
       targetText,
       hasBackspace: false,
     },
@@ -35,6 +38,11 @@ export function updateTranscripts(
 
   if (!target.hasBackspace && target.inputValue.length > inputValue.length) {
     clonedTranscripts[index].hasBackspace = true;
+  }
+
+  if (inputValue.length && target.inputValue.length < inputValue.length) {
+    clonedTranscripts[index].totalInputValue +=
+      inputValue[inputValue.length - 1];
   }
 
   clonedTranscripts[index].inputValue = inputValue;

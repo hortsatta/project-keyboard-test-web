@@ -26,6 +26,7 @@ export const WPMTestStage = memo(function ({
     (state) => state.testModeOptions,
   );
   const isPlaying = useBoundStore((state) => state.isPlaying);
+  const openMainMenu = useBoundStore((state) => state.openMainMenu);
   const isComplete = useBoundStore((state) => state.isComplete);
   const setComplete = useBoundStore((state) => state.setComplete);
   const initializeTranscripts = useBoundStore(
@@ -84,6 +85,15 @@ export const WPMTestStage = memo(function ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPlaying, isComplete]);
 
+  useEffect(() => {
+    if (openMainMenu) return;
+
+    setTimeout(() => {
+      handleWrapperClick();
+    }, 200);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openMainMenu]);
+
   useOnClickOutside(inputRef, handleWrapperClick);
 
   return (
@@ -96,9 +106,9 @@ export const WPMTestStage = memo(function ({
         <WPMTestInput ref={inputRef} passageList={passageList} />
         <div className='relative h-[200px] max-w-main'>
           {!isComplete && (
-            <WPMTestComboCounter className='!absolute right-full top-1/2 mr-6 -translate-y-1/2' />
+            <WPMTestComboCounter className='!absolute left-1/2 right-auto top-24 -translate-x-1/2 lg:left-auto lg:right-full lg:top-1/2 lg:mr-6 lg:-translate-y-1/2 lg:translate-x-0' />
           )}
-          <div className='relative mb-2.5 h-[200px] overflow-hidden'>
+          <div className='relative mb-2.5 mt-40 h-[200px] overflow-hidden px-2.5 lg:mt-0 lg:px-0'>
             <WPMTestWordPassage className='h-full' passageList={passageList} />
             {/* Top and bottom fade (gradient) */}
             <WPMTestStageGradientFadeOut className='top-0' color={comboColor} />
@@ -108,7 +118,7 @@ export const WPMTestStage = memo(function ({
               isBottom
             />
           </div>
-          <WPMTestProgress className='px-1' value={progressValue} />
+          <WPMTestProgress className='px-2.5 lg:px-1' value={progressValue} />
           {isComplete && <WPMTestResults className='mx-auto mt-16' />}
         </div>
       </div>

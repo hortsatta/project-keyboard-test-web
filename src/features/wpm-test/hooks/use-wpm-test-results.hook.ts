@@ -55,7 +55,7 @@ export function useWPMTestResults(): Result {
   const totalCharactersTypedCount = useMemo(() => {
     const spaces = totalWordsTyped.length - 1;
     const count = totalWordsTyped.reduce(
-      (total, current) => total + current.inputValue.length,
+      (total, current) => total + current.totalInputValue.length,
       0,
     );
 

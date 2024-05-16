@@ -19,6 +19,7 @@ export type TestModeOptions = {
 
 export type Transcript = {
   inputValue: string;
+  totalInputValue: string;
   targetText: string;
   hasBackspace: boolean;
   isDirty: boolean;

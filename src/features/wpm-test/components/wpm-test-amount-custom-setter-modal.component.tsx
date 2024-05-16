@@ -10,6 +10,8 @@ type Props = ComponentProps<typeof BaseModal> & {
   isTime: boolean;
 };
 
+const MIN = 10;
+
 export const WPMTestAmountCustomSetterModal = memo(function ({
   isTime,
   onClose,
@@ -47,9 +49,9 @@ export const WPMTestAmountCustomSetterModal = memo(function ({
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
-      if (onSubmit && inputRef.current) {
-        onSubmit && onSubmit(+(inputRef.current as any).value);
-      }
+      const target = +(inputRef.current as any).value;
+
+      target >= MIN && onSubmit && onSubmit(+(inputRef.current as any).value);
 
       onClose();
     },
@@ -69,7 +71,7 @@ export const WPMTestAmountCustomSetterModal = memo(function ({
           type='number'
           tabIndex={0}
           description={isTime ? 'Seconds' : 'Words'}
-          min={10}
+          min={MIN}
           className='text-right text-2xl'
           onKeyDown={handleKeyDown}
           onInput={handleInput}

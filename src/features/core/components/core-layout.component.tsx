@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
+import { BaseSEO } from '#/base/components/base-seo.component';
 import { useBoundStore } from '../hooks/use-store.hook';
 import { CoreHeader } from './core-header.component';
 
@@ -15,7 +16,8 @@ export function CoreLayout() {
 
   return (
     <div className='flex min-h-screen flex-col'>
-      <CoreHeader className='!absolute top-10 max-w-main self-center' />
+      <BaseSEO />
+      <CoreHeader className='!absolute top-5 max-w-main self-center lg:top-10' />
       <main>
         <Outlet />
       </main>

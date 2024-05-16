@@ -143,16 +143,19 @@ export const createWPMTestSlice: StateCreator<
   },
 
   setInputBack: () => {
-    set(({ activeIndex, fullInputValue }) => {
+    set(({ activeIndex, fullInputValue, transcripts }) => {
       const targetIndex = activeIndex > 0 ? activeIndex - 1 : 0;
       const fullInputValueList =
         fullInputValue?.split(/(\s+)/).filter((str) => str.trim().length > 0) ||
         [];
 
+      transcripts[targetIndex].hasBackspace = true;
+
       return {
         activeIndex: targetIndex,
         inputValue: fullInputValueList[targetIndex] || '',
         fullInputValue: fullInputValueList.slice(0, -1).join(' '),
+        transcripts,
       };
     });
     // Reset combo counter
@@ -174,9 +177,16 @@ export const createWPMTestSlice: StateCreator<
   appendComboCounter: () =>
     set(({ comboCounter, activeIndex }) => {
       const count = comboCounter.count + 1;
+      const highestCount =
+        comboCounter.highestCount < count ? count : comboCounter.highestCount;
 
       return {
-        comboCounter: { ...comboCounter, lastIndex: activeIndex, count },
+        comboCounter: {
+          ...comboCounter,
+          lastIndex: activeIndex,
+          count,
+          highestCount,
+        },
       };
     }),
 
@@ -186,10 +196,6 @@ export const createWPMTestSlice: StateCreator<
         ? DEFAULT_COMBO_COUNTER
         : {
             ...prevComboCounter,
-            highestCount:
-              prevComboCounter.highestCount < prevComboCounter.count
-                ? prevComboCounter.count
-                : prevComboCounter.highestCount,
             count: 0,
           };
 
@@ -199,7 +205,13 @@ export const createWPMTestSlice: StateCreator<
   initializeTranscripts: (targetText: string) =>
     set(({ inputValue }) => ({
       transcripts: [
-        { inputValue, targetText, hasBackspace: false, isDirty: false },
+        {
+          inputValue,
+          totalInputValue: inputValue,
+          targetText,
+          hasBackspace: false,
+          isDirty: false,
+        },
       ],
     })),
 
