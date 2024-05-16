@@ -12,7 +12,8 @@ type SingleResultProps = ComponentProps<'div'> & {
 
 const BUTTON_CLASSNAME = 'flex h-full w-12 gap-2 !px-1';
 
-const DIVIDER_CLASSNAME = 'h-20 w-px bg-border';
+const DIVIDER_CLASSNAME =
+  '2xs:h-20 2xs:w-auto 2xs:border-b-0 2xs:border-r h-auto w-full border-b border-r-0 border-border';
 
 const SingleResult = memo(function ({
   className,
@@ -46,7 +47,7 @@ export const WPMTestResults = memo(function ({
   return (
     <div
       className={cx(
-        'flex w-fit flex-col gap-2.5 rounded border border-border bg-primary/10 px-5 pb-2.5',
+        '2xs:pb-2.5 flex w-fit flex-col gap-2.5 rounded border border-border bg-primary/10 px-5 pb-4',
         className,
       )}
       {...moreProps}
@@ -65,7 +66,7 @@ export const WPMTestResults = memo(function ({
         />
       </div>
       <div className='h-px w-full bg-border' />
-      <div className='flex items-center justify-center gap-5'>
+      <div className='2xs:flex-row 2xs:gap-5 flex flex-col items-center justify-center gap-2.5'>
         <SingleResult label='Accuracy'>
           {accuracyPercent.toFixed(2)}%
         </SingleResult>

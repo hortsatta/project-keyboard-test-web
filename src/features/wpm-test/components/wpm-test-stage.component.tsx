@@ -106,9 +106,9 @@ export const WPMTestStage = memo(function ({
         <WPMTestInput ref={inputRef} passageList={passageList} />
         <div className='relative h-[200px] max-w-main'>
           {!isComplete && (
-            <WPMTestComboCounter className='!absolute left-1/2 right-auto top-24 -translate-x-1/2 lg:left-auto lg:right-full lg:top-1/2 lg:mr-6 lg:-translate-y-1/2 lg:translate-x-0' />
+            <WPMTestComboCounter className='xs:top-24 !absolute left-1/2 right-auto top-44 -translate-x-1/2 lg:left-auto lg:right-full lg:top-1/2 lg:mr-6 lg:-translate-y-1/2 lg:translate-x-0' />
           )}
-          <div className='relative mb-2.5 mt-40 h-[200px] overflow-hidden px-2.5 lg:mt-0 lg:px-0'>
+          <div className='xs:mt-40 relative mb-2.5 mt-60 h-[200px] overflow-hidden px-2.5 lg:mt-0 lg:px-0'>
             <WPMTestWordPassage className='h-full' passageList={passageList} />
             {/* Top and bottom fade (gradient) */}
             <WPMTestStageGradientFadeOut className='top-0' color={comboColor} />
