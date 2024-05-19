@@ -1,5 +1,4 @@
-import { Fragment, memo } from 'react';
-import Lottie from 'react-lottie-player';
+import { Fragment, lazy, memo } from 'react';
 import cx from 'classix';
 
 import { useWPMTestWordPassage } from '../hooks/use-wpm-test-word-passage.hook';
@@ -7,11 +6,13 @@ import { WPMTestWordSingle } from './wpm-test-word-single.component';
 
 import type { ComponentProps } from 'react';
 
-import blastEffectJson from '#/assets/json/blast-effect.json';
-
 type Props = ComponentProps<'div'> & {
   passageList?: string[];
 };
+
+const WPMTestBlastEffect = lazy(
+  () => import('./wpm-test-blast-effect.component'),
+);
 
 export const WPMTestWordPassage = memo(function ({
   className,
@@ -60,15 +61,7 @@ export const WPMTestWordPassage = memo(function ({
           className='absolute -ml-px -mt-px animate-blink border-l-2 border-primary bg-gradient-to-r from-primary/30 transition-transform duration-75'
         />
       )}
-      <Lottie
-        ref={blastEffectRef}
-        style={blastEffectStyle}
-        className='absolute -translate-x-full -translate-y-full opacity-70'
-        animationData={blastEffectJson}
-        renderer='canvas'
-        speed={2}
-        loop={false}
-      />
+      <WPMTestBlastEffect ref={blastEffectRef} style={blastEffectStyle} />
       {passageList?.map((str, index) => (
         <Fragment key={`word-${index}`}>
           {activeIndex === index ? (
