@@ -6,6 +6,7 @@ import {
 
 import { pageRoutes } from './core/config/page-routes.config';
 import { CoreLayout } from './core/components/core-layout.component';
+import { CoreNotFoundPage } from './core/pages/core-not-found.page';
 import { WPMTestLayout } from './wpm-test/components/wpm-test-layout.component';
 import { StaticTermsOfServicePage } from './static/pages/static-terms-of-service.page';
 import { StaticPrivacyPolicyPage } from './static/pages/static-privacy-policy.page';
@@ -21,6 +22,7 @@ const routes = createRoutesFromElements(
       <Route index lazy={wpmTestPage} />
     </Route>
     <Route element={<CoreLayout />}>
+      <Route path='*' element={<CoreNotFoundPage />} />
       <Route
         path={pageRoutes.termsOfService.path}
         element={<StaticTermsOfServicePage />}
