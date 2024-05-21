@@ -12,6 +12,7 @@ export const WPMTestComboCounter = memo(function ({
   const {
     count,
     localCount,
+    timer,
     wrapperTextClassName,
     textClassName,
     appendCounterClassName,
@@ -23,6 +24,7 @@ export const WPMTestComboCounter = memo(function ({
       className={cx(
         'relative mt-2 transition-[opacity,transform]',
         count < 2 ? '-translate-x-2.5 opacity-0' : '-translate-x-0 opacity-100',
+        count > 1 && timer <= 2 && 'animate-pulse-fast',
         className,
       )}
       {...moreProps}

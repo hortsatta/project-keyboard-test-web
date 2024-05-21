@@ -1,10 +1,11 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 
 import { useBoundStore } from '#/core/hooks/use-store.hook';
 
 type Result = {
   count: number;
   localCount: number;
+  timer: number;
   wrapperTextClassName: string | undefined;
   textClassName: string | undefined;
   appendCounterClassName: string | undefined;
@@ -34,11 +35,17 @@ const COUNTER_COLOR_CLASSNAMES = [
   'animate-max-combo max-combo max-combo-mask',
 ];
 
+const COUNTER_TIME_MS = 4000;
+
 export function useWPMTestComboCounter(): Result {
   const count = useBoundStore((state) => state.comboCounter.count);
+  const resetComboCounter = useBoundStore((state) => state.resetComboCounter);
 
+  const timeMs = useRef<number>(0);
+  const prevMs = useRef<number>(timeMs.current);
+
+  const [timer, setTimer] = useState(0);
   const [localCount, setLocalCount] = useState(0);
-
   const [appendCounterClassName, setAppendCounterClassName] = useState<
     string | undefined
   >(undefined);
@@ -82,9 +89,54 @@ export function useWPMTestComboCounter(): Result {
     setAppendCounterClassName(localCount > 2 ? 'animate-add-combo' : undefined);
   }, [localCount]);
 
+  useEffect(() => {
+    if (count <= 0) {
+      setTimer(0);
+      return;
+    }
+
+    const initialTimeMs = COUNTER_TIME_MS;
+    let initialTimestampMs: number;
+    let handle: number;
+
+    const step = (timestampMs: number) => {
+      if (initialTimestampMs === undefined) {
+        initialTimestampMs = timestampMs;
+      }
+
+      const elapsed = timestampMs - initialTimestampMs;
+      timeMs.current = initialTimeMs - elapsed;
+
+      if (timeMs.current <= 0) {
+        setTimer(0);
+        cancelAnimationFrame(handle);
+        resetComboCounter();
+      } else {
+        const seconds = Math.floor(timeMs.current / 1000);
+        const isUpdate = seconds !== Math.floor(prevMs.current / 1000);
+
+        prevMs.current = timeMs.current;
+
+        if (isUpdate) {
+          setTimer(seconds + 1);
+        }
+
+        handle = window.requestAnimationFrame(step);
+      }
+    };
+
+    handle = window.requestAnimationFrame(step);
+
+    return () => {
+      cancelAnimationFrame(handle);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [count]);
+
   return {
     count,
     localCount,
+    timer,
     wrapperTextClassName,
     textClassName,
     appendCounterClassName,
