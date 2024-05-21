@@ -1,6 +1,9 @@
+import { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 
-import { useMemo, type ComponentProps } from 'react';
+import { data } from '#/core/config/jsonld.config';
+
+import type { ComponentProps } from 'react';
 
 type Props = ComponentProps<typeof Helmet> & {
   title?: string;
@@ -37,6 +40,7 @@ export function BaseSEO({ title, description, ...moreProps }: Props) {
         name='twitter:description'
         content={description || APP_DESCRIPTION}
       />
+      <script type='application/ld+json'>{JSON.stringify(data)}</script>
     </Helmet>
   );
 }

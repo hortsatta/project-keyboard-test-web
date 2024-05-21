@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://typen.space/sitemap_index.xml
+Host: https://typen.space
