@@ -1,11 +1,15 @@
 import { memo, forwardRef, useMemo } from 'react';
 import {
   ClockCountdown,
+  Copyright,
+  EnvelopeSimple,
   Faders,
+  FileLock,
   List,
   MagicWand,
   Minus,
   Rewind,
+  Scroll,
   TextAa,
   X as XMark,
   YinYang,
@@ -27,8 +31,14 @@ export const BaseIcon = memo(
       switch (name) {
         case 'clock-countdown':
           return ClockCountdown;
+        case 'copyright':
+          return Copyright;
+        case 'envelope-simple':
+          return EnvelopeSimple;
         case 'faders':
           return Faders;
+        case 'file-lock':
+          return FileLock;
         case 'list':
           return List;
         case 'magic-wand':
@@ -37,6 +47,8 @@ export const BaseIcon = memo(
           return Minus;
         case 'rewind':
           return Rewind;
+        case 'scroll':
+          return Scroll;
         case 'text-aa':
           return TextAa;
         case 'x-mark':

@@ -23,6 +23,7 @@
       "#/assets/*": ["./src/assets/*"],
       "#/base/*": ["./src/features/base/*"],
       "#/core/*": ["./src/features/core/*"],
+      "#/static/*": ["./src/features/static/*"],
       "#/wpm-test/*": ["./src/features/wpm-test/*"]
     }
   },

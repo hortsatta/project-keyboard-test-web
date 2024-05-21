@@ -16,6 +16,27 @@
     @apply bg-backdrop font-body text-text;
   }
 
+  a {
+    @apply text-primary hover:underline;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-lg font-bold;
+  }
+
+  h1 {
+    @apply text-2xl;
+  }
+
+  h2 {
+    @apply text-xl;
+  }
+
   input[type='number']::-webkit-inner-spin-button,
   input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -31,4 +52,28 @@
 .max-combo-mask {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.page-content h2 {
+  @apply pb-2.5;
+}
+
+.page-content > ol > li:not(:first-child):not(:last-child) {
+  @apply py-2.5;
+}
+
+.page-content > ol > li:first-child {
+  @apply pb-2.5;
+}
+
+.page-content > ol > li:last-child {
+  @apply pt-2.5;
+}
+
+.page-content > ol ul {
+  @apply list-square py-2.5 pl-5;
+}
+
+.page-content > ol ul > li {
+  @apply pb-2.5;
 }

@@ -21,6 +21,9 @@ export default {
       fontFamily: {
         body: ['var(--font-body)', ...defaultTheme.fontFamily.sans],
       },
+      listStyleType: {
+        square: 'square',
+      },
       keyframes: {
         'shaking-x': {
           '0%': { transform: 'translateX(0)' },

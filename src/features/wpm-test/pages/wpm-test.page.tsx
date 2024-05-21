@@ -6,7 +6,7 @@ export function WPMTestPage() {
   useCoreMinimalUI();
 
   return (
-    <BaseScene>
+    <BaseScene className='!mt-0 h-screen !items-start !pb-0 lg:justify-center'>
       <WPMTestStage className='mb-24 w-full pb-12' />
     </BaseScene>
   );

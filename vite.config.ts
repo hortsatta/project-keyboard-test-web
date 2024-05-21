@@ -27,6 +27,12 @@ export default defineConfig({
         ),
       },
       {
+        find: '#/static',
+        replacement: fileURLToPath(
+          new URL('./src/features/static', import.meta.url),
+        ),
+      },
+      {
         find: '#/wpm-test',
         replacement: fileURLToPath(
           new URL('./src/features/wpm-test', import.meta.url),

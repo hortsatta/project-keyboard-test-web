@@ -3,17 +3,25 @@ import cx from 'classix';
 
 import type { ComponentProps } from 'react';
 
-export const BaseScene = forwardRef<HTMLDivElement, ComponentProps<'div'>>(
-  function ({ className, ...moreProps }, ref) {
-    return (
-      <div
-        ref={ref}
-        className={cx(
-          'relative flex h-screen w-full flex-col items-center justify-start lg:justify-center',
-          className,
-        )}
-        {...moreProps}
-      />
-    );
-  },
-);
+type Props = ComponentProps<'div'> & {
+  title?: string;
+};
+
+export const BaseScene = forwardRef<HTMLDivElement, Props>(function (
+  { className, title, children, ...moreProps },
+  ref,
+) {
+  return (
+    <div
+      ref={ref}
+      className={cx(
+        'relative mx-auto mt-10 flex w-full max-w-main flex-col items-start justify-start pb-20',
+        className,
+      )}
+      {...moreProps}
+    >
+      {title && <h1 className='mb-5'>{title}</h1>}
+      {children}
+    </div>
+  );
+});
