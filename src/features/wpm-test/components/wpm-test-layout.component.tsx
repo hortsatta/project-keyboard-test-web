@@ -9,6 +9,7 @@ import { WPMTestToolbarMenu } from './wpm-test-toolbar-menu.component';
 
 export function WPMTestLayout() {
   const isPlaying = useBoundStore((state) => state.isPlaying);
+  const isMinimalUI = useBoundStore((state) => state.isMinimalUI);
   const setMinimalUI = useBoundStore((state) => state.setMinimalUI);
 
   useEffect(() => {
@@ -19,13 +20,16 @@ export function WPMTestLayout() {
   return (
     <div className='flex min-h-screen flex-col'>
       <BaseSEO />
-      <CoreHeader className='!absolute top-5 lg:top-10'>
+      <CoreHeader className='!absolute top-5 lg:top-10' isMinimal={isMinimalUI}>
         <WPMTestToolbarMenu className='h-full max-w-main' />
       </CoreHeader>
       <main>
         <Outlet />
       </main>
-      <CoreFooter className='!absolute bottom-0 left-1/2 -translate-x-1/2' />
+      <CoreFooter
+        className='!absolute bottom-0 left-1/2 -translate-x-1/2'
+        isMinimal={isMinimalUI}
+      />
     </div>
   );
 }

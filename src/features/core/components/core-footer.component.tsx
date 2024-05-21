@@ -4,10 +4,13 @@ import cx from 'classix';
 
 import { BaseIcon } from '#/base/components/base-icon.component';
 import { pageRoutes } from '../config/page-routes.config';
-import { useBoundStore } from '../hooks/use-store.hook';
 
 import type { ComponentProps } from 'react';
 import type { IconName } from '#/base/models/base.model';
+
+type Props = ComponentProps<'footer'> & {
+  isMinimal?: boolean;
+};
 
 type LinkProps = ComponentProps<typeof RouterLink> & {
   iconName?: IconName;
@@ -29,15 +32,14 @@ const Link = memo(function ({ iconName, children, ...moreProps }: LinkProps) {
 
 export const CoreFooter = memo(function ({
   className,
+  isMinimal,
   ...moreProps
-}: ComponentProps<'footer'>) {
-  const isMinimalUI = useBoundStore((state) => state.isMinimalUI);
-
+}: Props) {
   return (
     <footer
       className={cx(
         'relative mx-auto flex w-full max-w-main items-center justify-between gap-2.5 py-3.5 duration-500',
-        isMinimalUI && 'pointer-events-none opacity-0',
+        isMinimal && 'pointer-events-none opacity-0',
         className,
       )}
       {...moreProps}
