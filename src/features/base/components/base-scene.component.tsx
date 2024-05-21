@@ -15,7 +15,7 @@ export const BaseScene = forwardRef<HTMLDivElement, Props>(function (
     <div
       ref={ref}
       className={cx(
-        'relative mx-auto mt-10 flex w-full max-w-main flex-col items-start justify-start pb-20',
+        'relative mx-auto mt-10 flex w-full flex-col items-start justify-start pb-20',
         className,
       )}
       {...moreProps}

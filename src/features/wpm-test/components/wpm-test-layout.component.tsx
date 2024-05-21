@@ -25,7 +25,7 @@ export function WPMTestLayout() {
       <main>
         <Outlet />
       </main>
-      <CoreFooter className='absolute bottom-0 left-1/2 -translate-x-1/2' />
+      <CoreFooter className='!absolute bottom-0 left-1/2 -translate-x-1/2' />
     </div>
   );
 }

@@ -9,7 +9,7 @@ export function CoreLayout() {
     <div className='flex min-h-screen flex-col'>
       <BaseSEO />
       <CoreHeader className='mt-5 lg:mt-10' noHeader />
-      <main>
+      <main className='mx-auto w-full max-w-main'>
         <Outlet />
       </main>
       <CoreFooter />
