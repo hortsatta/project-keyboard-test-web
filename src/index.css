@@ -77,3 +77,78 @@
 .page-content > ol ul > li {
   @apply pb-2.5;
 }
+
+.rating-mask {
+  mask-repeat: no-repeat;
+  mask-position: 50%;
+}
+
+.rating-mask.rating-e {
+  -webkit-mask-image: url(/images/rating-e.svg);
+  mask-image: url(/images/rating-e.svg);
+}
+
+.rating-mask.rating-e-stroke {
+  -webkit-mask-image: url(/images/rating-e-stroke.svg);
+  mask-image: url(/images/rating-e-stroke.svg);
+}
+
+.rating-mask.rating-d {
+  -webkit-mask-image: url(/images/rating-d.svg);
+  mask-image: url(/images/rating-d.svg);
+}
+
+.rating-mask.rating-d-stroke {
+  -webkit-mask-image: url(/images/rating-d-stroke.svg);
+  mask-image: url(/images/rating-d-stroke.svg);
+}
+
+.rating-mask.rating-c {
+  -webkit-mask-image: url(/images/rating-c.svg);
+  mask-image: url(/images/rating-c.svg);
+}
+
+.rating-mask.rating-c-stroke {
+  -webkit-mask-image: url(/images/rating-c-stroke.svg);
+  mask-image: url(/images/rating-c-stroke.svg);
+}
+
+.rating-mask.rating-b {
+  -webkit-mask-image: url(/images/rating-b.svg);
+  mask-image: url(/images/rating-b.svg);
+}
+
+.rating-mask.rating-b-stroke {
+  -webkit-mask-image: url(/images/rating-b-stroke.svg);
+  mask-image: url(/images/rating-b-stroke.svg);
+}
+
+.rating-mask.rating-a {
+  -webkit-mask-image: url(/images/rating-a.svg);
+  mask-image: url(/images/rating-a.svg);
+}
+
+.rating-mask.rating-a-stroke {
+  -webkit-mask-image: url(/images/rating-a-stroke.svg);
+  mask-image: url(/images/rating-a-stroke.svg);
+}
+
+.rating-mask.rating-s {
+  -webkit-mask-image: url(/images/rating-s.svg);
+  mask-image: url(/images/rating-s.svg);
+}
+
+.rating-mask.rating-s-stroke {
+  -webkit-mask-image: url(/images/rating-s-stroke.svg);
+  mask-image: url(/images/rating-s-stroke.svg);
+}
+
+.rating-mask.rating-sss {
+  -webkit-mask-image: url(/images/rating-sss.svg);
+  mask-image: url(/images/rating-sss.svg);
+}
+
+.rating-mask.rating-sss-stroke {
+  -webkit-mask-image: url(/images/rating-sss-stroke.svg);
+  mask-image: url(/images/rating-sss-stroke.svg);
+}
