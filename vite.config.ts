@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react-swc';
 import { fileURLToPath } from 'url';
 import { visualizer } from 'rollup-plugin-visualizer';
 
+import { version } from './package.json';
+
 import type { PluginOption } from 'vite';
 
 // https://vitejs.dev/config/
@@ -39,5 +41,8 @@ export default defineConfig({
         ),
       },
     ],
+  },
+  define: {
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(version),
   },
 });

@@ -25,6 +25,10 @@ export default {
         square: 'square',
       },
       keyframes: {
+        'fade-in': {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
         'shaking-x': {
           '0%': { transform: 'translateX(0)' },
           '25%': { transform: 'translateX(3px)' },
@@ -43,13 +47,48 @@ export default {
           '0%': { filter: 'hue-rotate(0deg)' },
           '100%': { filter: 'hue-rotate(359deg)' },
         },
+        shiny: {
+          '0%': { filter: 'brightness(1)' },
+          '50%': { filter: 'brightness(1.3)' },
+          '100%': { filter: 'brightness(1)' },
+        },
+        'shiny-2': {
+          '0%': { filter: 'brightness(1)' },
+          '50%': { filter: 'brightness(3)' },
+          '100%': { filter: 'brightness(1)' },
+        },
+        'slide-in-back': {
+          '0%': {
+            transform: 'scale(4)',
+            opacity: 0,
+          },
+          '50%': {
+            opacity: 1,
+          },
+          '70%': {
+            transform: 'scale(0.7)',
+          },
+          '100%': {
+            transform: 'scale(1)',
+            opacity: 1,
+          },
+        },
       },
       animation: {
+        'fade-in': 'fade-in 0.3s linear forwards',
         blink: 'pulse 1s step-start 0s infinite',
         'pulse-fast': 'pulse 0.6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'pulse-faster': 'pulse 0.3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         error: 'shaking-x 0.3s forwards',
         'add-combo': 'ping 0.4s 1',
         'max-combo': 'rainbow 0.8s linear infinite',
+        rating: 'shiny 4s linear infinite',
+        'rating-fast': 'shiny 1s ease infinite',
+        'rating-sss': 'rainbow 2s linear infinite',
+        'rating-sss-fast': 'rainbow 1s linear infinite',
+        'rating-reveal':
+          'slide-in-back 0.8s cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.2s both',
+        'rating-bg-reveal': 'shiny-2 2s ease 0.55s forwards',
       },
     },
   },

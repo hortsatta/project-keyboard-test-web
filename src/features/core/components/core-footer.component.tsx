@@ -16,6 +16,7 @@ type LinkProps = ComponentProps<typeof RouterLink> & {
   iconName?: IconName;
 };
 
+const APP_VERSION = import.meta.env.VITE_APP_VERSION;
 const APP_EMAIL = import.meta.env.VITE_APP_EMAIL;
 const LINK_CLASSNAME =
   'relative z-10 flex items-center gap-1.5 text-xs lowercase text-text opacity-50 transition-all hover:text-primary hover:no-underline hover:opacity-100';
@@ -38,17 +39,13 @@ export const CoreFooter = memo(function ({
   return (
     <footer
       className={cx(
-        'relative mx-auto flex w-full max-w-main items-center justify-between gap-2.5 py-3.5 duration-500',
+        'relative mx-auto flex w-full max-w-main flex-col items-center justify-between gap-2.5 py-3.5 duration-500 xs:flex-row',
         isMinimal && 'pointer-events-none opacity-0',
         className,
       )}
       {...moreProps}
     >
-      {/* <span className='w-[52px] text-sm lowercase text-text/20'>
-        {APP_TITLE}
-      </span> */}
-      <div className='w-[52px]' />
-      <div className='flex items-center gap-5'>
+      <div className='relative z-10 flex w-full items-center justify-center gap-2.5 xs:gap-5'>
         <Link to={pageRoutes.termsOfService.path} iconName='scroll'>
           {pageRoutes.termsOfService.shortTitle}
         </Link>
@@ -60,10 +57,16 @@ export const CoreFooter = memo(function ({
           Contact
         </a>
       </div>
-      <span className='flex w-[52px] items-center gap-1 text-sm text-text/20'>
-        <BaseIcon name='copyright' size={14} weight='bold' />
-        {currentYear}
-      </span>
+      <div className='static left-0 flex w-full items-center justify-center gap-2.5 xs:absolute xs:justify-between'>
+        <span className='flex w-16 items-center gap-1 text-sm text-text/20'>
+          <BaseIcon name='app-window' size={14} weight='bold' />
+          {APP_VERSION}
+        </span>
+        <span className='flex w-16 items-center gap-1 text-sm text-text/20'>
+          <BaseIcon name='copyright' size={14} weight='bold' />
+          {currentYear}
+        </span>
+      </div>
     </footer>
   );
 });
