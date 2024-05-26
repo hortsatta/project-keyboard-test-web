@@ -1,6 +1,6 @@
 import { TestMode } from '../models/wpm-test.model';
 
-export const timeSecondAmountList = [15, 30, 60, 120, 180];
+export const timeSecondAmountList = [15, 30, 60, 90, 120];
 
 export const wordAmountList = [25, 50, 100, 200, 300];
 

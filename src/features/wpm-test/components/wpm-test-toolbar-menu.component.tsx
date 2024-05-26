@@ -127,6 +127,12 @@ export const WPMTestToolbarMenu = memo(function ({
     setOpenMainMenu(true);
   }, [setOpenMainMenu]);
 
+  const handleResetTestModal = useCallback(() => {
+    resetTest()
+    handleCloseModal()
+  }, [resetTest, handleCloseModal])
+
+
   return (
     <>
       <div
@@ -196,7 +202,7 @@ export const WPMTestToolbarMenu = memo(function ({
         timeWordAmount={timeWordAmount}
         isTimeWordAmountCustom={isTimeWordAmountCustom}
         amountList={amountList}
-        resetTest={resetTest}
+        resetTest={handleResetTestModal}
         onClose={handleCloseModal}
         onModeChange={handleModeChange}
         onAmountChange={handleAmountChange}

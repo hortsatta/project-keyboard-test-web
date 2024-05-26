@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useRef } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { BaseModal } from '#/base/components/base-modal.component';
 import { BaseInput } from '#/base/components/base-input.component';
@@ -14,11 +14,12 @@ const MIN = 10;
 
 export const WPMTestAmountCustomSetterModal = memo(function ({
   isTime,
+  open,
   onClose,
   onSubmit,
   ...moreProps
 }: Props) {
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const title = useMemo(
     () => `Custom ${isTime ? 'Time' : 'Number of Words'}`,
@@ -26,7 +27,7 @@ export const WPMTestAmountCustomSetterModal = memo(function ({
   );
 
   const description = useMemo(
-    () => `Set your preferred ${isTime ? 'time' : 'amount'}.`,
+    () => `Set your preferred ${isTime ? 'time in seconds' : 'amount'}.`,
     [isTime],
   );
 
@@ -58,29 +59,38 @@ export const WPMTestAmountCustomSetterModal = memo(function ({
     [onClose, onSubmit],
   );
 
+  useEffect(() => {
+    if (!open) return;
+
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
+  }, [open]);
+
   return (
     <BaseModal
       title={title}
       description={description}
+      open={open}
       onClose={onClose}
+      small
       {...moreProps}
     >
-      <form className='flex items-center gap-4' onSubmit={handleSubmit}>
+      <form
+        className='flex flex-col items-center gap-4'
+        onSubmit={handleSubmit}
+      >
         <BaseInput
           ref={inputRef}
           type='number'
           tabIndex={0}
-          description={isTime ? 'Seconds' : 'Words'}
           min={MIN}
-          className='text-right text-2xl'
+          className='text-center text-2xl'
           onKeyDown={handleKeyDown}
           onInput={handleInput}
         />
-        <BaseButton
-          type='submit'
-          className='h-[66px] w-60 border border-primary bg-primary/20'
-        >
-          Set
+        <BaseButton type='submit' variant='secondary' className='w-full'>
+          Set Value
         </BaseButton>
       </form>
     </BaseModal>

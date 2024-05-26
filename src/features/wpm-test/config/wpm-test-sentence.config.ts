@@ -359,7 +359,6 @@ const nouns = [
   'nation',
   'nature',
   'neck',
-  'need',
   'nerve',
   'network',
   'night',
@@ -1073,8 +1072,8 @@ const adverbs = [
   'yet',
 ];
 
-function makeRandomSentence() {
-  let currentWord: { type: string | undefined; value: string | undefined } = {
+export function makeRandomSentence() {
+  let currentWord: { type?: string; value?: string } = {
     type: undefined,
     value: undefined,
   };
@@ -1113,15 +1112,8 @@ function makeRandomSentence() {
     return value;
   });
 
-  return templateList.join(' ');
-}
-
-export function createSentence() {
-  // const phrase = getRandomStartingPhrase();
-  // const sentence = phrase
-  //   ? `${phrase} ${makeRandomSentence()}`
-  //   : makeRandomSentence();
-
-  const sentence = makeRandomSentence();
-  return sentence.replace(/[^a-zA-Z ]/g, '').toLowerCase();
+  return templateList
+    .join(' ')
+    .replace(/[^a-zA-Z ]/g, '')
+    .toLowerCase();
 }

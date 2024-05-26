@@ -14,6 +14,7 @@ type Props = Omit<ComponentProps<typeof Dialog>, 'children'> & {
   open: boolean;
   title?: string;
   description?: string;
+  small?: boolean;
   children?: ReactNode;
   onClose?: () => void;
 };
@@ -22,8 +23,9 @@ export const BaseModal = memo(function ({
   open,
   title,
   description,
-  onClose,
+  small,
   children,
+  onClose,
   onKeyDown,
 }: Props) {
   return (
@@ -56,7 +58,12 @@ export const BaseModal = memo(function ({
               leaveFrom='opacity-100 scale-100'
               leaveTo='opacity-0 scale-95'
             >
-              <DialogPanel className='min-h-60 w-full max-w-md transform overflow-hidden rounded-md border border-border bg-surface px-8 py-6 text-left align-middle transition-all'>
+              <DialogPanel
+                className={cx(
+                  'min-h-60 w-full transform overflow-hidden rounded-md border border-border bg-surface px-8 py-6 text-left align-middle transition-all',
+                  small ? 'max-w-xs' : 'max-w-md',
+                )}
+              >
                 {title && (
                   <DialogTitle
                     as='h3'

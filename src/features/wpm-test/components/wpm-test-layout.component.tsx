@@ -27,7 +27,7 @@ export function WPMTestLayout() {
         <Outlet />
       </main>
       <CoreFooter
-        className='!absolute bottom-0 left-1/2 -translate-x-1/2'
+        className='bottom-0 left-1/2 -translate-x-1/2 2xs:!absolute'
         isMinimal={isMinimalUI}
       />
     </div>

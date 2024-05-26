@@ -10,9 +10,10 @@ export function useCoreMinimalUI() {
   const timeout = useRef<NodeJS.Timeout | null>(null);
 
   const triggerMinimalUI = useCallback(() => {
+    isMinimalUI && setMinimalUI(false);
+
     if (!isPlaying) return;
 
-    isMinimalUI && setMinimalUI(false);
     timeout.current && clearTimeout(timeout.current);
     timeout.current = setTimeout(() => {
       setMinimalUI(isPlaying);

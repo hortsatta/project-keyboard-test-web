@@ -87,8 +87,7 @@ export const WPMTestMainMenuModal = memo(function ({
   }, [cursor]);
 
   useEffect(() => {
-    if (open) return;
-    setCursor(null);
+    setCursor(open ? 0 : null);
   }, [open]);
 
   return (

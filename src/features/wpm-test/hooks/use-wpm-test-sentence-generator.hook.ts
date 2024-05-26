@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react';
 
 import { MIN_CHAR_COUNT } from '../config/wpm-test.config';
-import { createSentence } from '../config/wpm-test-sentence.config';
+import { makeRandomSentence } from '../config/wpm-test-sentence.config';
 import { useBoundStore } from '#/core/hooks/use-store.hook';
 
 type Result = {
@@ -22,7 +22,9 @@ export function useWPMTestSentenceGenerator(): Result {
   );
 
   const generatePassage = useCallback((last?: string) => {
-    const sentences = last ? `${last} ${createSentence()}` : createSentence();
+    const sentences = last
+      ? `${last} ${makeRandomSentence()}`
+      : makeRandomSentence();
 
     if (sentences.length < MIN_CHAR_COUNT) {
       return generatePassage(sentences);
@@ -34,7 +36,7 @@ export function useWPMTestSentenceGenerator(): Result {
   }, []);
 
   const appendPassage = useCallback(() => {
-    const sentence = createSentence();
+    const sentence = makeRandomSentence();
     setPassage(sentence, true);
   }, [setPassage]);
 

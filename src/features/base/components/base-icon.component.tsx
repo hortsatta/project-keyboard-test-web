@@ -1,10 +1,13 @@
 import { memo, forwardRef, useMemo } from 'react';
 import {
+  AppWindow,
+  Backspace,
   ClockCountdown,
   Copyright,
   EnvelopeSimple,
   Faders,
   FileLock,
+  Keyboard,
   List,
   MagicWand,
   Minus,
@@ -29,6 +32,10 @@ export const BaseIcon = memo(
   ) {
     const PIcon: Icon | null = useMemo(() => {
       switch (name) {
+        case 'app-window':
+          return AppWindow;
+        case 'backspace':
+          return Backspace;
         case 'clock-countdown':
           return ClockCountdown;
         case 'copyright':
@@ -39,6 +46,8 @@ export const BaseIcon = memo(
           return Faders;
         case 'file-lock':
           return FileLock;
+        case 'keyboard':
+          return Keyboard;
         case 'list':
           return List;
         case 'magic-wand':

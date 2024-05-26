@@ -27,10 +27,10 @@ const COUNTER_COLOR_CLASSNAMES = [
   'text-teal-400',
   'text-cyan-400',
   'text-sky-400',
-  'text-yellow-400',
   'text-orange-400',
-  'text-red-500',
   'text-pink-500',
+  'text-red-500',
+  'text-yellow-400',
   'text-violet-500',
   'animate-max-combo max-combo max-combo-mask',
 ];

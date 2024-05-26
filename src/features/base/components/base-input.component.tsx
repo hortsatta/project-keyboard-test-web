@@ -29,7 +29,7 @@ export const BaseInput = memo(
         <input
           ref={ref}
           className={cx(
-            'w-full rounded-sm border border-primary bg-green-950 px-2.5 py-1 outline-none',
+            'w-full rounded-sm border-b-2 border-primary bg-transparent px-2.5 py-1 outline-none',
             className,
           )}
           {...moreProps}

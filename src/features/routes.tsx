@@ -16,10 +16,18 @@ const wpmTestPage = async () => {
   return { Component: WPMTestPage };
 };
 
+const wpmTestResultsPage = async () => {
+  const { WPMTestResultsPage } = await import(
+    './wpm-test/pages/wpm-test-results.page'
+  );
+  return { Component: WPMTestResultsPage };
+};
+
 const routes = createRoutesFromElements(
   <>
     <Route path='/' element={<WPMTestLayout />}>
       <Route index lazy={wpmTestPage} />
+      <Route path={pageRoutes.testResults.path} lazy={wpmTestResultsPage} />
     </Route>
     <Route element={<CoreLayout />}>
       <Route path='*' element={<CoreNotFoundPage />} />
