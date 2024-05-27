@@ -18,8 +18,11 @@ type LinkProps = ComponentProps<typeof RouterLink> & {
 
 const APP_VERSION = import.meta.env.VITE_APP_VERSION;
 const APP_EMAIL = import.meta.env.VITE_APP_EMAIL;
+
 const LINK_CLASSNAME =
   'relative z-10 flex items-center gap-1.5 text-xs lowercase text-text opacity-50 transition-all hover:text-primary hover:no-underline hover:opacity-100';
+const BORDER_CLASSNAME = 'h-4 border-r border-border';
+
 const currentYear = new Date().getFullYear();
 
 const Link = memo(function ({ iconName, children, ...moreProps }: LinkProps) {
@@ -45,15 +48,16 @@ export const CoreFooter = memo(function ({
       )}
       {...moreProps}
     >
-      <div className='relative z-10 flex w-full items-center justify-center gap-2.5 xs:gap-5'>
-        <Link to={pageRoutes.termsOfService.path} iconName='scroll'>
+      <div className='relative z-10 flex w-full items-center justify-center gap-2.5 xs:gap-4'>
+        <Link to={pageRoutes.termsOfService.path}>
           {pageRoutes.termsOfService.shortTitle}
         </Link>
-        <Link to={pageRoutes.privacyPolicy.path} iconName='file-lock'>
+        <div className={BORDER_CLASSNAME} />
+        <Link to={pageRoutes.privacyPolicy.path}>
           {pageRoutes.privacyPolicy.shortTitle}
         </Link>
+        <div className={BORDER_CLASSNAME} />
         <a href={`mailto:${APP_EMAIL}`} className={LINK_CLASSNAME}>
-          <BaseIcon name='envelope-simple' size={18} />
           Contact
         </a>
       </div>
