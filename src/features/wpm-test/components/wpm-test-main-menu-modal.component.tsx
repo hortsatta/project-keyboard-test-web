@@ -4,6 +4,11 @@ import cx from 'classix';
 import { BaseButton } from '#/base/components/base-button.component';
 import { BaseIcon } from '#/base/components/base-icon.component';
 import { BaseModal } from '#/base/components/base-modal.component';
+import {
+  BaseTooltip,
+  BaseTooltipContent,
+  BaseTooltipTrigger,
+} from '#/base/components/base-tooltip.component';
 import { TestMode } from '../models/wpm-test.model';
 
 import type { ComponentProps, KeyboardEvent } from 'react';
@@ -112,40 +117,60 @@ export const WPMTestMainMenuModal = memo(function ({
         <div className='w-full border-b border-b-border' />
         <div className='flex items-center justify-center gap-5'>
           <div className={WRAPPER_OPTIONS_COL_CLASSNAME}>
-            {testModes.map(({ value, iconName }, index) => (
-              <BaseButton
-                key={`tm-${value}`}
-                className={cx(BUTTON_ROW_CLASSNAME, `menu-item-${index + 1}`)}
-                iconName={iconName as IconName}
-                onClick={onModeChange(value)}
-                active={value === mode}
-              />
+            {testModes.map(({ value, label, iconName }, index) => (
+              <BaseTooltip key={`tm-${value}`}>
+                <BaseTooltipTrigger>
+                  <BaseButton
+                    className={cx(
+                      BUTTON_ROW_CLASSNAME,
+                      `menu-item-${index + 1}`,
+                    )}
+                    iconName={iconName as IconName}
+                    onClick={onModeChange(value)}
+                    active={value === mode}
+                  />
+                </BaseTooltipTrigger>
+                <BaseTooltipContent>{label} Mode</BaseTooltipContent>
+              </BaseTooltip>
             ))}
           </div>
           <div className='h-32 border-r border-r-border' />
           <div className='grid grid-cols-2 gap-2'>
             {amountList?.map((amount, index) => (
-              <BaseButton
-                key={`ta-${amount}`}
-                className={cx(
-                  BUTTON_ROW_CLASSNAME,
-                  `menu-item-${testModes.length + index + 1}`,
-                )}
-                onClick={onAmountChange(amount)}
-                active={amount === timeWordAmount}
-              >
-                {amount}
-              </BaseButton>
+              <BaseTooltip key={`ta-${amount}`}>
+                <BaseTooltipTrigger>
+                  <BaseButton
+                    className={cx(
+                      BUTTON_ROW_CLASSNAME,
+                      `menu-item-${testModes.length + index + 1}`,
+                    )}
+                    onClick={onAmountChange(amount)}
+                    active={amount === timeWordAmount}
+                  >
+                    {amount}
+                  </BaseButton>
+                </BaseTooltipTrigger>
+                <BaseTooltipContent>
+                  {amount} {mode === TestMode.Time ? 'Seconds' : 'Words'}
+                </BaseTooltipContent>
+              </BaseTooltip>
             ))}
             {mode === TestMode.Zen ? (
               <BaseIcon name='minus' className='opacity-50' />
             ) : (
-              <BaseButton
-                className={cx(BUTTON_ROW_CLASSNAME, customAmountClassName)}
-                iconName='magic-wand'
-                active={isTimeWordAmountCustom}
-                onClick={onOpenAmountCustomSetter}
-              />
+              <BaseTooltip>
+                <BaseTooltipTrigger>
+                  <BaseButton
+                    className={cx(BUTTON_ROW_CLASSNAME, customAmountClassName)}
+                    iconName='magic-wand'
+                    active={isTimeWordAmountCustom}
+                    onClick={onOpenAmountCustomSetter}
+                  />
+                </BaseTooltipTrigger>
+                <BaseTooltipContent>
+                  Set custom {mode === TestMode.Time ? 'Time' : 'Word Count'}
+                </BaseTooltipContent>
+              </BaseTooltip>
             )}
           </div>
         </div>

@@ -4,6 +4,11 @@ import { useOnClickOutside } from 'usehooks-ts';
 import cx from 'classix';
 
 import { BaseButton } from '#/base/components/base-button.component';
+import {
+  BaseTooltip,
+  BaseTooltipContent,
+  BaseTooltipTrigger,
+} from '#/base/components/base-tooltip.component';
 import { TestMode } from '../models/wpm-test.model';
 import { useWPMTestResults } from '../hooks/use-wpm-test-results.hook';
 import { WPMTestInput } from './wpm-test-input.component';
@@ -100,18 +105,28 @@ export const WPMTestResults = memo(function ({
             <span className='text-xs italic text-white/60'>{description}</span>
           </div>
           <div className='flex items-center'>
-            <BaseButton
-              className={BUTTON_CLASSNAME}
-              tabIndex={0}
-              iconName='rewind'
-              onClick={resetTest}
-            />
-            <BaseButton
-              className={BUTTON_CLASSNAME}
-              tabIndex={1}
-              iconName='backspace'
-              onClick={goBack}
-            />
+            <BaseTooltip>
+              <BaseTooltipTrigger>
+                <BaseButton
+                  className={BUTTON_CLASSNAME}
+                  tabIndex={0}
+                  iconName='rewind'
+                  onClick={resetTest}
+                />
+              </BaseTooltipTrigger>
+              <BaseTooltipContent>Reset Test</BaseTooltipContent>
+            </BaseTooltip>
+            <BaseTooltip>
+              <BaseTooltipTrigger>
+                <BaseButton
+                  className={BUTTON_CLASSNAME}
+                  tabIndex={1}
+                  iconName='backspace'
+                  onClick={goBack}
+                />
+              </BaseTooltipTrigger>
+              <BaseTooltipContent>Back to Test View</BaseTooltipContent>
+            </BaseTooltip>
           </div>
         </div>
         <div className='h-px w-full bg-border' />

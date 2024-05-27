@@ -6,7 +6,7 @@ import { BaseIcon } from './base-icon.component';
 import type { ComponentProps } from 'react';
 import type { ButtonSize, ButtonVariant, IconName } from '../models/base.model';
 
-type Props = ComponentProps<'button'> & {
+type BaseButtonProps = ComponentProps<'button'> & {
   active?: boolean;
   loading?: boolean;
   variant?: ButtonVariant;
@@ -16,7 +16,7 @@ type Props = ComponentProps<'button'> & {
 };
 
 export const BaseButton = memo(
-  forwardRef<HTMLButtonElement, Props>(function (
+  forwardRef<HTMLButtonElement, BaseButtonProps>(function (
     {
       className,
       active,

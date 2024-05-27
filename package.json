@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.26.16",
     "@headlessui/react": "^2.0.3",
     "@phosphor-icons/react": "^2.1.4",
     "classix": "^2.1.36",

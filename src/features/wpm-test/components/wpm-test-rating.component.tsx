@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 import cx from 'classix';
 
 import type { ComponentProps } from 'react';
@@ -56,18 +56,20 @@ export const WPMTestRating = memo(function ({
   rating,
   ...moreProps
 }: Props) {
+  const [localRating] = useState(rating);
+
   const ratingGradientStyle = useMemo(
     () => [
       {
-        backgroundColor: (ratings as any)[rating].color,
-        backgroundImage: `linear-gradient(${(ratings as any)[rating].strokeGradient})`,
+        backgroundColor: (ratings as any)[localRating].color,
+        backgroundImage: `linear-gradient(${(ratings as any)[localRating].strokeGradient})`,
       },
       {
-        backgroundColor: (ratings as any)[rating].color,
-        backgroundImage: `radial-gradient(${(ratings as any)[rating].gradient})`,
+        backgroundColor: (ratings as any)[localRating].color,
+        backgroundImage: `radial-gradient(${(ratings as any)[localRating].gradient})`,
       },
     ],
-    [rating],
+    [localRating],
   );
 
   return (
@@ -76,32 +78,32 @@ export const WPMTestRating = memo(function ({
         <div
           className={cx(
             'rating-mask absolute left-0 top-0 z-10',
-            `rating-${rating}-stroke`,
+            `rating-${localRating}-stroke`,
           )}
         >
           <div
             style={ratingGradientStyle[0]}
             className={cx(
               'h-[200px] w-[281px]',
-              rating === 'sss'
+              localRating === 'sss'
                 ? 'animate-rating-sss-fast'
                 : 'animate-rating-fast',
             )}
           />
         </div>
-        <div className={cx('rating-mask', `rating-${rating}`)}>
+        <div className={cx('rating-mask', `rating-${localRating}`)}>
           <div
             style={ratingGradientStyle[1]}
             className={cx(
               'h-[200px] w-[281px]',
-              rating === 'sss' ? 'animate-rating-sss' : 'animate-rating',
+              localRating === 'sss' ? 'animate-rating-sss' : 'animate-rating',
             )}
           />
         </div>
       </div>
       <div
         style={ratingBgStyle}
-        className='animate-rating-bg-reveal absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 bg-cover bg-no-repeat opacity-80'
+        className='absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 animate-rating-bg-reveal bg-cover bg-no-repeat opacity-80'
       />
     </div>
   );

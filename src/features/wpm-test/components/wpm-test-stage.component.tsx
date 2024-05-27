@@ -142,7 +142,7 @@ export const WPMTestStage = memo(function ({
                 variant='secondary'
                 onClick={viewTestResults}
               >
-                See Test Results
+                View Test Results
               </BaseButton>
             </div>
           )}

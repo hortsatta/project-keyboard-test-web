@@ -10,6 +10,11 @@ import { TestMode } from '../models/wpm-test.model';
 import { useBoundStore } from '#/core/hooks/use-store.hook';
 import { BaseButton } from '#/base/components/base-button.component';
 import { BaseIcon } from '#/base/components/base-icon.component';
+import {
+  BaseTooltip,
+  BaseTooltipTrigger,
+  BaseTooltipContent,
+} from '#/base/components/base-tooltip.component';
 import { WPMTestSystemOptionsModal } from './wpm-test-system-options-modal.component';
 import { WPMTestAmountCustomSetterModal } from './wpm-test-amount-custom-setter-modal.component';
 import { WPMTestMainMenuModal } from './wpm-test-main-menu-modal.component';
@@ -128,10 +133,9 @@ export const WPMTestToolbarMenu = memo(function ({
   }, [setOpenMainMenu]);
 
   const handleResetTestModal = useCallback(() => {
-    resetTest()
-    handleCloseModal()
-  }, [resetTest, handleCloseModal])
-
+    resetTest();
+    handleCloseModal();
+  }, [resetTest, handleCloseModal]);
 
   return (
     <>
@@ -143,56 +147,88 @@ export const WPMTestToolbarMenu = memo(function ({
         {...moreProps}
       >
         <div className={cx(WRAPPER_OPTIONS_CLASSNAME, 'hidden lg:flex')}>
-          {testModes.map(({ value, iconName }) => (
-            <BaseButton
-              key={`tm-${value}`}
-              className={BUTTON_CLASSNAME}
-              iconName={iconName as IconName}
-              onClick={handleModeChange(value)}
-              active={value === mode}
-            />
+          {testModes.map(({ value, label, iconName }) => (
+            <BaseTooltip key={`tm-${value}`}>
+              <BaseTooltipTrigger>
+                <BaseButton
+                  className={BUTTON_CLASSNAME}
+                  iconName={iconName as IconName}
+                  onClick={handleModeChange(value)}
+                  active={value === mode}
+                />
+              </BaseTooltipTrigger>
+              <BaseTooltipContent>{label} Mode</BaseTooltipContent>
+            </BaseTooltip>
           ))}
         </div>
         <Border />
         <div className={cx(WRAPPER_OPTIONS_CLASSNAME, 'hidden flex-1 lg:flex')}>
           {amountList?.map((amount) => (
-            <BaseButton
-              key={`ta-${amount}`}
-              className={BUTTON_CLASSNAME}
-              onClick={handleAmountChange(amount)}
-              active={amount === timeWordAmount}
-            >
-              {amount}
-            </BaseButton>
+            <BaseTooltip key={`ta-${amount}`}>
+              <BaseTooltipTrigger>
+                <BaseButton
+                  className={BUTTON_CLASSNAME}
+                  onClick={handleAmountChange(amount)}
+                  active={amount === timeWordAmount}
+                >
+                  {amount}
+                </BaseButton>
+              </BaseTooltipTrigger>
+              <BaseTooltipContent>
+                {amount} {mode === TestMode.Time ? 'Seconds' : 'Words'}
+              </BaseTooltipContent>
+            </BaseTooltip>
           ))}
           {mode === TestMode.Zen ? (
             <BaseIcon name='minus' className='opacity-50' />
           ) : (
-            <BaseButton
-              className={BUTTON_CLASSNAME}
-              iconName='magic-wand'
-              active={isTimeWordAmountCustom}
-              onClick={handleOpenAmountCustomSetter}
-            />
+            <BaseTooltip>
+              <BaseTooltipTrigger>
+                <BaseButton
+                  className={BUTTON_CLASSNAME}
+                  iconName='magic-wand'
+                  active={isTimeWordAmountCustom}
+                  onClick={handleOpenAmountCustomSetter}
+                />
+              </BaseTooltipTrigger>
+              <BaseTooltipContent>
+                Set custom {mode === TestMode.Time ? 'Time' : 'Word Count'}
+              </BaseTooltipContent>
+            </BaseTooltip>
           )}
         </div>
         <Border />
         <div className={WRAPPER_OPTIONS_CLASSNAME}>
-          <BaseButton
-            className={cx(BUTTON_CLASSNAME, 'lg:hidden')}
-            iconName='list'
-            onClick={handleSetOpenMainMenu}
-          />
-          <BaseButton
-            className={BUTTON_CLASSNAME}
-            iconName='faders'
-            onClick={handleOpenSystemOptions}
-          />
-          <BaseButton
-            className={BUTTON_CLASSNAME}
-            iconName='rewind'
-            onClick={resetTest}
-          />
+          <BaseTooltip>
+            <BaseTooltipTrigger>
+              <BaseButton
+                className={cx(BUTTON_CLASSNAME, 'lg:hidden')}
+                iconName='list'
+                onClick={handleSetOpenMainMenu}
+              />
+            </BaseTooltipTrigger>
+            <BaseTooltipContent>Main Menu</BaseTooltipContent>
+          </BaseTooltip>
+          <BaseTooltip>
+            <BaseTooltipTrigger>
+              <BaseButton
+                className={BUTTON_CLASSNAME}
+                iconName='faders'
+                onClick={handleOpenSystemOptions}
+              />
+            </BaseTooltipTrigger>
+            <BaseTooltipContent>System Options</BaseTooltipContent>
+          </BaseTooltip>
+          <BaseTooltip>
+            <BaseTooltipTrigger>
+              <BaseButton
+                className={BUTTON_CLASSNAME}
+                iconName='rewind'
+                onClick={resetTest}
+              />
+            </BaseTooltipTrigger>
+            <BaseTooltipContent>Reset Test</BaseTooltipContent>
+          </BaseTooltip>
         </div>
       </div>
       <WPMTestMainMenuModal
