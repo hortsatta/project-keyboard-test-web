@@ -71,27 +71,31 @@ function getWPMScore(wpm: number) {
   }
 }
 
-function getComboScore(wpm: number, timeSec: number, comboCount: number) {
+function getComboScore(wpm: number, timeSec: number, comboCounts: number[]) {
   const wps = wpm / 60;
   const highestComboCount = Math.floor(wps * timeSec);
+  const totalComboCount = comboCounts
+    .slice(0, 3)
+    .reduce((total, current) => total + current, 0);
+
   const score =
-    highestComboCount <= 0 ? 0 : (comboCount / highestComboCount) * 0.5;
+    highestComboCount <= 0 ? 0 : (totalComboCount / highestComboCount) * 0.5;
 
   return Math.round(score * 10) / 10;
 }
 
-function getWeightedScore(wpm: number, timeSec: number, comboCount: number) {
+function getWeightedScore(wpm: number, timeSec: number, comboCounts: number[]) {
   const wpmScore = getWPMScore(wpm);
-  const comboScore = getComboScore(wpm, timeSec, comboCount);
+  const comboScore = getComboScore(wpm, timeSec, comboCounts);
   return Math.floor(wpmScore + (comboScore || 0));
 }
 
 export function generateRating(
   wpm: number,
   timeSec: number,
-  comboCount: number,
+  comboCounts: number[],
 ) {
-  const score = getWeightedScore(wpm, timeSec, comboCount);
+  const score = getWeightedScore(wpm, timeSec, comboCounts);
 
   if (score <= 3) {
     return 'e';

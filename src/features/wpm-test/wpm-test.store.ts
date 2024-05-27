@@ -163,9 +163,11 @@ export const createWPMTestSlice: StateCreator<
   },
 
   setComplete: (elapsedTimeMs = 0) => {
-    const { inputValue, setInputNext } = get();
+    const { inputValue, setInputNext, resetComboCounter } = get();
 
     inputValue.trim().length && setInputNext();
+    resetComboCounter();
+
     set({
       isPlaying: false,
       isComplete: true,
@@ -177,27 +179,36 @@ export const createWPMTestSlice: StateCreator<
   appendComboCounter: () =>
     set(({ comboCounter, activeIndex }) => {
       const count = comboCounter.count + 1;
-      const highestCount =
-        comboCounter.highestCount < count ? count : comboCounter.highestCount;
 
       return {
         comboCounter: {
           ...comboCounter,
           lastIndex: activeIndex,
           count,
-          highestCount,
         },
       };
     }),
 
   resetComboCounter: (hardReset?: boolean) =>
     set(({ comboCounter: prevComboCounter }) => {
-      const comboCounter = hardReset
-        ? DEFAULT_COMBO_COUNTER
-        : {
-            ...prevComboCounter,
-            count: 0,
-          };
+      if (hardReset) {
+        return { comboCounter: DEFAULT_COMBO_COUNTER };
+      }
+
+      let highestCounts = prevComboCounter.highestCounts;
+
+      if (prevComboCounter.count > 0) {
+        highestCounts = [
+          ...prevComboCounter.highestCounts,
+          prevComboCounter.count,
+        ].sort((a, b) => b - a);
+      }
+
+      const comboCounter = {
+        ...prevComboCounter,
+        highestCounts,
+        count: 0,
+      };
 
       return { comboCounter };
     }),

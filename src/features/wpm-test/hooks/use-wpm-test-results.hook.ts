@@ -22,8 +22,13 @@ export function useWPMTestResults(): Result {
   const transcripts = useBoundStore((state) => state.transcripts);
   const resetTest = useBoundStore((state) => state.resetTest);
 
-  const highestComboCount = useBoundStore(
-    (state) => state.comboCounter.highestCount,
+  const highestComboCounts = useBoundStore(
+    (state) => state.comboCounter.highestCounts,
+  );
+
+  const highestComboCount = useMemo(
+    () => highestComboCounts[0] || 0,
+    [highestComboCounts],
   );
 
   const timeSeconds = useMemo(() => elapsedTimeMs / 1000, [elapsedTimeMs]);
@@ -101,8 +106,8 @@ export function useWPMTestResults(): Result {
   );
 
   const overallRating = useMemo(
-    () => generateRating(netWPM, timeSeconds, highestComboCount),
-    [netWPM, timeSeconds, highestComboCount],
+    () => generateRating(netWPM, timeSeconds, highestComboCounts),
+    [netWPM, timeSeconds, highestComboCounts],
   );
 
   return {

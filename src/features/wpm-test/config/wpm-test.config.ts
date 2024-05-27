@@ -27,7 +27,7 @@ export const DEFAULT_TEST_MODE_OPTIONS = {
 
 export const DEFAULT_COMBO_COUNTER = {
   count: 0,
-  highestCount: 0,
+  highestCounts: [],
 };
 
 const MAX_CHAR_PER_ROW = 72;

@@ -27,7 +27,7 @@ export type Transcript = {
 
 export type ComboCounter = {
   count: number;
-  highestCount: number;
+  highestCounts: number[];
   lastIndex?: number;
 };
 
