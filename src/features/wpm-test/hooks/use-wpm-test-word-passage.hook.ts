@@ -13,6 +13,7 @@ type Result = {
   textCursorStyle: CSSProperties | undefined;
   wordStyle: CSSProperties | undefined;
   blastEffectStyle: CSSProperties | undefined;
+  comboMultiplierActive: boolean;
   activeIndex: number;
   inputValue: string;
   transcripts: Transcript[];
@@ -69,6 +70,9 @@ export function useWPMTestWordPassage(): Result {
   const activeIndex = useBoundStore((state) => state.activeIndex);
   const inputValue = useBoundStore((state) => state.inputValue);
   const transcripts = useBoundStore((state) => state.transcripts);
+  const { active: comboMultiplierActive } = useBoundStore(
+    (state) => state.comboMultiplier,
+  );
   const wrapperRef = useRef<HTMLDivElement>(null);
   const charSampleRef = useRef<HTMLInputElement>(null);
   const blastEffectRef = useRef<AnimationItem | undefined>(null);
@@ -208,6 +212,7 @@ export function useWPMTestWordPassage(): Result {
     textCursorStyle,
     wordStyle,
     blastEffectStyle,
+    comboMultiplierActive,
     activeIndex,
     inputValue,
     transcripts,

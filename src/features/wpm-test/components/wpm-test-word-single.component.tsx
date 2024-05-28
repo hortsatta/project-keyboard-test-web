@@ -11,6 +11,7 @@ type Props = ComponentProps<'div'> & {
   value: string;
   inputValue?: string;
   active?: boolean;
+  comboMultiplierActive?: boolean;
   transcript?: Transcript;
   onPerfect?: (rect?: DOMRect) => void;
 };
@@ -22,6 +23,7 @@ export const WPMTestWordSingle = memo(
       value,
       inputValue,
       active,
+      comboMultiplierActive,
       transcript,
       onPerfect,
       ...moreProps
@@ -67,6 +69,11 @@ export const WPMTestWordSingle = memo(
             className={cx(
               'relative z-10 inline-block not-italic transition-all duration-75',
               inputValueList[index] == null ? 'opacity-30' : 'opacity-80',
+              inputValueList[index] != null &&
+                inputValueList[index] === char &&
+                active &&
+                comboMultiplierActive &&
+                'animate-max-combo text-primary !opacity-100',
               inputValueList[index] != null &&
                 inputValueList[index] !== char &&
                 'text-rose-300',

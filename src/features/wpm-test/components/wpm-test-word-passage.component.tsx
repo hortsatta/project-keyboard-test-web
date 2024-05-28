@@ -27,6 +27,7 @@ export const WPMTestWordPassage = memo(function ({
     textCursorStyle,
     wordStyle,
     blastEffectStyle,
+    comboMultiplierActive,
     activeIndex,
     inputValue,
     transcripts,
@@ -58,7 +59,10 @@ export const WPMTestWordPassage = memo(function ({
       {!isComplete && (
         <div
           style={textCursorStyle}
-          className='absolute -ml-px -mt-px animate-blink border-l-2 border-primary bg-gradient-to-r from-primary/30 transition-transform duration-75'
+          className={cx(
+            'absolute -ml-px -mt-px animate-blink border-l-2 border-primary bg-gradient-to-r from-primary/30 transition-transform duration-75',
+            comboMultiplierActive && 'animate-max-combo',
+          )}
         />
       )}
       <WPMTestBlastEffect ref={blastEffectRef} style={blastEffectStyle} />
@@ -71,6 +75,7 @@ export const WPMTestWordPassage = memo(function ({
               value={str}
               inputValue={inputValue}
               transcript={transcripts[index]}
+              comboMultiplierActive={comboMultiplierActive}
               active
             />
           ) : (
