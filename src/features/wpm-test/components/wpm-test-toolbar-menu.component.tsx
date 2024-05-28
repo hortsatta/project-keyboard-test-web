@@ -47,7 +47,7 @@ const BUTTON_CLASSNAME = 'flex h-full w-12 gap-2 !px-1';
 
 const Border = memo(function () {
   return (
-    <div className='hidden h-full w-[13px] justify-center lg:flex'>
+    <div className='2lg:flex hidden h-full w-[13px] justify-center'>
       <div className='h-full border-r border-r-border' />
     </div>
   );
@@ -141,12 +141,12 @@ export const WPMTestToolbarMenu = memo(function ({
     <>
       <div
         className={cx(
-          'flex h-full w-fit flex-none items-center gap-2 rounded border border-border bg-primary/10 p-2 lg:w-full lg:flex-1',
+          '2lg:w-full 2lg:flex-1 flex h-full w-fit flex-none items-center gap-2 rounded border border-border bg-primary/10 p-2',
           className,
         )}
         {...moreProps}
       >
-        <div className={cx(WRAPPER_OPTIONS_CLASSNAME, 'hidden lg:flex')}>
+        <div className={cx(WRAPPER_OPTIONS_CLASSNAME, '2lg:flex hidden')}>
           {testModes.map(({ value, label, iconName }) => (
             <BaseTooltip key={`tm-${value}`}>
               <BaseTooltipTrigger>
@@ -162,7 +162,9 @@ export const WPMTestToolbarMenu = memo(function ({
           ))}
         </div>
         <Border />
-        <div className={cx(WRAPPER_OPTIONS_CLASSNAME, 'hidden flex-1 lg:flex')}>
+        <div
+          className={cx(WRAPPER_OPTIONS_CLASSNAME, '2lg:flex hidden flex-1')}
+        >
           {amountList?.map((amount) => (
             <BaseTooltip key={`ta-${amount}`}>
               <BaseTooltipTrigger>
@@ -202,7 +204,7 @@ export const WPMTestToolbarMenu = memo(function ({
           <BaseTooltip>
             <BaseTooltipTrigger>
               <BaseButton
-                className={cx(BUTTON_CLASSNAME, 'lg:hidden')}
+                className={cx(BUTTON_CLASSNAME, '2lg:hidden')}
                 iconName='list'
                 onClick={handleSetOpenMainMenu}
               />

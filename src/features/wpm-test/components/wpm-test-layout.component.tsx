@@ -20,7 +20,10 @@ export function WPMTestLayout() {
   return (
     <div className='flex min-h-screen flex-col'>
       <BaseSEO />
-      <CoreHeader className='!absolute top-5 lg:top-10' isMinimal={isMinimalUI}>
+      <CoreHeader
+        className='2lg:top-10 !absolute top-5'
+        isMinimal={isMinimalUI}
+      >
         <WPMTestToolbarMenu className='h-full max-w-main' />
       </CoreHeader>
       <main>

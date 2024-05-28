@@ -23,7 +23,7 @@ export const CoreHeader = memo(function ({
   return (
     <header
       className={cx(
-        'relative z-50 flex h-[61px] w-full max-w-main flex-col items-center justify-between gap-4 self-center px-2.5 transition-opacity duration-500 hover:!pointer-events-auto hover:!opacity-100 xs:flex-row lg:justify-normal lg:px-0',
+        '2lg:justify-normal 2lg:px-0 relative z-50 flex h-[61px] w-full max-w-main flex-col items-center justify-between gap-4 self-center px-2.5 transition-opacity duration-500 hover:!pointer-events-auto hover:!opacity-100 xs:flex-row',
         isMinimal && 'pointer-events-none opacity-0',
         className,
       )}

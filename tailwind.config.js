@@ -14,6 +14,7 @@ export default {
       screens: {
         xs: '430px',
         '2xs': '470px',
+        '2lg': '1111px',
       },
       maxWidth: {
         main: '876px',
@@ -77,9 +78,11 @@ export default {
       animation: {
         'fade-in': 'fade-in 0.3s linear forwards',
         blink: 'pulse 1s step-start 0s infinite',
+        'pulse-once': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) 1',
         'pulse-fast': 'pulse 0.6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pulse-faster': 'pulse 0.3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        error: 'shaking-x 0.3s forwards',
+        error: 'shaking-x 0.3s',
+        active: 'shaking-x 0.5s',
         'add-combo': 'ping 0.4s 1',
         'max-combo': 'rainbow 0.8s linear infinite',
         rating: 'shiny 4s linear infinite',

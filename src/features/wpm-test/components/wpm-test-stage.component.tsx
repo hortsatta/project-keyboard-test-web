@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useOnClickOutside } from 'usehooks-ts';
 import cx from 'classix';
 
+import { pageRoutes } from '#/core/config/page-routes.config';
 import { useBoundStore } from '#/core/hooks/use-store.hook';
 import { BaseButton } from '#/base/components/base-button.component';
 import { TestMode } from '../models/wpm-test.model';
@@ -15,10 +16,10 @@ import { WPMTestProgress } from './wpm-test-progress.component';
 import { WPMTestWordPassage } from './wpm-test-word-passage.component';
 import { WPMTestComboCounter } from './wpm-test-combo-counter.component';
 import { WPMTestComboColorBackdrop } from './wpm-test-combo-color-backdrop.component';
+import { WPMTestComboMultiplierBar } from './wpm-test-combo-multiplier-bar.component';
 import { WPMTestStageGradientFadeOut } from './wpm-test-stage-gradient-fade-out.component';
 
 import type { ComponentProps } from 'react';
-import { pageRoutes } from '#/core/config/page-routes.config';
 
 export const WPMTestStage = memo(function ({
   className,
@@ -122,9 +123,12 @@ export const WPMTestStage = memo(function ({
         <WPMTestInput ref={inputRef} passageList={passageList} />
         <div className='relative h-[200px] max-w-main'>
           {!isComplete && (
-            <WPMTestComboCounter className='!absolute left-1/2 right-auto top-44 -translate-x-1/2 xs:top-24 lg:left-auto lg:right-full lg:top-1/2 lg:mr-6 lg:-translate-y-1/2 lg:translate-x-0' />
+            <div className='2lg:left-auto 2lg:right-full 2lg:top-1/2 2lg:mr-9 2lg:-translate-y-1/2 2lg:translate-x-0 !absolute left-1/2 right-auto top-44 flex -translate-x-1/2 items-center gap-4 xs:top-24'>
+              <WPMTestComboCounter className='relative z-10' />
+              <WPMTestComboMultiplierBar className='!absolute -top-1.5 left-1/2 -translate-x-1/2' />
+            </div>
           )}
-          <div className='relative mb-2.5 mt-60 h-[200px] overflow-hidden px-2.5 xs:mt-40 lg:mt-0 lg:px-0'>
+          <div className='2lg:mt-0 2lg:px-0 relative mb-2.5 mt-[16.5rem] h-[200px] overflow-hidden px-2.5 xs:mt-48'>
             <WPMTestWordPassage className='h-full' passageList={passageList} />
             {/* Top and bottom fade (gradient) */}
             <WPMTestStageGradientFadeOut className='top-0' color={comboColor} />
@@ -134,7 +138,7 @@ export const WPMTestStage = memo(function ({
               isBottom
             />
           </div>
-          <WPMTestProgress className='px-2.5 lg:px-1' value={progressValue} />
+          <WPMTestProgress className='2lg:px-1 px-2.5' value={progressValue} />
           {isComplete && (
             <div className='mt-16 flex w-full justify-center'>
               <BaseButton

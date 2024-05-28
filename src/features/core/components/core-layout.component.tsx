@@ -8,7 +8,7 @@ export function CoreLayout() {
   return (
     <div className='flex min-h-screen flex-col'>
       <BaseSEO />
-      <CoreHeader className='mt-5 lg:mt-10' noHeader />
+      <CoreHeader className='2lg:mt-10 mt-5' noHeader />
       <main className='mx-auto w-full max-w-main flex-1'>
         <Outlet />
       </main>

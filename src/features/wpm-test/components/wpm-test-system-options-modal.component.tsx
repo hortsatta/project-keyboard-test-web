@@ -10,8 +10,12 @@ import type { TestSystemOptions } from '../models/wpm-test.model';
 export const WPMTestSystemOptionsModal = memo(function (
   props: ComponentProps<typeof BaseModal>,
 ) {
-  const { comboBackdropColorSync, perfectWordSfx, notCorrectWordSfx } =
-    useBoundStore((state) => state.testSystemOptions);
+  const {
+    comboMultiplierAutoActivate,
+    comboBackdropColorSync,
+    perfectWordSfx,
+    notCorrectWordSfx,
+  } = useBoundStore((state) => state.testSystemOptions);
 
   const setTestSystemOptions = useBoundStore(
     (state) => state.setTestSystemOptions,
@@ -32,12 +36,20 @@ export const WPMTestSystemOptionsModal = memo(function (
     >
       <div className='flex flex-col gap-2.5'>
         <BaseSwitchToggle
+          enabled={!!comboMultiplierAutoActivate}
+          onChange={settingsToggle({
+            comboMultiplierAutoActivate: !comboMultiplierAutoActivate,
+          })}
+        >
+          Auto activate combo multiplier
+        </BaseSwitchToggle>
+        <BaseSwitchToggle
           enabled={!!comboBackdropColorSync}
           onChange={settingsToggle({
             comboBackdropColorSync: !comboBackdropColorSync,
           })}
         >
-          Combo background color sync
+          Sync combo background color
         </BaseSwitchToggle>
         <BaseSwitchToggle
           enabled={!!perfectWordSfx}

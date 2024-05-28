@@ -6,8 +6,11 @@ import {
 } from './helpers/transcript.helper';
 import {
   DEFAULT_COMBO_COUNTER,
+  DEFAULT_COMBO_MULTIPLIER,
   DEFAULT_TEST_MODE_OPTIONS,
   DEFAULT_TEST_SYSTEM_OPTIONS,
+  INC_COMBO_MULTIPLIER,
+  MAX_COMBO_MULTIPLIER,
 } from './config/wpm-test.config';
 
 import type { ChangeEvent } from 'react';
@@ -34,6 +37,7 @@ export const createWPMTestSlice: StateCreator<
   fullInputValue: undefined,
   transcripts: [],
   comboCounter: DEFAULT_COMBO_COUNTER,
+  comboMultiplier: DEFAULT_COMBO_MULTIPLIER,
   elapsedTimeMs: 0,
 
   setTestSystemOptions: (testSystemOptions: TestSystemOptions) =>
@@ -176,20 +180,30 @@ export const createWPMTestSlice: StateCreator<
     });
   },
 
-  appendComboCounter: () =>
-    set(({ comboCounter, activeIndex }) => {
-      const count = comboCounter.count + 1;
+  appendComboCounter: () => {
+    const {
+      comboCounter,
+      comboMultiplier,
+      activeIndex,
+      appendComboMultiplier,
+    } = get();
 
-      return {
-        comboCounter: {
-          ...comboCounter,
-          lastIndex: activeIndex,
-          count,
-        },
-      };
-    }),
+    const count = comboCounter.count + (comboMultiplier.active ? 2 : 1);
 
-  resetComboCounter: (hardReset?: boolean) =>
+    appendComboMultiplier();
+
+    set({
+      comboCounter: {
+        ...comboCounter,
+        lastIndex: activeIndex,
+        count,
+      },
+    });
+  },
+
+  resetComboCounter: (hardReset?: boolean) => {
+    get().resetComboMultiplier();
+
     set(({ comboCounter: prevComboCounter }) => {
       if (hardReset) {
         return { comboCounter: DEFAULT_COMBO_COUNTER };
@@ -211,6 +225,64 @@ export const createWPMTestSlice: StateCreator<
       };
 
       return { comboCounter };
+    });
+  },
+
+  activateComboMultiplier: (active: boolean) => {
+    const { comboMultiplier } = get();
+
+    if (active && comboMultiplier.stock < 1) {
+      return;
+    }
+
+    set({
+      comboMultiplier: { ...comboMultiplier, active },
+    });
+  },
+
+  appendComboMultiplier: () => {
+    const { comboMultiplier } = get();
+
+    if (comboMultiplier.active) return;
+
+    const currentCount = comboMultiplier.currentCount + 1;
+    const stock =
+      currentCount % 10 === 0 && comboMultiplier.stock < MAX_COMBO_MULTIPLIER
+        ? comboMultiplier.stock + INC_COMBO_MULTIPLIER
+        : comboMultiplier.stock;
+
+    set({
+      comboMultiplier: {
+        ...comboMultiplier,
+        stock,
+        currentCount,
+      },
+    });
+  },
+
+  clearComboMultiplier: () =>
+    set(({ comboMultiplier }) => ({
+      comboMultiplier: {
+        ...comboMultiplier,
+        active: false,
+        stock: 0,
+      },
+    })),
+
+  resetComboMultiplier: (hardReset?: boolean) =>
+    set(({ comboMultiplier }) => {
+      if (hardReset) {
+        return {
+          comboMultiplier: DEFAULT_COMBO_MULTIPLIER,
+        };
+      }
+
+      return {
+        comboMultiplier: {
+          ...comboMultiplier,
+          currentCount: 0,
+        },
+      };
     }),
 
   initializeTranscripts: (targetText: string) =>
@@ -229,10 +301,11 @@ export const createWPMTestSlice: StateCreator<
   resetTranscripts: () => set({ transcripts: [] }),
 
   resetTest: () => {
-    const { resetComboCounter, resetTranscripts } = get();
+    const { resetTranscripts, resetComboCounter, resetComboMultiplier } = get();
 
-    resetComboCounter(true);
     resetTranscripts();
+    resetComboCounter(true);
+    resetComboMultiplier(true);
 
     set(() => ({
       isPlaying: false,

@@ -7,6 +7,7 @@ export enum TestMode {
 }
 
 export type TestSystemOptions = {
+  comboMultiplierAutoActivate?: boolean;
   comboBackdropColorSync?: boolean;
   perfectWordSfx?: boolean;
   notCorrectWordSfx?: boolean;
@@ -31,6 +32,12 @@ export type ComboCounter = {
   lastIndex?: number;
 };
 
+export type ComboMultiplier = {
+  active: boolean;
+  stock: number;
+  currentCount: number;
+};
+
 export type WPMTestSlice = {
   testSystemOptions: TestSystemOptions;
   testModeOptions: TestModeOptions;
@@ -41,6 +48,7 @@ export type WPMTestSlice = {
   passage: string | undefined;
   fullInputValue: string | undefined;
   comboCounter: ComboCounter;
+  comboMultiplier: ComboMultiplier;
   transcripts: Transcript[];
   elapsedTimeMs: number;
   setTestSystemOptions: (testSystemOptions: TestSystemOptions) => void;
@@ -52,6 +60,10 @@ export type WPMTestSlice = {
   setComplete: (elapsedTimeMs?: number) => void;
   appendComboCounter: () => void;
   resetComboCounter: (hardReset?: boolean) => void;
+  activateComboMultiplier: (active: boolean) => void;
+  appendComboMultiplier: () => void;
+  clearComboMultiplier: () => void;
+  resetComboMultiplier: (hardReset?: boolean) => void;
   initializeTranscripts: (targetText: string) => void;
   resetTranscripts: () => void;
   resetTest: () => void;

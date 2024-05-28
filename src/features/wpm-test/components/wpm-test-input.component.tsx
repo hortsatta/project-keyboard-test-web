@@ -21,6 +21,9 @@ export const WPMTestInput = memo(
     const setInputNext = useBoundStore((state) => state.setInputNext);
     const setInputBack = useBoundStore((state) => state.setInputBack);
     const setOpenMainMenu = useBoundStore((state) => state.setOpenMainMenu);
+    const activateComboMultiplier = useBoundStore(
+      (state) => state.activateComboMultiplier,
+    );
 
     const activePassage = useMemo(
       () => passageList[activeIndex + 1],
@@ -93,10 +96,13 @@ export const WPMTestInput = memo(
 
     const handleKeyUp = useCallback(
       (event: KeyboardEvent<HTMLInputElement>) => {
-        if (event.key !== 'Escape') return;
-        setOpenMainMenu();
+        if (event.key === 'Escape') {
+          setOpenMainMenu();
+        } else if (event.key === 'Control') {
+          activateComboMultiplier(true);
+        }
       },
-      [setOpenMainMenu],
+      [setOpenMainMenu, activateComboMultiplier],
     );
 
     return (
