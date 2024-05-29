@@ -117,6 +117,7 @@ export const createWPMTestSlice: StateCreator<
       inputValue,
       fullInputValue,
       transcripts,
+      comboMultiplier,
       appendComboCounter,
       resetComboCounter,
     } = get();
@@ -130,7 +131,7 @@ export const createWPMTestSlice: StateCreator<
       fullInputValue: updatedFullInputValue,
     };
 
-    targetTranscript &&
+    if (targetTranscript) {
       checkSimilarity(
         inputValue,
         targetTranscript.targetText,
@@ -138,6 +139,11 @@ export const createWPMTestSlice: StateCreator<
         appendComboCounter,
         resetComboCounter,
       );
+
+      if (comboMultiplier.active) {
+        transcripts[activeIndex] = { ...targetTranscript, hasMultiplier: true };
+      }
+    }
 
     // Add current value data to the transcript if targetText is not null
     if (nextActiveIndex >= transcripts.length && targetText?.length) {
@@ -294,8 +300,9 @@ export const createWPMTestSlice: StateCreator<
           inputValue,
           totalInputValue: inputValue,
           targetText,
-          hasBackspace: false,
           isDirty: false,
+          hasBackspace: false,
+          hasMultiplier: false,
         },
       ],
     })),

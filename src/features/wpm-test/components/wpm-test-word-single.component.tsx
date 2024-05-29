@@ -35,7 +35,7 @@ export const WPMTestWordSingle = memo(
       wasteInputValue,
       isDirty,
       isExact,
-      isPerfect,
+      perfectCat,
       handleMergeRefs,
     } = useWPMTestWordSingle(
       value,
@@ -60,7 +60,7 @@ export const WPMTestWordSingle = memo(
           <WPMTestWordMark
             className='-bottom-1 left-1/2 -translate-x-1/2'
             isCorrect={isExact}
-            isPerfect={isPerfect}
+            perfectCat={perfectCat}
           />
         )}
         {value.split('').map((char, index) => (

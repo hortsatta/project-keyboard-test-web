@@ -5,10 +5,11 @@ import type { ComponentProps } from 'react';
 
 import iconNotCorrectPng from '#/assets/images/icon-not-correct.png';
 import iconPerfectPng from '#/assets/images/icon-perfect.png';
+import iconPerfect2Png from '#/assets/images/icon-perfect-2.png';
 
 type Props = ComponentProps<'div'> & {
-  isCorrect?: boolean;
-  isPerfect?: boolean;
+  isCorrect: boolean;
+  perfectCat: number;
 };
 
 const IMG_CLASSNAME = 'h-1.5 w-1.5';
@@ -16,7 +17,7 @@ const IMG_CLASSNAME = 'h-1.5 w-1.5';
 export const WPMTestWordMark = memo(function ({
   className,
   isCorrect,
-  isPerfect,
+  perfectCat,
   ...moreProps
 }: Props) {
   return (
@@ -28,8 +29,12 @@ export const WPMTestWordMark = memo(function ({
           className={IMG_CLASSNAME}
         />
       ) : (
-        isPerfect && (
-          <img src={iconPerfectPng} alt='perfect' className={IMG_CLASSNAME} />
+        perfectCat > 0 && (
+          <img
+            src={perfectCat === 1 ? iconPerfectPng : iconPerfect2Png}
+            alt='perfect'
+            className={cx(IMG_CLASSNAME, perfectCat > 1 && '!w-[14px]')}
+          />
         )
       )}
     </div>

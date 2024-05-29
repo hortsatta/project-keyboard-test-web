@@ -15,7 +15,7 @@ type Result = {
   wasteInputValue: string | undefined;
   isDirty: boolean;
   isExact: boolean;
-  isPerfect: boolean;
+  perfectCat: number;
   handleMergeRefs: (instance: HTMLElement) => void;
 };
 
@@ -29,9 +29,10 @@ export function useWPMTestWordSingle(
   ref?: ForwardedRef<HTMLElement>,
   onPerfect?: (rect: DOMRect) => void,
 ): Result {
-  const { isDirty, hasBackspace } = transcript || {
+  const { isDirty, hasBackspace, hasMultiplier } = transcript || {
     isDirty: false,
     hasBackspace: false,
+    hasMultiplier: false,
   };
 
   const { perfectWordSfx, notCorrectWordSfx } = useBoundStore(
@@ -59,10 +60,16 @@ export function useWPMTestWordSingle(
     return similarity === 1;
   }, [value, inputValue]);
 
-  const isPerfect = useMemo(
-    () => (!isDirty ? false : isExact && !hasBackspace),
-    [isExact, isDirty, hasBackspace],
-  );
+  const perfectCat = useMemo(() => {
+    let cat = 0;
+    if (!isDirty || hasBackspace) {
+      cat = 0;
+    } else if (isExact) {
+      cat = hasMultiplier ? 2 : 1;
+    }
+
+    return cat;
+  }, [isExact, isDirty, hasBackspace, hasMultiplier]);
 
   const handleMergeRefs = useCallback(
     (instance: HTMLElement) => {
@@ -77,25 +84,25 @@ export function useWPMTestWordSingle(
   );
 
   useEffect(() => {
-    if (isDirty && !active && isExact && isPerfect) {
+    if (isDirty && !active && isExact && perfectCat > 0) {
       const { width, height } = localRef.current?.getBoundingClientRect() || {};
       const left = localRef.current?.offsetLeft || 0;
       const top = localRef.current?.offsetTop || 0;
 
       perfectWordSfx && playPerfectSfx();
       onPerfect && onPerfect({ width, height, left, top } as DOMRect);
-    } else if (isDirty && !active && !isExact && !isPerfect) {
+    } else if (isDirty && !active && !isExact && perfectCat < 1) {
       notCorrectWordSfx && playNotCorrectSfx();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active, isDirty, isExact, isPerfect, perfectWordSfx, notCorrectWordSfx]);
+  }, [active, isDirty, isExact, perfectCat, perfectWordSfx, notCorrectWordSfx]);
 
   return {
     inputValueList,
     wasteInputValue,
     isDirty,
     isExact,
-    isPerfect,
+    perfectCat,
     handleMergeRefs,
   };
 }

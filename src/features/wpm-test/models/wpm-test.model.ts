@@ -22,8 +22,9 @@ export type Transcript = {
   inputValue: string;
   totalInputValue: string;
   targetText: string;
-  hasBackspace: boolean;
   isDirty: boolean;
+  hasBackspace: boolean;
+  hasMultiplier: boolean;
 };
 
 export type ComboCounter = {
