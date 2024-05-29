@@ -4,7 +4,8 @@ import cx from 'classix';
 import { useBoundStore } from '#/core/hooks/use-store.hook';
 import { BaseSemiCircleProgress } from '#/base/components/base-semi-circle-progress.component';
 import {
-  MAX_COMBO_MULTIPLIER,
+  MAX_STOCK_COMBO_MULTIPLIER,
+  MIN_ACTIVE_STOCK_COMBO_MULTIPLIER,
   STOCK_COMBO_MULTIPLIER_SEC,
 } from '../config/wpm-test.config';
 
@@ -34,7 +35,8 @@ export const WPMTestComboMultiplierBar = memo(function ({
   const percent = useMemo(
     () =>
       Math.floor(
-        (timer / (MAX_COMBO_MULTIPLIER * STOCK_COMBO_MULTIPLIER_SEC)) * 100,
+        (timer / (MAX_STOCK_COMBO_MULTIPLIER * STOCK_COMBO_MULTIPLIER_SEC)) *
+          100,
       ),
     [timer],
   );
@@ -110,18 +112,20 @@ export const WPMTestComboMultiplierBar = memo(function ({
       <div className={cx(active && 'animate-pulse-fast')}>
         <BaseSemiCircleProgress
           className={cx(
-            stock === 1 && 'animate-pulse-once',
+            stock === MIN_ACTIVE_STOCK_COMBO_MULTIPLIER && 'animate-pulse-once',
             active && '!animate-error',
           )}
           percent={percent}
           active={active}
-          primary={stock >= 1}
+          primary={stock >= MIN_ACTIVE_STOCK_COMBO_MULTIPLIER}
         />
       </div>
       <div
         className={cx(
           'absolute -bottom-11 left-1/2 flex -translate-x-1/2 animate-rating-fast flex-col items-center justify-center transition-opacity',
-          !active && stock >= 1 ? 'opacity-80' : 'opacity-0',
+          !active && stock >= MIN_ACTIVE_STOCK_COMBO_MULTIPLIER
+            ? 'opacity-80'
+            : 'opacity-0',
         )}
       >
         <div className='flex h-[18px] items-start overflow-hidden'>

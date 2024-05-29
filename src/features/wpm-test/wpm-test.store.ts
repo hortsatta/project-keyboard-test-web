@@ -9,8 +9,9 @@ import {
   DEFAULT_COMBO_MULTIPLIER,
   DEFAULT_TEST_MODE_OPTIONS,
   DEFAULT_TEST_SYSTEM_OPTIONS,
-  INC_COMBO_MULTIPLIER,
-  MAX_COMBO_MULTIPLIER,
+  INC_STOCK_COMBO_MULTIPLIER,
+  MAX_STOCK_COMBO_MULTIPLIER,
+  MIN_ACTIVE_STOCK_COMBO_MULTIPLIER,
 } from './config/wpm-test.config';
 
 import type { ChangeEvent } from 'react';
@@ -231,7 +232,7 @@ export const createWPMTestSlice: StateCreator<
   activateComboMultiplier: (active: boolean) => {
     const { comboMultiplier } = get();
 
-    if (active && comboMultiplier.stock < 1) {
+    if (active && comboMultiplier.stock < MIN_ACTIVE_STOCK_COMBO_MULTIPLIER) {
       return;
     }
 
@@ -247,8 +248,9 @@ export const createWPMTestSlice: StateCreator<
 
     const currentCount = comboMultiplier.currentCount + 1;
     const stock =
-      currentCount % 10 === 0 && comboMultiplier.stock < MAX_COMBO_MULTIPLIER
-        ? comboMultiplier.stock + INC_COMBO_MULTIPLIER
+      currentCount % 10 === 0 &&
+      comboMultiplier.stock < MAX_STOCK_COMBO_MULTIPLIER
+        ? comboMultiplier.stock + INC_STOCK_COMBO_MULTIPLIER
         : comboMultiplier.stock;
 
     set({

@@ -37,8 +37,9 @@ export const DEFAULT_COMBO_MULTIPLIER = {
   currentCount: 0,
 };
 
-export const INC_COMBO_MULTIPLIER = 0.5;
-export const MAX_COMBO_MULTIPLIER = 3;
+export const INC_STOCK_COMBO_MULTIPLIER = 0.5;
+export const MAX_STOCK_COMBO_MULTIPLIER = 3;
+export const MIN_ACTIVE_STOCK_COMBO_MULTIPLIER = 1;
 export const STOCK_COMBO_MULTIPLIER_SEC = 6;
 
 const MAX_CHAR_PER_ROW = 72;
