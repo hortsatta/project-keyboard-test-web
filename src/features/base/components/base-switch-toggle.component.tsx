@@ -16,10 +16,16 @@ export const BaseSwitchToggle = memo(function ({
 }: Props) {
   return (
     <Switch
-      className={cx('group/switch flex items-center text-sm', className)}
+      className={cx(
+        'group/switch flex items-center justify-between text-sm',
+        className,
+      )}
       {...moreProps}
     >
-      <div className='relative mr-4 inline-flex h-7 w-14 shrink-0 cursor-pointer rounded border border-primary bg-green-950 p-0.5 outline-none transition-colors duration-200 ease-in-out'>
+      <div className='transition-colors group-hover/switch:text-primary'>
+        {children as ReactNode}
+      </div>
+      <div className='relative inline-flex h-7 w-14 shrink-0 cursor-pointer rounded border border-primary bg-green-950 p-0.5 outline-none transition-colors duration-200 ease-in-out'>
         <div
           aria-hidden='true'
           className={cx(
@@ -34,9 +40,6 @@ export const BaseSwitchToggle = memo(function ({
             <div className='absolute left-1/2 h-full -translate-x-1/2 border-r border-primary' />
           </div>
         </div>
-      </div>
-      <div className='transition-colors group-hover/switch:text-primary'>
-        {children as ReactNode}
       </div>
     </Switch>
   );

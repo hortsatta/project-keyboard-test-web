@@ -34,6 +34,7 @@ type Props = ComponentProps<typeof BaseModal> & {
 const BUTTON_COL_CLASSNAME = 'flex h-10 gap-2 !px-1';
 const BUTTON_ROW_CLASSNAME = 'flex h-10 w-12 gap-2 !px-1';
 const WRAPPER_OPTIONS_COL_CLASSNAME = 'flex flex-col gap-2';
+const BORDER_CLASSNAME = 'w-full border-b border-b-border';
 
 export const WPMTestMainMenuModal = memo(function ({
   open,
@@ -114,7 +115,7 @@ export const WPMTestMainMenuModal = memo(function ({
             Reset Test
           </BaseButton>
         </div>
-        <div className='w-full border-b border-b-border' />
+        <div className={BORDER_CLASSNAME} />
         <div className='flex items-center justify-center gap-5'>
           <div className={WRAPPER_OPTIONS_COL_CLASSNAME}>
             {testModes.map(({ value, label, iconName }, index) => (
@@ -174,7 +175,7 @@ export const WPMTestMainMenuModal = memo(function ({
             )}
           </div>
         </div>
-        <div className='w-full border-b border-b-border' />
+        <div className={BORDER_CLASSNAME} />
         <div className={WRAPPER_OPTIONS_COL_CLASSNAME}>
           <BaseButton
             className={cx(BUTTON_COL_CLASSNAME, systemOptionsClassName)}
