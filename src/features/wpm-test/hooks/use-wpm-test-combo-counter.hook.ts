@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 
 import { useBoundStore } from '#/core/hooks/use-store.hook';
+import { COMBO_COUNTER_EXPIRE_MS } from '../config/wpm-test.config';
 
 type Result = {
   count: number;
@@ -34,8 +35,6 @@ const COUNTER_COLOR_CLASSNAMES = [
   'text-violet-500',
   'animate-max-combo max-combo max-combo-mask',
 ];
-
-const COUNTER_TIME_MS = 4000;
 
 export function useWPMTestComboCounter(): Result {
   const count = useBoundStore((state) => state.comboCounter.count);
@@ -95,7 +94,7 @@ export function useWPMTestComboCounter(): Result {
       return;
     }
 
-    const initialTimeMs = COUNTER_TIME_MS;
+    const initialTimeMs = COMBO_COUNTER_EXPIRE_MS;
     let initialTimestampMs: number;
     let handle: number;
 
@@ -118,7 +117,7 @@ export function useWPMTestComboCounter(): Result {
         prevMs.current = timeMs.current;
 
         if (isUpdate) {
-          setTimer(seconds + 1);
+          setTimer(seconds);
         }
 
         handle = window.requestAnimationFrame(step);

@@ -26,6 +26,8 @@ export const DEFAULT_TEST_MODE_OPTIONS = {
   },
 };
 
+export const COMBO_COUNTER_EXPIRE_MS = 4000;
+
 export const DEFAULT_COMBO_COUNTER = {
   count: 0,
   highestCounts: [],
