@@ -1,6 +1,7 @@
 import { memo, forwardRef, useMemo } from 'react';
 import {
   AppWindow,
+  ArrowUp,
   Backspace,
   ClockCountdown,
   Copyright,
@@ -34,6 +35,8 @@ export const BaseIcon = memo(
       switch (name) {
         case 'app-window':
           return AppWindow;
+        case 'arrow-up':
+          return ArrowUp;
         case 'backspace':
           return Backspace;
         case 'clock-countdown':

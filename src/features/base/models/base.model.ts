@@ -2,6 +2,7 @@ import type { Placement } from '@floating-ui/react';
 
 export type IconName =
   | 'app-window'
+  | 'arrow-up'
   | 'backspace'
   | 'clock-countdown'
   | 'copyright'

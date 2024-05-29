@@ -9,6 +9,7 @@ import {
 } from '../config/wpm-test.config';
 
 import type { ComponentProps } from 'react';
+import { BaseIcon } from '#/base/components/base-icon.component';
 
 export const WPMTestComboMultiplierBar = memo(function ({
   className,
@@ -116,6 +117,24 @@ export const WPMTestComboMultiplierBar = memo(function ({
           active={active}
           primary={stock >= 1}
         />
+      </div>
+      <div
+        className={cx(
+          'absolute -bottom-11 left-1/2 flex -translate-x-1/2 animate-rating-fast flex-col items-center justify-center transition-opacity',
+          !active && stock >= 1 ? 'opacity-80' : 'opacity-0',
+        )}
+      >
+        <div className='flex h-[18px] items-start overflow-hidden'>
+          <BaseIcon
+            name='arrow-up'
+            weight='thin'
+            size={24}
+            className='fill-primary/70'
+          />
+        </div>
+        <kbd className='rounded-t border border-b-0 border-border px-2 py-1 text-xs leading-none text-primary/80'>
+          control
+        </kbd>
       </div>
     </div>
   );
