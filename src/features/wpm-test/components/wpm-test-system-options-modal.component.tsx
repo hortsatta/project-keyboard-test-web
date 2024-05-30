@@ -18,6 +18,7 @@ export const WPMTestSystemOptionsModal = memo(function (
     comboBackdropColorSync,
     perfectWordSfx,
     notCorrectWordSfx,
+    comboMultiplierSfx,
   } = useBoundStore((state) => state.testSystemOptions);
 
   const setTestSystemOptions = useBoundStore(
@@ -75,6 +76,14 @@ export const WPMTestSystemOptionsModal = memo(function (
               })}
             >
               Mistake word
+            </BaseSwitchToggle>
+            <BaseSwitchToggle
+              enabled={!!comboMultiplierSfx}
+              onChange={settingsToggle({
+                comboMultiplierSfx: !comboMultiplierSfx,
+              })}
+            >
+              Combo multiplier
             </BaseSwitchToggle>
           </div>
           <h4 className={HEADER_CLASSNAME}>Sound</h4>

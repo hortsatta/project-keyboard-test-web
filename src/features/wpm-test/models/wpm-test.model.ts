@@ -11,6 +11,7 @@ export type TestSystemOptions = {
   comboBackdropColorSync?: boolean;
   perfectWordSfx?: boolean;
   notCorrectWordSfx?: boolean;
+  comboMultiplierSfx?: boolean;
 };
 
 export type TestModeOptions = {

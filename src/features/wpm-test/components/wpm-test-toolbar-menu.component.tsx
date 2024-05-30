@@ -47,7 +47,7 @@ const BUTTON_CLASSNAME = 'flex h-full w-12 gap-2 !px-1';
 
 const Border = memo(function () {
   return (
-    <div className='2lg:flex hidden h-full w-[13px] justify-center'>
+    <div className='hidden h-full w-[13px] justify-center 2lg:flex'>
       <div className='h-full border-r border-r-border' />
     </div>
   );
@@ -137,16 +137,24 @@ export const WPMTestToolbarMenu = memo(function ({
     handleCloseModal();
   }, [resetTest, handleCloseModal]);
 
+  const handleAmountChangeModal = useCallback(
+    (amount: number) => () => {
+      handleAmountChange(amount)();
+      handleCloseModal();
+    },
+    [handleAmountChange, handleCloseModal],
+  );
+
   return (
     <>
       <div
         className={cx(
-          '2lg:w-full 2lg:flex-1 flex h-full w-fit flex-none items-center gap-2 rounded border border-border bg-primary/10 p-2',
+          'flex h-full w-fit flex-none items-center gap-2 rounded border border-border bg-primary/10 p-2 2lg:w-full 2lg:flex-1',
           className,
         )}
         {...moreProps}
       >
-        <div className={cx(WRAPPER_OPTIONS_CLASSNAME, '2lg:flex hidden')}>
+        <div className={cx(WRAPPER_OPTIONS_CLASSNAME, 'hidden 2lg:flex')}>
           {testModes.map(({ value, label, iconName }) => (
             <BaseTooltip key={`tm-${value}`}>
               <BaseTooltipTrigger>
@@ -163,7 +171,7 @@ export const WPMTestToolbarMenu = memo(function ({
         </div>
         <Border />
         <div
-          className={cx(WRAPPER_OPTIONS_CLASSNAME, '2lg:flex hidden flex-1')}
+          className={cx(WRAPPER_OPTIONS_CLASSNAME, 'hidden flex-1 2lg:flex')}
         >
           {amountList?.map((amount) => (
             <BaseTooltip key={`ta-${amount}`}>
@@ -243,7 +251,7 @@ export const WPMTestToolbarMenu = memo(function ({
         resetTest={handleResetTestModal}
         onClose={handleCloseModal}
         onModeChange={handleModeChange}
-        onAmountChange={handleAmountChange}
+        onAmountChange={handleAmountChangeModal}
         onOpenAmountCustomSetter={handleOpenAmountCustomSetter}
         onOpenSystemOptions={handleOpenSystemOptions}
       />

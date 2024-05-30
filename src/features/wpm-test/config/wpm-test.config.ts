@@ -9,6 +9,7 @@ export const DEFAULT_TEST_SYSTEM_OPTIONS = {
   comboBackdropColorSync: true,
   perfectWordSfx: false,
   notCorrectWordSfx: false,
+  comboMultiplierSfx: false,
 };
 
 export const DEFAULT_TEST_MODE_OPTIONS = {

@@ -2,6 +2,7 @@ import { useMemo, useEffect, useRef, useCallback } from 'react';
 import useSound from 'use-sound';
 import levenshtein from 'damerau-levenshtein';
 
+import { generateSoundOptions } from '#/core/config/system.config';
 import { useBoundStore } from '#/core/hooks/use-store.hook';
 
 import wordPerfectSfx from '#/assets/sfx/word-perfect.mp3';
@@ -18,8 +19,6 @@ type Result = {
   perfectCat: number;
   handleMergeRefs: (instance: HTMLElement) => void;
 };
-
-const soundOptions = { volume: 0.1 };
 
 export function useWPMTestWordSingle(
   value: string,
@@ -39,8 +38,15 @@ export function useWPMTestWordSingle(
     (state) => state.testSystemOptions,
   );
 
-  const [playPerfectSfx] = useSound(wordPerfectSfx, soundOptions);
-  const [playNotCorrectSfx] = useSound(wordNotCorrectSfx, soundOptions);
+  const [playPerfectSfx] = useSound(
+    wordPerfectSfx,
+    generateSoundOptions({ soundEnabled: perfectWordSfx }),
+  );
+
+  const [playNotCorrectSfx] = useSound(
+    wordNotCorrectSfx,
+    generateSoundOptions({ soundEnabled: notCorrectWordSfx }),
+  );
 
   const localRef = useRef<HTMLElement | null>(null);
 
@@ -89,13 +95,13 @@ export function useWPMTestWordSingle(
       const left = localRef.current?.offsetLeft || 0;
       const top = localRef.current?.offsetTop || 0;
 
-      perfectWordSfx && playPerfectSfx();
+      playPerfectSfx();
       onPerfect && onPerfect({ width, height, left, top } as DOMRect);
     } else if (isDirty && !active && !isExact && perfectCat < 1) {
-      notCorrectWordSfx && playNotCorrectSfx();
+      playNotCorrectSfx();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active, isDirty, isExact, perfectCat, perfectWordSfx, notCorrectWordSfx]);
+  }, [active, isDirty, isExact, perfectCat]);
 
   return {
     inputValueList,
