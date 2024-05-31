@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useRef } from 'react';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOnClickOutside } from 'usehooks-ts';
 import cx from 'classix';
@@ -13,6 +13,7 @@ import { TestMode } from '../models/wpm-test.model';
 import { useWPMTestResults } from '../hooks/use-wpm-test-results.hook';
 import { WPMTestInput } from './wpm-test-input.component';
 import { WPMTestRating } from './wpm-test-rating.component';
+import { WPMTestScore } from './wpm-test-score.component';
 
 import type { ComponentProps } from 'react';
 
@@ -61,8 +62,15 @@ export const WPMTestResults = memo(function ({
     highestComboCount,
     accuracyPercent,
     netWPM,
+    score,
     overallRating,
   } = useWPMTestResults();
+
+  const [localMainResults] = useState([
+    isNaN(netWPM) ? '0.0' : netWPM.toFixed(1),
+    accuracyPercent.toFixed(2),
+    highestComboCount,
+  ]);
 
   const description = useMemo(() => {
     switch (testModeOptions.mode) {
@@ -130,16 +138,18 @@ export const WPMTestResults = memo(function ({
           </div>
         </div>
         <div className='h-px w-full bg-border' />
+        <WPMTestScore className='relative z-10' score={score} />
+        <div className='h-px w-full bg-border' />
         <div className='flex flex-col items-center justify-center gap-2.5 2xs:flex-row 2xs:gap-5'>
-          <SingleResult label='Accuracy'>
-            {accuracyPercent.toFixed(2)}%
+          <SingleResult className='order-2 2xs:order-none' label='Accuracy'>
+            {localMainResults[1]}%
+          </SingleResult>
+          <div className={cx(DIVIDER_CLASSNAME, 'order-1 2xs:order-none')} />
+          <SingleResult className='order-0 text-4xl 2xs:order-none' label='WPM'>
+            {localMainResults[0]}
           </SingleResult>
           <div className={DIVIDER_CLASSNAME} />
-          <SingleResult className='text-4xl' label='WPM'>
-            {netWPM.toFixed(1)}
-          </SingleResult>
-          <div className={DIVIDER_CLASSNAME} />
-          <SingleResult label='Max Combo'>{highestComboCount}</SingleResult>
+          <SingleResult label='Max Combo'>{localMainResults[2]}</SingleResult>
         </div>
       </div>
     </div>
