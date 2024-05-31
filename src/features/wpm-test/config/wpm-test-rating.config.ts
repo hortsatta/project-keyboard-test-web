@@ -26,7 +26,9 @@ function getScoreByIndex(index: number, wpm: number) {
 function getWPMScore(wpm: number) {
   const transformedWPM = Math.floor(wpm);
 
-  if (
+  if (isNaN(transformedWPM)) {
+    return null;
+  } else if (
     transformedWPM >= wpmScoring[0].min &&
     transformedWPM <= wpmScoring[0].max
   ) {
@@ -87,7 +89,8 @@ function getComboScore(wpm: number, timeSec: number, comboCounts: number[]) {
 function getWeightedScore(wpm: number, timeSec: number, comboCounts: number[]) {
   const wpmScore = getWPMScore(wpm);
   const comboScore = getComboScore(wpm, timeSec, comboCounts);
-  return Math.floor(wpmScore + (comboScore || 0));
+
+  return wpmScore == null ? wpmScore : Math.floor(wpmScore + (comboScore || 0));
 }
 
 export function generateRating(
@@ -97,7 +100,9 @@ export function generateRating(
 ) {
   const score = getWeightedScore(wpm, timeSec, comboCounts);
 
-  if (score <= 3) {
+  if (score == null) {
+    return null;
+  } else if (score <= 3) {
     return 'e';
   } else if (score === 4) {
     return 'd';

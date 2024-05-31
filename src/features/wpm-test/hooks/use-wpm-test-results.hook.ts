@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import levenshtein from 'damerau-levenshtein';
 
 import { useBoundStore } from '#/core/hooks/use-store.hook';
+import { MAX_CHAR_ON_PERFECT_SCORE } from '../config/wpm-test.config';
 import { generateRating } from '../config/wpm-test-rating.config';
 
 import type { TestModeOptions } from '../models/wpm-test.model';
@@ -12,7 +13,8 @@ type Result = {
   highestComboCount: number;
   accuracyPercent: number;
   netWPM: number;
-  overallRating: string;
+  score: number;
+  overallRating: string | null;
   resetTest: () => void;
 };
 
@@ -105,6 +107,32 @@ export function useWPMTestResults(): Result {
     [totalCharactersWithBackspaceTypedCount, totalCorrectCharacterCount],
   );
 
+  const score = useMemo(() => {
+    return totalWordsTyped.reduce(
+      (total, { inputValue, targetText, hasBackspace, hasMultiplier }) => {
+        const { similarity } = levenshtein(inputValue, targetText);
+        let score = 0;
+
+        if (similarity && !hasBackspace) {
+          const remainingCharLength =
+            targetText.length - MAX_CHAR_ON_PERFECT_SCORE;
+          const rawScore =
+            remainingCharLength <= 0
+              ? targetText.length + 1
+              : targetText.length + remainingCharLength + 1;
+          score = hasMultiplier ? rawScore * 2 : rawScore;
+        } else {
+          inputValue.split('').forEach((value, index) => {
+            value === targetText[index] && ++score;
+          });
+        }
+
+        return total + score;
+      },
+      0,
+    );
+  }, [totalWordsTyped]);
+
   const overallRating = useMemo(
     () => generateRating(netWPM, timeSeconds, highestComboCounts),
     [netWPM, timeSeconds, highestComboCounts],
@@ -117,6 +145,7 @@ export function useWPMTestResults(): Result {
     accuracyPercent,
     netWPM,
     highestComboCount,
+    score,
     overallRating,
   };
 }

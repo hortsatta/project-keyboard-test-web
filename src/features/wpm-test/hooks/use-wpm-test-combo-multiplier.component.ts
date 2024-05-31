@@ -65,7 +65,6 @@ export function useWPMTestComboMultiplier(): Result {
     }),
   );
 
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const timeMs = useRef<number>(0);
   const prevMs = useRef<number>(timeMs.current);
   const [timer, setTimer] = useState(0);
@@ -136,12 +135,12 @@ export function useWPMTestComboMultiplier(): Result {
       return;
     }
 
-    timeoutRef.current = setTimeout(() => {
+    const timeout = setTimeout(() => {
       activateComboMultiplier(true);
     }, 300);
 
     return () => {
-      timeoutRef.current && clearTimeout(timeoutRef.current);
+      clearTimeout(timeout);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [percent, active, comboMultiplierAutoActivate]);

@@ -6,7 +6,7 @@ import type { ComponentProps } from 'react';
 import ratingBgPng from '#/assets/images/rating-bg.png';
 
 type Props = ComponentProps<'div'> & {
-  rating: string;
+  rating: string | null;
 };
 
 const ratingBgStyle = {
@@ -61,19 +61,22 @@ export const WPMTestRating = memo(function ({
   const ratingGradientStyle = useMemo(
     () => [
       {
-        backgroundColor: (ratings as any)[localRating].color,
-        backgroundImage: `linear-gradient(${(ratings as any)[localRating].strokeGradient})`,
+        backgroundColor: (ratings as any)[localRating || 'e'].color,
+        backgroundImage: `linear-gradient(${(ratings as any)[localRating || 'e'].strokeGradient})`,
       },
       {
-        backgroundColor: (ratings as any)[localRating].color,
-        backgroundImage: `radial-gradient(${(ratings as any)[localRating].gradient})`,
+        backgroundColor: (ratings as any)[localRating || 'e'].color,
+        backgroundImage: `radial-gradient(${(ratings as any)[localRating || 'e'].gradient})`,
       },
     ],
     [localRating],
   );
 
   return (
-    <div className={cx('relative', className)} {...moreProps}>
+    <div
+      className={cx('relative', !localRating && 'opacity-0', className)}
+      {...moreProps}
+    >
       <div className='relative z-10 animate-rating-reveal'>
         <div
           className={cx(
