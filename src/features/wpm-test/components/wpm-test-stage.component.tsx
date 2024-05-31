@@ -123,12 +123,12 @@ export const WPMTestStage = memo(function ({
         <WPMTestInput ref={inputRef} passageList={passageList} />
         <div className='relative h-[200px] max-w-main'>
           {!isComplete && (
-            <div className='2lg:left-auto 2lg:right-full 2lg:top-1/2 2lg:mr-9 2lg:-translate-y-1/2 2lg:translate-x-0 !absolute left-1/2 right-auto top-44 flex -translate-x-1/2 items-center gap-4 xs:top-24'>
-              <WPMTestComboCounter className='relative z-10' />
+            <div className='!absolute left-1/2 right-auto top-44 flex h-[65px] w-[65px] -translate-x-1/2 items-center gap-4 xs:top-24 2lg:left-auto 2lg:right-full 2lg:top-1/2 2lg:mr-9 2lg:-translate-y-1/2 2lg:translate-x-0'>
+              <WPMTestComboCounter className='z-10' />
               <WPMTestComboMultiplierBar className='!absolute -top-1.5 left-1/2 -translate-x-1/2' />
             </div>
           )}
-          <div className='2lg:mt-0 2lg:px-0 relative mb-2.5 mt-[16.5rem] h-[200px] overflow-hidden px-2.5 xs:mt-48'>
+          <div className='relative mb-2.5 mt-[16.5rem] h-[200px] overflow-hidden px-2.5 xs:mt-48 2lg:mt-0 2lg:px-0'>
             <WPMTestWordPassage className='h-full' passageList={passageList} />
             {/* Top and bottom fade (gradient) */}
             <WPMTestStageGradientFadeOut className='top-0' color={comboColor} />
@@ -138,7 +138,7 @@ export const WPMTestStage = memo(function ({
               isBottom
             />
           </div>
-          <WPMTestProgress className='2lg:px-1 px-2.5' value={progressValue} />
+          <WPMTestProgress className='px-2.5 2lg:px-1' value={progressValue} />
           {isComplete && (
             <div className='mt-16 flex w-full justify-center'>
               <BaseButton

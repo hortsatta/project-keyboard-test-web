@@ -21,12 +21,13 @@ export function useWPMTestComboCounterColorBackdrop() {
   const count = useBoundStore((state) => state.comboCounter.count);
 
   const color = useMemo(() => {
-    if (comboBackdropColorSync && count >= 20 && count < 100) {
-      const index = +count.toString()[0] - 2;
-      return COUNTER_COLOR_CLASSNAMES[index];
-    }
+    const transformedCount = +count.toString().padStart(3, '0').slice(-2);
 
-    return undefined;
+    if (!comboBackdropColorSync || transformedCount < 20) return undefined;
+
+    const index = +transformedCount.toString()[0] - 2;
+
+    return COUNTER_COLOR_CLASSNAMES[index];
   }, [comboBackdropColorSync, count]);
 
   return color;
