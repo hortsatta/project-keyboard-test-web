@@ -81,7 +81,7 @@ function getComboScore(wpm: number, timeSec: number, comboCounts: number[]) {
     .reduce((total, current) => total + current, 0);
 
   const score =
-    highestComboCount <= 0 ? 0 : (totalComboCount / highestComboCount) * 0.5;
+    highestComboCount <= 0 ? 0 : (totalComboCount / highestComboCount) * 1;
 
   return Math.round(score * 10) / 10;
 }
