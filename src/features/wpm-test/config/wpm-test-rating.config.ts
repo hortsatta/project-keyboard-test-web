@@ -1,12 +1,12 @@
 const wpmScoring = [
-  { min: 0, max: 29, score: 1.5 },
-  { min: 30, max: 39, score: 2.5 },
-  { min: 40, max: 49, score: 3.5 },
-  { min: 50, max: 59, score: 4.5 },
-  { min: 60, max: 79, score: 5.5 },
-  { min: 80, max: 99, score: 6.5 },
-  { min: 100, max: 119, score: 7.5 },
-  { min: 120, max: 139, score: 8.5 },
+  { min: 0, max: 29, score: 2 },
+  { min: 30, max: 39, score: 3 },
+  { min: 40, max: 49, score: 4 },
+  { min: 50, max: 59, score: 5 },
+  { min: 60, max: 79, score: 6 },
+  { min: 80, max: 99, score: 7 },
+  { min: 100, max: 119, score: 8 },
+  { min: 120, max: 139, score: 9 },
 ];
 
 function clampValue(value: number, minInput: number, maxInput: number) {
