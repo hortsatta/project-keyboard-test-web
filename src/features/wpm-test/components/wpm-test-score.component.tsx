@@ -4,8 +4,6 @@ import cx from 'classix';
 
 import type { ComponentProps } from 'react';
 
-import 'odometer/themes/odometer-theme-default.css';
-
 type Props = ComponentProps<'div'> & {
   score: number;
 };
@@ -33,7 +31,7 @@ export const WPMTestScore = memo(function ({
     >
       <Odometer
         className={cx(
-          '!font-body text-4xl',
+          'odometer odometer-theme-default !font-body text-4xl',
           localScore == null ? 'opacity-0' : 'opacity-100',
         )}
         value={localScore || 0}

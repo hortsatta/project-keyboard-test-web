@@ -5,6 +5,8 @@ import { useBoundStore } from '#/core/hooks/use-store.hook';
 import { BaseScene } from '#/base/components/base-scene.component';
 import { WPMTestResults } from '../components/wpm-test-results.component';
 
+import '#/assets/css/odometer-theme-default.css';
+
 export function WPMTestResultsPage() {
   const navigate = useNavigate();
   const isComplete = useBoundStore((state) => state.isComplete);
