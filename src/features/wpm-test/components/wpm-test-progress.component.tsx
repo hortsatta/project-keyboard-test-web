@@ -47,6 +47,7 @@ export const WPMTestProgress = memo(function ({
             )}
             currentProgressPercent={currentProgressPercent}
             mode={mode}
+            isPlaying={isPlaying}
           />
           <div
             className={cx(
@@ -76,6 +77,7 @@ export const WPMTestProgress = memo(function ({
             )}
             currentProgressPercent={currentProgressPercent}
             mode={mode}
+            isPlaying={isPlaying}
             reverse
           />
         </div>
