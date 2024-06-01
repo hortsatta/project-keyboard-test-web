@@ -28,15 +28,14 @@ export const WPMTestScore = memo(function ({
 
   return (
     <div
-      className={cx(
-        'flex flex-col items-center justify-center',
-        localScore == null ? 'opacity-0' : 'opacity-100',
-        className,
-      )}
+      className={cx('flex flex-col items-center justify-center', className)}
       {...moreProps}
     >
       <Odometer
-        className='!font-body text-4xl'
+        className={cx(
+          '!font-body text-4xl',
+          localScore == null ? 'opacity-0' : 'opacity-100',
+        )}
         value={localScore || 0}
         format='d'
       />
