@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react';
 
 import { useBoundStore } from '#/core/hooks/use-store.hook';
-import { HEADER_CLASSNAME } from '#/base/helpers/modal.helper';
+import { BaseSectionHeader } from '#/base/components/base-section-header.component';
 import { BaseSwitchToggle } from '#/base/components/base-switch-toggle.component';
 import { BaseModal } from '#/base/components/base-modal.component';
 
@@ -38,8 +38,8 @@ export const WPMTestSystemOptionsModal = memo(function (
       {...props}
     >
       <div className='flex flex-col gap-5'>
-        <div className='relative'>
-          <div className='relative z-10 flex flex-col gap-2.5'>
+        <div className='flex items-center gap-2'>
+          <div className='relative z-10 flex w-full flex-col gap-2.5'>
             <BaseSwitchToggle
               enabled={!!typeTwiceToStart}
               onChange={settingsToggle({
@@ -49,11 +49,11 @@ export const WPMTestSystemOptionsModal = memo(function (
               Type twice to start
             </BaseSwitchToggle>
           </div>
-          <h4 className={HEADER_CLASSNAME}>Core</h4>
+          <BaseSectionHeader>Core</BaseSectionHeader>
         </div>
         <div className='w-full border-b border-border' />
-        <div className='relative'>
-          <div className='relative z-10 flex flex-col gap-2.5'>
+        <div className='flex items-center gap-2'>
+          <div className='relative z-10 flex w-full flex-col gap-2.5'>
             <BaseSwitchToggle
               enabled={!!comboMultiplierAutoActivate}
               onChange={settingsToggle({
@@ -71,11 +71,11 @@ export const WPMTestSystemOptionsModal = memo(function (
               Sync background color
             </BaseSwitchToggle>
           </div>
-          <h4 className={HEADER_CLASSNAME}>Combo</h4>
+          <BaseSectionHeader>Combo</BaseSectionHeader>
         </div>
         <div className='w-full border-b border-border' />
-        <div className='relative'>
-          <div className='relative z-10 flex flex-col gap-2.5'>
+        <div className='flex items-center gap-2'>
+          <div className='relative z-10 flex w-full flex-col gap-2.5'>
             <BaseSwitchToggle
               enabled={!!perfectWordSfx}
               onChange={settingsToggle({ perfectWordSfx: !perfectWordSfx })}
@@ -99,7 +99,7 @@ export const WPMTestSystemOptionsModal = memo(function (
               Combo multiplier
             </BaseSwitchToggle>
           </div>
-          <h4 className={HEADER_CLASSNAME}>Sound</h4>
+          <BaseSectionHeader>Sound</BaseSectionHeader>
         </div>
       </div>
     </BaseModal>
