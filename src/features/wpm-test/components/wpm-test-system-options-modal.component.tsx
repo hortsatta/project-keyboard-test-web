@@ -1,14 +1,12 @@
 import { memo, useCallback } from 'react';
 
 import { useBoundStore } from '#/core/hooks/use-store.hook';
+import { HEADER_CLASSNAME } from '#/base/helpers/modal.helper';
 import { BaseSwitchToggle } from '#/base/components/base-switch-toggle.component';
 import { BaseModal } from '#/base/components/base-modal.component';
 
 import type { ComponentProps } from 'react';
 import type { TestSystemOptions } from '../models/wpm-test.model';
-
-const HEADER_CLASSNAME =
-  'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl uppercase text-primary/10';
 
 export const WPMTestSystemOptionsModal = memo(function (
   props: ComponentProps<typeof BaseModal>,
