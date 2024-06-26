@@ -7,6 +7,7 @@ export enum TestMode {
 }
 
 export type TestSystemOptions = {
+  typeTwiceToStart?: boolean;
   comboMultiplierAutoActivate?: boolean;
   comboBackdropColorSync?: boolean;
   perfectWordSfx?: boolean;

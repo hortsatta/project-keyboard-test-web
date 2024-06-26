@@ -1,4 +1,4 @@
-import { forwardRef, memo, useCallback, useMemo } from 'react';
+import { forwardRef, memo, useCallback, useMemo, useState } from 'react';
 import cx from 'classix';
 
 import { useBoundStore } from '#/core/hooks/use-store.hook';
@@ -14,9 +14,13 @@ export const WPMTestInput = memo(
     { className, passageList, ...moreProps },
     ref,
   ) {
+    const isPlaying = useBoundStore((state) => state.isPlaying);
     const isComplete = useBoundStore((state) => state.isComplete);
     const activeIndex = useBoundStore((state) => state.activeIndex);
     const inputValue = useBoundStore((state) => state.inputValue);
+    const typeTwiceToStart = useBoundStore(
+      (state) => state.testSystemOptions.typeTwiceToStart,
+    );
     const setInputChange = useBoundStore((state) => state.setInputChange);
     const setInputNext = useBoundStore((state) => state.setInputNext);
     const setInputBack = useBoundStore((state) => state.setInputBack);
@@ -24,6 +28,8 @@ export const WPMTestInput = memo(
     const activateComboMultiplier = useBoundStore(
       (state) => state.activateComboMultiplier,
     );
+    // For when typeTwiceToStart is active
+    const [isTwicePlaying, setIsTwicePlaying] = useState(false);
 
     const activePassage = useMemo(
       () => passageList[activeIndex + 1],
@@ -61,9 +67,16 @@ export const WPMTestInput = memo(
           return;
         }
 
+        if (!isPlaying && typeTwiceToStart && !isTwicePlaying) {
+          setIsTwicePlaying(true);
+          return;
+        } else if (isPlaying && isTwicePlaying) {
+          setIsTwicePlaying(false);
+        }
+
         setInputChange(event);
       },
-      [isComplete, setInputChange],
+      [isPlaying, isTwicePlaying, isComplete, typeTwiceToStart, setInputChange],
     );
 
     const handleKeyDown = useCallback(

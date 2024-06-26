@@ -12,6 +12,7 @@ export const WPMTestSystemOptionsModal = memo(function (
   props: ComponentProps<typeof BaseModal>,
 ) {
   const {
+    typeTwiceToStart,
     comboMultiplierAutoActivate,
     comboBackdropColorSync,
     perfectWordSfx,
@@ -37,6 +38,20 @@ export const WPMTestSystemOptionsModal = memo(function (
       {...props}
     >
       <div className='flex flex-col gap-5'>
+        <div className='relative'>
+          <div className='relative z-10 flex flex-col gap-2.5'>
+            <BaseSwitchToggle
+              enabled={!!typeTwiceToStart}
+              onChange={settingsToggle({
+                typeTwiceToStart: !typeTwiceToStart,
+              })}
+            >
+              Type twice to start
+            </BaseSwitchToggle>
+          </div>
+          <h4 className={HEADER_CLASSNAME}>Core</h4>
+        </div>
+        <div className='w-full border-b border-border' />
         <div className='relative'>
           <div className='relative z-10 flex flex-col gap-2.5'>
             <BaseSwitchToggle
