@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOnClickOutside } from 'usehooks-ts';
 import cx from 'classix';
@@ -11,6 +11,7 @@ import { useWPMTestTimer } from '../hooks/use-wpm-test-timer.hook';
 import { useWPMTestComboCounterColorBackdrop } from '../hooks/use-wpm-test-combo-counter-color-backdrop.hook';
 import { useWPMTestSentenceGenerator } from '../hooks/use-wpm-test-sentence-generator.hook';
 import { useWPMTestWordCounter } from '../hooks/use-wpm-test-word-counter.hook';
+import { useWPMTestAudioRecorder } from '../hooks/use-wpm-test-audio-recorder.hook';
 import { WPMTestInput } from './wpm-test-input.component';
 import { WPMTestProgress } from './wpm-test-progress.component';
 import { WPMTestWordPassage } from './wpm-test-word-passage.component';
@@ -29,23 +30,36 @@ export const WPMTestStage = memo(function ({
   const { mode: testMode, timeWordAmount } = useBoundStore(
     (state) => state.testModeOptions,
   );
+  const recordAudioWhenPlaying = useBoundStore(
+    (state) => state.testSystemOptions.recordAudioWhenPlaying,
+  );
   const openMainMenu = useBoundStore((state) => state.openMainMenu);
   const isPlaying = useBoundStore((state) => state.isPlaying);
   const isComplete = useBoundStore((state) => state.isComplete);
   const setComplete = useBoundStore((state) => state.setComplete);
+  const setAudioRecording = useBoundStore((state) => state.setAudioRecording);
   const resetTest = useBoundStore((state) => state.resetTest);
   const initializeTranscripts = useBoundStore(
     (state) => state.initializeTranscripts,
   );
 
+  const [isAwaitingRecording, setIsAwaitingRecording] = useState(false);
+
+  const { hasError: hasRecordingError, recordingBlob } =
+    useWPMTestAudioRecorder();
   const comboColor = useWPMTestComboCounterColorBackdrop();
   const { passageList } = useWPMTestSentenceGenerator();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const viewTestResults = useCallback(() => {
+    if (recordAudioWhenPlaying && !isAwaitingRecording) {
+      setIsAwaitingRecording(true);
+      return;
+    }
+
     navigate(pageRoutes.testResults.path);
-  }, [navigate]);
+  }, [recordAudioWhenPlaying, isAwaitingRecording, navigate]);
 
   const options = useMemo(
     () => ({
@@ -110,6 +124,16 @@ export const WPMTestStage = memo(function ({
     !isComplete && isPlaying && resetTest();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!isAwaitingRecording) return;
+    // If recording is ready then pass it to global state
+    if (hasRecordingError || (recordingBlob?.size || 0) > 0) {
+      setAudioRecording({ hasError: hasRecordingError, blob: recordingBlob });
+      viewTestResults();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAwaitingRecording, hasRecordingError, recordingBlob]);
 
   useOnClickOutside(inputRef, handleWrapperClick);
 

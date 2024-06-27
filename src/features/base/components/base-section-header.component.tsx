@@ -11,7 +11,7 @@ export const BaseSectionHeader = memo(function ({
   return (
     <h4
       className={cx(
-        '-scale-100 text-sm font-normal uppercase text-primary/80 [writing-mode:vertical-lr]',
+        '-scale-100 text-sm font-normal uppercase text-primary/60 [writing-mode:vertical-lr]',
         className,
       )}
       {...moreProps}

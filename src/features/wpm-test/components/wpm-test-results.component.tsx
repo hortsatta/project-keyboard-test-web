@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useOnClickOutside } from 'usehooks-ts';
 import cx from 'classix';
 
+import { useBoundStore } from '#/core/hooks/use-store.hook';
 import { BaseButton } from '#/base/components/base-button.component';
+import { BaseAudioPlayer } from '#/base/components/base-audio-player.component';
 import {
   BaseTooltip,
   BaseTooltipContent,
@@ -52,6 +54,13 @@ export const WPMTestResults = memo(function ({
   className,
   ...moreProps
 }: ComponentProps<'div'>) {
+  const { hasError: hasRecordingError, blob: recordingBlob } = useBoundStore(
+    (state) => state.audioRecording,
+  );
+  const recordAudioWhenPlaying = useBoundStore(
+    (state) => state.testSystemOptions.recordAudioWhenPlaying,
+  );
+
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -151,6 +160,18 @@ export const WPMTestResults = memo(function ({
           <div className={DIVIDER_CLASSNAME} />
           <SingleResult label='Max Combo'>{localMainResults[2]}</SingleResult>
         </div>
+        <div className='h-px w-full bg-border' />
+        {recordAudioWhenPlaying && (
+          <div className='flex h-20 w-full items-center justify-center'>
+            {hasRecordingError ? (
+              <span className='text-xs italic text-white/60'>
+                Cannot do audio recording, please check mic settings.
+              </span>
+            ) : (
+              <BaseAudioPlayer audio={recordingBlob} />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

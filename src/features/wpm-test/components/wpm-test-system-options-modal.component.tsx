@@ -12,6 +12,7 @@ export const WPMTestSystemOptionsModal = memo(function (
   props: ComponentProps<typeof BaseModal>,
 ) {
   const {
+    recordAudioWhenPlaying,
     typeTwiceToStart,
     comboMultiplierAutoActivate,
     comboBackdropColorSync,
@@ -40,6 +41,14 @@ export const WPMTestSystemOptionsModal = memo(function (
       <div className='flex flex-col gap-5'>
         <div className='flex items-center gap-2'>
           <div className='relative z-10 flex w-full flex-col gap-2.5'>
+            <BaseSwitchToggle
+              enabled={!!recordAudioWhenPlaying}
+              onChange={settingsToggle({
+                recordAudioWhenPlaying: !recordAudioWhenPlaying,
+              })}
+            >
+              Record audio when playing
+            </BaseSwitchToggle>
             <BaseSwitchToggle
               enabled={!!typeTwiceToStart}
               onChange={settingsToggle({

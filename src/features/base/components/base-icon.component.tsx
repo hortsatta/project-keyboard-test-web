@@ -1,6 +1,7 @@
 import { memo, forwardRef, useMemo } from 'react';
 import {
   AppWindow,
+  ArrowLineDown,
   ArrowUp,
   Backspace,
   ClockCountdown,
@@ -11,7 +12,11 @@ import {
   Keyboard,
   List,
   MagicWand,
+  Microphone,
+  MicrophoneSlash,
   Minus,
+  Pause,
+  Play,
   Rewind,
   Scroll,
   TextAa,
@@ -35,6 +40,8 @@ export const BaseIcon = memo(
       switch (name) {
         case 'app-window':
           return AppWindow;
+        case 'arrow-line-down':
+          return ArrowLineDown;
         case 'arrow-up':
           return ArrowUp;
         case 'backspace':
@@ -55,8 +62,16 @@ export const BaseIcon = memo(
           return List;
         case 'magic-wand':
           return MagicWand;
+        case 'microphone':
+          return Microphone;
+        case 'microphone-slash':
+          return MicrophoneSlash;
         case 'minus':
           return Minus;
+        case 'play':
+          return Play;
+        case 'pause':
+          return Pause;
         case 'rewind':
           return Rewind;
         case 'scroll':

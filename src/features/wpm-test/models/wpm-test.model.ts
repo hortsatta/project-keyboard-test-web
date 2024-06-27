@@ -7,6 +7,7 @@ export enum TestMode {
 }
 
 export type TestSystemOptions = {
+  recordAudioWhenPlaying?: boolean;
   typeTwiceToStart?: boolean;
   comboMultiplierAutoActivate?: boolean;
   comboBackdropColorSync?: boolean;
@@ -41,10 +42,16 @@ export type ComboMultiplier = {
   currentCount: number;
 };
 
+export type AudioRecording = {
+  hasError: boolean;
+  blob?: Blob;
+};
+
 export type WPMTestSlice = {
   testSystemOptions: TestSystemOptions;
   testModeOptions: TestModeOptions;
   isPlaying: boolean;
+  isTwicePlaying: boolean;
   isComplete: boolean;
   activeIndex: number;
   inputValue: string;
@@ -54,6 +61,8 @@ export type WPMTestSlice = {
   comboMultiplier: ComboMultiplier;
   transcripts: Transcript[];
   elapsedTimeMs: number;
+  audioRecording: AudioRecording;
+  setAudioRecording: (audioRecording: AudioRecording) => void;
   setTestSystemOptions: (testSystemOptions: TestSystemOptions) => void;
   setTestModeOptions: (testModeOptions: TestModeOptions) => void;
   setPassage: (value: string, append?: boolean) => void;

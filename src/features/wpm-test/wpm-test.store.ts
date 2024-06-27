@@ -5,6 +5,7 @@ import {
   updateTranscripts,
 } from './helpers/transcript.helper';
 import {
+  DEFAULT_AUDIO_RECORDING,
   DEFAULT_COMBO_COUNTER,
   DEFAULT_COMBO_MULTIPLIER,
   DEFAULT_TEST_MODE_OPTIONS,
@@ -17,6 +18,7 @@ import {
 import type { ChangeEvent } from 'react';
 import type { StateCreator } from 'zustand';
 import type {
+  AudioRecording,
   TestModeOptions,
   TestSystemOptions,
   WPMTestSlice,
@@ -31,6 +33,7 @@ export const createWPMTestSlice: StateCreator<
   testModeOptions: DEFAULT_TEST_MODE_OPTIONS.time,
   testSystemOptions: DEFAULT_TEST_SYSTEM_OPTIONS,
   isPlaying: false,
+  isTwicePlaying: false,
   isComplete: false,
   activeIndex: 0,
   passage: undefined,
@@ -40,6 +43,12 @@ export const createWPMTestSlice: StateCreator<
   comboCounter: DEFAULT_COMBO_COUNTER,
   comboMultiplier: DEFAULT_COMBO_MULTIPLIER,
   elapsedTimeMs: 0,
+  audioRecording: DEFAULT_AUDIO_RECORDING,
+
+  setAudioRecording: (audioRecording: Partial<AudioRecording>) =>
+    set(({ audioRecording: oldAudioRecording }) => ({
+      audioRecording: { ...oldAudioRecording, ...audioRecording },
+    })),
 
   setTestSystemOptions: (testSystemOptions: TestSystemOptions) =>
     set(({ testSystemOptions: oldTestSystemOptions }) => ({
@@ -74,16 +83,27 @@ export const createWPMTestSlice: StateCreator<
   },
 
   setInputChange: (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    const newState: Record<string, unknown> = { inputValue: value };
-
     const {
+      testSystemOptions,
       activeIndex,
       isPlaying,
+      isTwicePlaying,
       fullInputValue,
       transcripts,
       resetComboCounter,
     } = get();
+
+    const { value } = event.target;
+    const newState: Record<string, unknown> = {};
+
+    if (!isPlaying && !isTwicePlaying && testSystemOptions.typeTwiceToStart) {
+      newState.isTwicePlaying = true;
+      return set(newState);
+    } else if (isPlaying && isTwicePlaying) {
+      newState.isTwicePlaying = false;
+    }
+
+    newState.inputValue = value;
 
     const updatedTranscript = updateTranscripts(
       transcripts,
@@ -181,6 +201,7 @@ export const createWPMTestSlice: StateCreator<
 
     set({
       isPlaying: false,
+      isTwicePlaying: false,
       isComplete: true,
       inputValue: '',
       elapsedTimeMs: Math.floor(elapsedTimeMs / 1000) * 1000,
@@ -318,12 +339,14 @@ export const createWPMTestSlice: StateCreator<
 
     set(() => ({
       isPlaying: false,
+      isTwicePlaying: false,
       isComplete: false,
       activeIndex: 0,
       passage: undefined,
       inputValue: '',
       fullInputValue: undefined,
       elapsedTimeMs: 0,
+      audioRecording: DEFAULT_AUDIO_RECORDING,
     }));
   },
 });

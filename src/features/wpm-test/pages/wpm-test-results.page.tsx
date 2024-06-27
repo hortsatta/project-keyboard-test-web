@@ -17,7 +17,7 @@ export function WPMTestResultsPage() {
 
   return (
     <BaseScene>
-      <WPMTestResults className='mt-48' />
+      <WPMTestResults className='mt-40' />
     </BaseScene>
   );
 }

@@ -57,6 +57,9 @@ export const WPMTestToolbarMenu = memo(function ({
   className,
   ...moreProps
 }: ComponentProps<'div'>) {
+  const recordAudioWhenPlaying = useBoundStore(
+    (state) => state.testSystemOptions.recordAudioWhenPlaying,
+  );
   const { mode, timeWordAmount } = useBoundStore(
     (state) => state.testModeOptions,
   );
@@ -64,6 +67,9 @@ export const WPMTestToolbarMenu = memo(function ({
   const openMainMenu = useBoundStore((state) => state.openMainMenu);
   const setOpenMainMenu = useBoundStore((state) => state.setOpenMainMenu);
   const setTestModeOptions = useBoundStore((state) => state.setTestModeOptions);
+  const setTestSystemOptions = useBoundStore(
+    (state) => state.setTestSystemOptions,
+  );
   const [openSystemOptions, setOpenSystemOptions] = useState(false);
   const [openCustomTimeWordAmount, setOpenCustomTimeWordAmount] =
     useState(false);
@@ -111,6 +117,10 @@ export const WPMTestToolbarMenu = memo(function ({
     },
     [handleAmountChange],
   );
+
+  const handleRecordAudioChange = useCallback(() => {
+    setTestSystemOptions({ recordAudioWhenPlaying: !recordAudioWhenPlaying });
+  }, [recordAudioWhenPlaying, setTestSystemOptions]);
 
   const handleCloseModal = useCallback(() => {
     setOpenSystemOptions(false);
@@ -218,6 +228,18 @@ export const WPMTestToolbarMenu = memo(function ({
               />
             </BaseTooltipTrigger>
             <BaseTooltipContent>Main Menu</BaseTooltipContent>
+          </BaseTooltip>
+          <BaseTooltip>
+            <BaseTooltipTrigger>
+              <BaseButton
+                className={BUTTON_CLASSNAME}
+                iconName={
+                  recordAudioWhenPlaying ? 'microphone' : 'microphone-slash'
+                }
+                onClick={handleRecordAudioChange}
+              />
+            </BaseTooltipTrigger>
+            <BaseTooltipContent>Record Audio When Playing</BaseTooltipContent>
           </BaseTooltip>
           <BaseTooltip>
             <BaseTooltipTrigger>

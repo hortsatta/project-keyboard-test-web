@@ -1,10 +1,11 @@
 import { TestMode } from '../models/wpm-test.model';
 
-export const timeSecondAmountList = [15, 30, 60, 90, 120];
+export const timeSecondAmountList = [15, 30, 60, 90];
 
-export const wordAmountList = [25, 50, 100, 200, 300];
+export const wordAmountList = [25, 50, 100, 200];
 
 export const DEFAULT_TEST_SYSTEM_OPTIONS = {
+  recordAudioWhenPlaying: false,
   typeTwiceToStart: false,
   comboMultiplierAutoActivate: true,
   comboBackdropColorSync: true,
@@ -26,6 +27,11 @@ export const DEFAULT_TEST_MODE_OPTIONS = {
     mode: TestMode.Zen,
     timeWordAmount: 0,
   },
+};
+
+export const DEFAULT_AUDIO_RECORDING = {
+  hasError: false,
+  blob: undefined,
 };
 
 export const COMBO_COUNTER_EXPIRE_MS = 4000;
