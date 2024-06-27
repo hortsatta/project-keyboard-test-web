@@ -129,6 +129,7 @@ export const WPMTestStage = memo(function ({
     if (!isAwaitingRecording) return;
     // If recording is ready then pass it to global state
     if (hasRecordingError || (recordingBlob?.size || 0) > 0) {
+      setIsAwaitingRecording(false);
       setAudioRecording({ hasError: hasRecordingError, blob: recordingBlob });
       viewTestResults();
     }
@@ -169,8 +170,9 @@ export const WPMTestStage = memo(function ({
                 iconName='keyboard'
                 variant='secondary'
                 onClick={viewTestResults}
+                loading={isAwaitingRecording}
               >
-                View Test Results
+                {isAwaitingRecording ? 'Computing' : 'View Test Results'}
               </BaseButton>
             </div>
           )}

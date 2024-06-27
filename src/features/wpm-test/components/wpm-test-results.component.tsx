@@ -160,17 +160,19 @@ export const WPMTestResults = memo(function ({
           <div className={DIVIDER_CLASSNAME} />
           <SingleResult label='Max Combo'>{localMainResults[2]}</SingleResult>
         </div>
-        <div className='h-px w-full bg-border' />
         {recordAudioWhenPlaying && (
-          <div className='flex h-20 w-full items-center justify-center'>
-            {hasRecordingError ? (
-              <span className='text-xs italic text-white/60'>
-                Cannot do audio recording, please check mic settings.
-              </span>
-            ) : (
-              <BaseAudioPlayer audio={recordingBlob} />
-            )}
-          </div>
+          <>
+            <div className='h-px w-full bg-border' />
+            <div className='flex h-20 w-full items-center justify-center'>
+              {hasRecordingError ? (
+                <span className='text-xs italic text-white/60'>
+                  Cannot do audio recording, please check mic settings.
+                </span>
+              ) : (
+                <BaseAudioPlayer audio={recordingBlob} />
+              )}
+            </div>
+          </>
         )}
       </div>
     </div>
